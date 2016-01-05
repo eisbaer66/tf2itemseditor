@@ -273,6 +273,9 @@ namespace TF2Items
 
         private void comboItems_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboItems.SelectedItem == null)
+                return;
+
             itemSetup = true;
             txtItemName.Text = "";
             txtItemTypeName.Text = "";
@@ -352,6 +355,9 @@ namespace TF2Items
 
         private void comboSets_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (comboSets.SelectedItem == null)
+                return;
+
             DataNode setNode = FindSetsNode().SubNodes.Find(n => n.Key == comboSets.SelectedItem.ToString());
             txtSetName.Text = setNode.SubNodes.Find(n => n.Key == "name").Value;
             DataNode itemsNode = setNode.SubNodes.Find(n => n.Key == "items");
@@ -360,18 +366,11 @@ namespace TF2Items
             {
                 listSetItems.Items.Add(node.Key);
             }
-            gridSetAttributes.Rows.Clear();
-            DataNode attribsNode = setNode.SubNodes.Find(n => n.Key == "attributes");
-            foreach (DataNode node in attribsNode.SubNodes)
-            {
-                gridSetAttributes.Rows.Add(new[]
-                                               {
-                                                   node.Key, 
-                                                   node.SubNodes.Find(n => n.Key == "attribute_class").Value,
-                                                   node.SubNodes.Find(n => n.Key == "value").Value
-                                               });
-            }
-            if (englishParser == null) return;
+            DisplaySetAttributes(setNode);
+
+            if (englishParser == null) 
+                return;
+
             List<DataNode> tokens = FindEnglishTokens().SubNodes;
             foreach (TextBox box in tipBoxes)
             {
@@ -379,6 +378,24 @@ namespace TF2Items
                 if (token != null) tipReference.SetToolTip(box, token.Value);
             }
 
+        }
+
+        private void DisplaySetAttributes(DataNode setNode)
+        {
+            gridSetAttributes.Rows.Clear();
+            DataNode attribsNode = setNode.SubNodes.Find(n => n.Key == "attributes");
+            if (attribsNode == null)
+                return;
+
+            foreach (DataNode node in attribsNode.SubNodes)
+            {
+                gridSetAttributes.Rows.Add(new[]
+                                           {
+                                               node.Key,
+                                               node.SubNodes.Find(n => n.Key == "attribute_class").Value,
+                                               node.SubNodes.Find(n => n.Key == "value").Value
+                                           });
+            }
         }
 
         private void btnEditSetName_Click(object sender, EventArgs e)
