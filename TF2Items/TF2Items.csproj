@@ -151,6 +151,12 @@
     <Compile Include="Dialogs\ReferenceWindow.Designer.cs">
       <DependentUpon>ReferenceWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="scottwis\InteropUtil.cs" />
+    <Compile Include="scottwis\OpenFileOrFolderDialog .cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="scottwis\Util.cs" />
+    <Compile Include="SteamService.cs" />
     <Compile Include="ToolTips.cs" />
     <Compile Include="Converter.cs" />
     <Compile Include="Osinfo.cs" />
@@ -249,14 +255,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ValveFormat\ValveFormat.csproj">
-      <Project>{8EFEF957-69EE-46C7-8728-E2D460BA8807}</Project>
+      <Project>{8efef957-69ee-46c7-8728-e2d460ba8807}</Project>
       <Name>ValveFormat</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_DetectChanges="False" />
+      <UserProperties BuildVersion_DetectChanges="False" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

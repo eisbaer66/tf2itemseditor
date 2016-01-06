@@ -14,7 +14,10 @@ namespace TF2Items
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+
+            ISteamService steam = new SteamService();
+
+            Application.Run(new MainWindow(steam));
         }
     }
 }

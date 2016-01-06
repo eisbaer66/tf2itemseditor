@@ -31,9 +31,11 @@ namespace TF2Items
 
         public bool itemSetup;
         public bool wait;
+        private readonly ISteamService _steam;
 
-        public MainWindow()
+        public MainWindow(ISteamService steam)
         {
+            _steam = steam;
             InitializeComponent();
             tipBoxes = new[] {txtItemName, txtItemTypeName, txtSetName};
         }
@@ -131,37 +133,35 @@ namespace TF2Items
         private void itemsgametxtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string ret;
-            using (var diag = new OpenFileWindow())
+            using (var diag = new OpenFileWindow(_steam))
             {
-                Cursor = Cursors.WaitCursor;
                 ret = diag.ShowWindow("items_game.txt", @"\tf\scripts\items\");
             }
-            Cursor = Cursors.Arrow;
-            if (!String.IsNullOrEmpty(ret))
+            if (String.IsNullOrEmpty(ret))
+                return;
+
+            Cursor.Current = Cursors.WaitCursor;
+            itemsParser = new ValveFormatParser(ret);
+            itemsParser.LoadFile();
+            Cursor.Current = Cursors.Arrow;
+            if (itemsParser.RootNode.Key != "items_game")
             {
-                Cursor.Current = Cursors.WaitCursor;
-                itemsParser = new ValveFormatParser(ret);
-                itemsParser.LoadFile();
-                Cursor.Current = Cursors.Arrow;
-                if (itemsParser.RootNode.Key != "items_game")
-                {
-                    MessageBox.Show("That is not items_game.txt.\r\nPlease select items_game.txt!",
-                                    "TF2 Items Editor",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                    itemsParser = null;
-                    return;
-                }
-                LoadItems();
-                stripTxt.Text = "Edit->Attributes to open the attributes window!";
-                stripTxt.Image = images.Images["Info"];
+                MessageBox.Show("That is not items_game.txt.\r\nPlease select items_game.txt!",
+                    "TF2 Items Editor",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                itemsParser = null;
+                return;
             }
+            LoadItems();
+            stripTxt.Text = "Edit->Attributes to open the attributes window!";
+            stripTxt.Image = images.Images["Info"];
         }
 
         private void tfenglishtxtToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string ret = "";
-            using (var diag = new OpenFileWindow())
+            using (var diag = new OpenFileWindow(_steam))
             {
                 Cursor = Cursors.WaitCursor;
                 ret = diag.ShowWindow("tf_english.txt", @"\tf\resource\");
@@ -427,65 +427,6 @@ namespace TF2Items
              }
         }
 
-        private bool CheckSteamappsFolder()
-        {
-            if (Settings.Default.SteamFolder == null || Settings.Default.SteamFolder.ToString() == "")
-            {
-            showDia:
-                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    if (!File.Exists(folderBrowserDialog1.SelectedPath + @"\team fortress 2 content.gcf"))
-                    {
-                        var res = MessageBox.Show(
-                            "team fortress 2 content.gcf could not be found in that folder!\r\nPlease select your steamapps folder!",
-                            "TF2 Items Editor",
-                            MessageBoxButtons.OKCancel,
-                            MessageBoxIcon.Error);
-                        if (res == DialogResult.OK) goto showDia;
-                        return false;
-                    }
-                    Settings.Default.SteamFolder = folderBrowserDialog1.SelectedPath;
-                    Settings.Default.Save();
-                }
-                else return false;
-
-            }
-            string[] dirs = Directory.GetDirectories(Settings.Default.SteamFolder);
-            if (string.IsNullOrEmpty(Settings.Default.SteamUser))
-            {
-                var match = new List<string>();
-                foreach (string _dir in dirs)
-                {
-                    string dir = (new DirectoryInfo(_dir)).Name;
-                    if (dir != "common" && dir != "media" && dir != "SourceMods") match.Add(dir);
-                }
-                if (match.Count > 1)
-                {
-                    using (var win = new SteamFolderSelectWindow())
-                    {
-                        string ret = win.ShowWindow(match);
-                        if (ret == "") return false;
-                        Settings.Default.SteamUser = ret;
-                        Settings.Default.Save();
-                    }
-                }
-                else if (match.Count == 1)
-                {
-                    Settings.Default.SteamUser = match[0];
-                    Settings.Default.Save();
-                }
-                else
-                {
-                    MessageBox.Show("No user folders found in steamapps!",
-                                    "TF2 Items Editor",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                    return false;
-                }
-            }
-            return true;
-        }
-
         private void itemsgametxtToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             if (itemsParser == null)
@@ -496,9 +437,8 @@ namespace TF2Items
                                 MessageBoxIcon.Error);
                 return;
             }
-            if (!CheckSteamappsFolder()) return;
-            string p = Settings.Default.SteamFolder + @"\" + Settings.Default.SteamUser +
-                           @"\team fortress 2\tf\scripts\items\items_game.txt";
+            if (!_steam.EnsureSteamFolderIsSet()) return;
+            string p = Settings.Default.SteamFolder + @"\tf\addons\items_game.txt";
             Cursor.Current = Cursors.WaitCursor;
             itemsParser.SaveFile(p);
             Cursor.Current = Cursors.Arrow;
@@ -514,9 +454,8 @@ namespace TF2Items
                                 MessageBoxIcon.Error);
                 return;
             }
-            if (!CheckSteamappsFolder()) return;
-            string p = Settings.Default.SteamFolder + @"\" + Settings.Default.SteamUser +
-                           @"\team fortress 2\tf\resource\tf_english.txt";
+            if (!_steam.EnsureSteamFolderIsSet()) return;
+            string p = Settings.Default.SteamFolder + @"\tf\resource\tf_english.txt";
             Cursor.Current = Cursors.WaitCursor;
             englishParser.SaveFile(p, false); //tf_english.txt somehow doesn't like indenting :/
             Cursor.Current = Cursors.Arrow;
@@ -682,7 +621,7 @@ namespace TF2Items
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var w = new SettingsWindow())
+            using (var w = new SettingsWindow(_steam))
             {
                 w.ShowDialog();
             }

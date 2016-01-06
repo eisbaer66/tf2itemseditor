@@ -30,7 +30,6 @@
         {
             this.labelOpen = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.radioGcf = new System.Windows.Forms.RadioButton();
             this.radioSteamapps = new System.Windows.Forms.RadioButton();
             this.radioManual = new System.Windows.Forms.RadioButton();
             this.btnNext = new System.Windows.Forms.Button();
@@ -59,34 +58,22 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "How would you like to open this file?";
             // 
-            // radioGcf
-            // 
-            this.radioGcf.AutoSize = true;
-            this.radioGcf.Location = new System.Drawing.Point(26, 52);
-            this.radioGcf.Name = "radioGcf";
-            this.radioGcf.Size = new System.Drawing.Size(349, 19);
-            this.radioGcf.TabIndex = 2;
-            this.radioGcf.TabStop = true;
-            this.radioGcf.Text = "Extract from .gcf to steamapps/USERNAME/team fortress 2/...";
-            this.radioGcf.UseVisualStyleBackColor = true;
-            this.radioGcf.CheckedChanged += new System.EventHandler(this.radioGcf_CheckedChanged);
-            // 
             // radioSteamapps
             // 
             this.radioSteamapps.AutoSize = true;
-            this.radioSteamapps.Location = new System.Drawing.Point(26, 77);
+            this.radioSteamapps.Location = new System.Drawing.Point(26, 52);
             this.radioSteamapps.Name = "radioSteamapps";
-            this.radioSteamapps.Size = new System.Drawing.Size(284, 19);
+            this.radioSteamapps.Size = new System.Drawing.Size(272, 19);
             this.radioSteamapps.TabIndex = 3;
             this.radioSteamapps.TabStop = true;
-            this.radioSteamapps.Text = "Find in steamapps/USERNAME/team fortress 2/...\r\n";
+            this.radioSteamapps.Text = "Find in steamapps\\common\\team fortress 2\\...\r\n";
             this.radioSteamapps.UseVisualStyleBackColor = true;
             this.radioSteamapps.CheckedChanged += new System.EventHandler(this.radioSteamapps_CheckedChanged);
             // 
             // radioManual
             // 
             this.radioManual.AutoSize = true;
-            this.radioManual.Location = new System.Drawing.Point(26, 102);
+            this.radioManual.Location = new System.Drawing.Point(26, 77);
             this.radioManual.Name = "radioManual";
             this.radioManual.Size = new System.Drawing.Size(137, 19);
             this.radioManual.TabIndex = 4;
@@ -97,8 +84,9 @@
             // 
             // btnNext
             // 
+            this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNext.Enabled = false;
-            this.btnNext.Location = new System.Drawing.Point(306, 122);
+            this.btnNext.Location = new System.Drawing.Point(306, 99);
             this.btnNext.Name = "btnNext";
             this.btnNext.Size = new System.Drawing.Size(75, 23);
             this.btnNext.TabIndex = 5;
@@ -108,7 +96,9 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(225, 122);
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(225, 99);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 6;
@@ -123,14 +113,15 @@
             // 
             // OpenFileWindow
             // 
+            this.AcceptButton = this.btnNext;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(393, 151);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(393, 128);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.radioManual);
             this.Controls.Add(this.radioSteamapps);
-            this.Controls.Add(this.radioGcf);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelOpen);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(186)));
@@ -153,7 +144,6 @@
 
         private System.Windows.Forms.Label labelOpen;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.RadioButton radioGcf;
         private System.Windows.Forms.RadioButton radioSteamapps;
         private System.Windows.Forms.RadioButton radioManual;
         private System.Windows.Forms.Button btnNext;
