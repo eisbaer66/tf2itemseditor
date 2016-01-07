@@ -132,7 +132,6 @@
       <DependentUpon>SteamFolderSelectWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="EnglishReference.cs" />
-    <Compile Include="HLLib.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -151,11 +150,6 @@
     <Compile Include="Dialogs\ReferenceWindow.Designer.cs">
       <DependentUpon>ReferenceWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="scottwis\InteropUtil.cs" />
-    <Compile Include="scottwis\OpenFileOrFolderDialog .cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="scottwis\Util.cs" />
     <Compile Include="SteamService.cs" />
     <Compile Include="ToolTips.cs" />
     <Compile Include="Converter.cs" />
@@ -230,7 +224,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="033bdd91842b6aca0633ee1e5f3e6b82f2e8962f.ico" />
-    <Content Include="HLLib.x86.dll" />
     <None Include="Resources\exclamation.png" />
     <None Include="Resources\add.png" />
     <None Include="vice3.exe" />
@@ -263,7 +256,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_DetectChanges="False" BuildVersion_ConfigurationName="Any" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Any" BuildVersion_DetectChanges="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
