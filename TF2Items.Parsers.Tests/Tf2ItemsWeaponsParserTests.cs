@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using log4net.Config;
 using NUnit.Framework;
 using TF2Items.Core;
@@ -43,10 +45,12 @@ namespace TF2Items.Parsers.Tests
                                                                              }
                                                                          }
                                                  };
-            ServerConfiguration config = new Tf2ItemsWeaponsParser().Parse("tf2items.weapons.1.txt");
+            string filepath = GetFile("tf2items.weapons.1.txt");
+            ServerConfiguration config = new Tf2ItemsWeaponsParser().Parse(filepath);
 
             AssertEquality(config, expectedConfig);
         }
+
         [Test]
         public void ParsesExampleConfig()
         {
@@ -138,7 +142,8 @@ namespace TF2Items.Parsers.Tests
                                                                              }
                                                                          }
                                                  };
-            ServerConfiguration config = new Tf2ItemsWeaponsParser().Parse("tf2items.weapons.example.txt");
+            string filepath = GetFile("tf2items.weapons.example.txt");
+            ServerConfiguration config = new Tf2ItemsWeaponsParser().Parse(filepath);
 
             AssertEquality(config, expectedConfig);
         }
@@ -191,6 +196,31 @@ namespace TF2Items.Parsers.Tests
             Assert.That(actualAttribute.Value,      Is.EqualTo(expectedAttribute.Value),        "expectedAttribute.Value");
             Assert.That(actualAttribute.EffectType, Is.EqualTo(expectedAttribute.EffectType),   "expectedAttribute.EffectType");
             Assert.That(actualAttribute.Format,     Is.EqualTo(expectedAttribute.Format),       "expectedAttribute.Format");
+        }
+
+        private string GetFile(string filename)
+        {
+            string dir = Directory.GetCurrentDirectory();
+
+            string foundFile = SearchFile(filename, dir);
+            if (foundFile == null)
+                throw new FileNotFoundException("test-file was not found", filename);
+            return foundFile;
+        }
+
+        private static string SearchFile(string filename, string dir)
+        {
+            string foundFile = Directory.GetFiles(dir).FirstOrDefault(f => Path.GetFileName(f) == filename);
+            if (foundFile != null)
+                return foundFile;
+            foreach (string subDir in Directory.GetDirectories(dir))
+            {
+                foundFile = SearchFile(filename, subDir);
+                if (foundFile != null)
+                    return foundFile;
+            }
+
+            return null;
         }
     }
 }
