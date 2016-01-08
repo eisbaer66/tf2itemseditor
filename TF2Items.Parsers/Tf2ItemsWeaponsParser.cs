@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using log4net;
 using TF2Items.Core;
 using ValveFormat;
@@ -10,7 +9,7 @@ namespace TF2Items.Parsers
     public class Tf2ItemsWeaponsParser
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Tf2ItemsWeaponsParser));
-
+        
         public ServerConfiguration Parse(string filePath)
         {
             using (NDC.Push("parse"))
@@ -34,22 +33,9 @@ namespace TF2Items.Parsers
                 {
                     using (NDC.Push(node.Key))
                     {
-                        UserIdentifier users;
-                        if (node.Key == "*")
-                            users = UserIdentifier.Any();
-                        else
-                        {
-                            string[] streamIds = node.Key.Split(new []{" ; "}, StringSplitOptions.RemoveEmptyEntries);
-                            if (streamIds.Length == 0)
-                            {
-                                Log.Warn("Could not detect Users in " + node.Key);
-                                continue;
-                            }
-
-                            users = UserIdentifier.FromStreamIds(streamIds);
-                        }
-
-                        WeaponCollection collection = new WeaponCollection(users);
+                        WeaponCollection collection = CreateWeaponCollection(node);
+                        if (collection == null)
+                            continue;
 
                         AddWeapons(collection, node.SubNodes);
 
@@ -68,13 +54,11 @@ namespace TF2Items.Parsers
                     string idRaw = node.Key;
                     using (NDC.Push(idRaw))
                     {
-                        WeaponIdentifier weaponId;
-                        if (!ParseWeaponIdentifier(idRaw, out weaponId))
+                        Weapon weapon = CreateWeapon(idRaw);
+                        if (weapon == null)
                             continue;
 
-                        Weapon weapon = new Weapon(weaponId);
-
-                        AddStats(weapon, node.SubNodes);
+                        AddWeaponAttributes(weapon, node.SubNodes);
 
                         collection.Weapons.Add(weapon);
                     }
@@ -82,24 +66,7 @@ namespace TF2Items.Parsers
             }
         }
 
-        private static bool ParseWeaponIdentifier(string idRaw, out WeaponIdentifier weaponId)
-        {
-            if (idRaw == "*")
-                weaponId = WeaponIdentifier.Any();
-            else
-            {
-                int id;
-                if (!TryParse(idRaw, "Key", out id))
-                {
-                    weaponId = WeaponIdentifier.Any();
-                    return false;
-                }
-                weaponId = WeaponIdentifier.FromId(id);
-            }
-            return true;
-        }
-
-        private static void AddStats(Weapon weapon, List<DataNode> nodes)
+        private void AddWeaponAttributes(Weapon weapon, List<DataNode> nodes)
         {
             using (NDC.Push("Attribute"))
             {
@@ -107,76 +74,88 @@ namespace TF2Items.Parsers
                 {
                     using (NDC.Push(node.Key))
                     {
-                        if (node.Key == "quality")
-                        {
-                            int quality;
-                            if (!TryParse(node.Value, "quality", out quality))
-                                continue;
-                            weapon.Quality = quality;
-                            continue;
-                        }
-                        if (node.Key == "level")
-                        {
-                            int level;
-                            if (!TryParse(node.Value, "level", out level))
-                                continue;
-                            weapon.Level = level;
-                            continue;
-                        }
-                        if (node.Key == "admin-flags")
-                        {
-                            weapon.AdminFlags = node.Value;
-                            continue;
-                        }
-
-                        int index;
-                        if (!TryParse(node.Key, "attribute-index", out index))
+                        WeaponAttribute attribute = CreateWeaponAttribute(weapon, node);
+                        if (attribute == null)
                             continue;
 
-                        string[] pair = node.Value.Split(new[] {" ; "}, StringSplitOptions.RemoveEmptyEntries);
-                        if (pair.Length != 2)
-                        {
-                            Log.Warn("could not detect attribute in " + node.Value);
-                            continue;
-                        }
-
-                        int id;
-                        if (!TryParse(pair[0], "attribute-id", out id))
-                        {
-                            continue;
-                        }
-
-                        float value;
-                        if (!TryParse(pair[1], "attribute-value", out value))
-                        {
-                            continue;
-                        }
-
-                        WeaponAttribute attribute = new WeaponAttribute(id, value);
                         weapon.Attributes.Add(attribute);
                     }
                 }
             }
         }
 
-        private static bool TryParse(string idRaw, string label, out int id)
+        private static WeaponCollection CreateWeaponCollection(DataNode node)
         {
-            if (!int.TryParse(idRaw, NumberStyles.Any, new CultureInfo("en-US"), out id))
+            UserIdentifier users;
+            if (node.Key == "*")
+                users = UserIdentifier.Any();
+            else
             {
-                Log.Warn(string.Format("Could not parse {1} {0} as Integer", idRaw, label));
-                return false;
+                string[] streamIds = node.Key.Split(new[] { " ; " }, StringSplitOptions.RemoveEmptyEntries);
+                if (streamIds.Length == 0)
+                {
+                    Log.Warn("Could not detect Users in " + node.Key);
+                    return null;
+                }
+
+                users = UserIdentifier.FromStreamIds(streamIds);
             }
-            return true;
+
+            WeaponCollection collection = new WeaponCollection(users);
+            return collection;
         }
 
-        private static bool TryParse(string idRaw, string label, out float id)
+        private static Weapon CreateWeapon(string idRaw)
         {
-            if (!float.TryParse(idRaw, NumberStyles.Any, new CultureInfo("en-US"), out id))
+            WeaponIdentifier weaponId;
+            if (!Primitives.ParseWeaponIdentifier(idRaw, out weaponId))
+                return null;
+
+            Weapon weapon = new Weapon(weaponId);
+            return weapon;
+        }
+
+        private WeaponAttribute CreateWeaponAttribute(Weapon weapon, DataNode node)
+        {
+            if (node.Key == "quality")
             {
-                Log.Warn(string.Format("Could not parse {1} {0} as Float", idRaw, label));
-                return false;
+                int quality;
+                if (!Primitives.TryParse(node.Value, "quality", out quality))
+                    return null;
+                weapon.Quality = quality;
+                return null;
             }
-            return true;
+            if (node.Key == "level")
+            {
+                int level;
+                if (!Primitives.TryParse(node.Value, "level", out level))
+                    return null;
+                weapon.Level = level;
+                return null;
+            }
+            if (node.Key == "admin-flags")
+            {
+                weapon.AdminFlags = node.Value;
+                return null;
+            }
+
+            int index;
+            if (!Primitives.TryParse(node.Key, "attribute-index", out index))
+                return null;
+
+            string[] pair = node.Value.Split(new[] {" ; "}, StringSplitOptions.RemoveEmptyEntries);
+            if (pair.Length != 2)
+            {
+                Log.Warn("could not detect attribute in " + node.Value);
+                return null;
+            }
+
+            int id;
+            if (!Primitives.TryParse(pair[0], "attribute-id", out id))
+                return null;
+            
+            WeaponAttribute attribute = WeaponAttribute.FromTf2ItemsWeapons(id, pair[1]);
+            return attribute;
         }
     }
 }

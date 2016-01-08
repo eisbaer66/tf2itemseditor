@@ -69,6 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemsGameAttributesParserTests.cs" />
+    <Compile Include="ItemsGameParserTests.cs" />
+    <Compile Include="TestDeployment.cs" />
     <Compile Include="Tf2ItemsWeaponsParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -86,6 +89,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="items_game.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="tf2items.weapons.1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

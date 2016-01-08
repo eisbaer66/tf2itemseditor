@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace TF2Items.Core
 {
+    [DebuggerDisplay("{Id}: {Name}")]
     public class Weapon
     {
         public Weapon(WeaponIdentifier id)

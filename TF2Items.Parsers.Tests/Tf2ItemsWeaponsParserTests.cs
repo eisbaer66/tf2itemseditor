@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using log4net.Config;
 using NUnit.Framework;
 using TF2Items.Core;
@@ -35,17 +33,17 @@ namespace TF2Items.Parsers.Tests
                                                                                                    AdminFlags = "a",
                                                                                                    Attributes = new List<WeaponAttribute>
                                                                                                                 {
-                                                                                                                    new WeaponAttribute(134,   2),
-                                                                                                                    new WeaponAttribute(  2, 100),
-                                                                                                                    new WeaponAttribute(  4,  10),
-                                                                                                                    new WeaponAttribute(  6,   .25f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
                                                                                                                 }
                                                                                                }
                                                                                            }
                                                                              }
                                                                          }
                                                  };
-            string filepath = GetFile("tf2items.weapons.1.txt");
+            string filepath = TestDeployment.GetFile("tf2items.weapons.1.txt");
             ServerConfiguration config = new Tf2ItemsWeaponsParser().Parse(filepath);
 
             AssertEquality(config, expectedConfig);
@@ -70,10 +68,10 @@ namespace TF2Items.Parsers.Tests
                                                                                                    AdminFlags = "a",
                                                                                                    Attributes = new List<WeaponAttribute>
                                                                                                                 {
-                                                                                                                    new WeaponAttribute(134,   2),
-                                                                                                                    new WeaponAttribute(  2, 100),
-                                                                                                                    new WeaponAttribute(  4,  10),
-                                                                                                                    new WeaponAttribute(  6,   .25f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
                                                                                                                 }
                                                                                                },
                                                                                                new Weapon(WeaponIdentifier.FromId(12))
@@ -87,10 +85,10 @@ namespace TF2Items.Parsers.Tests
                                                                                                    Level = 100,
                                                                                                    Attributes = new List<WeaponAttribute>
                                                                                                                 {
-                                                                                                                    new WeaponAttribute(134,   2),
-                                                                                                                    new WeaponAttribute(  2, 100),
-                                                                                                                    new WeaponAttribute(  4,  10),
-                                                                                                                    new WeaponAttribute(  6,   .25f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
                                                                                                                 }
                                                                                                },
                                                                                                new Weapon(WeaponIdentifier.FromId(45))
@@ -99,18 +97,18 @@ namespace TF2Items.Parsers.Tests
                                                                                                    Level = 10,
                                                                                                    Attributes = new List<WeaponAttribute>
                                                                                                                 {
-                                                                                                                    new WeaponAttribute(134,   2),
-                                                                                                                    new WeaponAttribute(  2, 100),
-                                                                                                                    new WeaponAttribute(  4,  10),
-                                                                                                                    new WeaponAttribute(  6,   .25f),
-                                                                                                                    new WeaponAttribute( 16, 500),
-                                                                                                                    new WeaponAttribute( 26, 250),
-                                                                                                                    new WeaponAttribute( 31,  10),
-                                                                                                                    new WeaponAttribute(123,   3),
-                                                                                                                    new WeaponAttribute(134,   4),
-                                                                                                                    new WeaponAttribute(  3,   .17f),
-                                                                                                                    new WeaponAttribute( 97,   .6f),
-                                                                                                                    new WeaponAttribute(106,   .5f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 16, 500),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 26, 250),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 31,  10),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(123,   3),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   4),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  3,   .17f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 97,   .6f),
+                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(106,   .5f),
                                                                                                                 }
                                                                                                },
                                                                                                new Weapon(WeaponIdentifier.FromId(4))
@@ -142,7 +140,7 @@ namespace TF2Items.Parsers.Tests
                                                                              }
                                                                          }
                                                  };
-            string filepath = GetFile("tf2items.weapons.example.txt");
+            string filepath = TestDeployment.GetFile("tf2items.weapons.example.txt");
             ServerConfiguration config = new Tf2ItemsWeaponsParser().Parse(filepath);
 
             AssertEquality(config, expectedConfig);
@@ -196,31 +194,6 @@ namespace TF2Items.Parsers.Tests
             Assert.That(actualAttribute.Value,      Is.EqualTo(expectedAttribute.Value),        "expectedAttribute.Value");
             Assert.That(actualAttribute.EffectType, Is.EqualTo(expectedAttribute.EffectType),   "expectedAttribute.EffectType");
             Assert.That(actualAttribute.Format,     Is.EqualTo(expectedAttribute.Format),       "expectedAttribute.Format");
-        }
-
-        private string GetFile(string filename)
-        {
-            string dir = Directory.GetCurrentDirectory();
-
-            string foundFile = SearchFile(filename, dir);
-            if (foundFile == null)
-                throw new FileNotFoundException("test-file was not found", filename);
-            return foundFile;
-        }
-
-        private static string SearchFile(string filename, string dir)
-        {
-            string foundFile = Directory.GetFiles(dir).FirstOrDefault(f => Path.GetFileName(f) == filename);
-            if (foundFile != null)
-                return foundFile;
-            foreach (string subDir in Directory.GetDirectories(dir))
-            {
-                foundFile = SearchFile(filename, subDir);
-                if (foundFile != null)
-                    return foundFile;
-            }
-
-            return null;
         }
     }
 }
