@@ -33,6 +33,12 @@ namespace TF2Items.Parsers
             WeaponsFilter = DefaultWeaponsFilter;
         }
 
+        public IDictionary<int, WeaponAttribute> ParseAsDictionary(string filePath)
+        {
+            return ParseSingle(filePath)
+                        .Where(f => f.Id.HasValue)
+                        .ToDictionary(f => f.Id.Value);
+        }
         public IList<WeaponAttribute> Parse(string filePath)
         {
             return ParseSingle(filePath).ToList();
@@ -83,9 +89,9 @@ namespace TF2Items.Parsers
         private WeaponAttribute CreateWeaponAttribute(DataNode node)
         {
             string name = null;
-            string format = null;
-            string attributeClass = null;
-            string effectType = null;
+            string format = String.Empty;
+            string attributeClass = String.Empty;
+            string effectType = String.Empty;
 
             foreach (DataNode subNode in node.SubNodes)
             {
@@ -106,24 +112,9 @@ namespace TF2Items.Parsers
                 }
 
             }
-            if (string.IsNullOrEmpty(attributeClass))
-            {
-                Log.Warn("could not find 'attribute_class'");
-                return null;
-            }
             if (string.IsNullOrEmpty(name))
             {
                 Log.Warn("could not find 'name'");
-                return null;
-            }
-            if (string.IsNullOrEmpty(format))
-            {
-                Log.Warn("could not find 'format'");
-                return null;
-            }
-            if (string.IsNullOrEmpty(effectType))
-            {
-                Log.Warn("could not find 'effectType'");
                 return null;
             }
 

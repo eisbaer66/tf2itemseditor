@@ -7,9 +7,9 @@ using ValveFormat;
 
 namespace TF2Items.Parsers
 {
-    public class ItemsGameParser 
+    public class ItemsGameWeaponsParser 
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ItemsGameParser));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ItemsGameWeaponsParser));
         
         public Func<DataNode, bool> WeaponsFilter { get; set; }
 
@@ -28,11 +28,16 @@ namespace TF2Items.Parsers
                                                                return true;
                                                            };
 
-        public ItemsGameParser()
+        public ItemsGameWeaponsParser()
         {
             WeaponsFilter = DefaultWeaponsFilter;
         }
 
+        public IDictionary<WeaponIdentifier, Weapon> ParseAsDictionary(string filePath)
+        {
+            return ParseSingle(filePath)
+                        .ToDictionary(f => f.Id);
+        }
         public IList<Weapon> Parse(string filePath)
         {
             return ParseSingle(filePath).ToList();

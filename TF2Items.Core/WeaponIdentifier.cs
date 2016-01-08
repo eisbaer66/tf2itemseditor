@@ -44,7 +44,9 @@ namespace TF2Items.Core
 
         public override int GetHashCode()
         {
-            return ToString().GetHashCode();
+            if (Id == null)
+                return 0;
+            return Id.GetHashCode();
         }
 
         public static WeaponIdentifier Any()

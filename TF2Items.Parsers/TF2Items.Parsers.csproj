@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ItemsGameAttributesParser.cs" />
-    <Compile Include="ItemsGameParser.cs" />
+    <Compile Include="ItemsGameWeaponsParser.cs" />
     <Compile Include="Primitives.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tf2ItemsWeaponsParser.cs" />

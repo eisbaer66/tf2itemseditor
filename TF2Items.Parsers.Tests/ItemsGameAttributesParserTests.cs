@@ -23,5 +23,15 @@ namespace TF2Items.Parsers.Tests
             Assert.That(attributes, Is.Not.Null);
             Assert.That(attributes.Count, Is.Not.EqualTo(0));
         }
+
+        [Test]
+        public void ParsesItemsGameAsDictionary()
+        {
+            string filepath = TestDeployment.GetFile("items_game.txt");
+            IDictionary<int, WeaponAttribute> attributes = new ItemsGameAttributesParser().ParseAsDictionary(filepath);
+
+            Assert.That(attributes, Is.Not.Null);
+            Assert.That(attributes.Count, Is.Not.EqualTo(0));
+        }
     }
 }
