@@ -33,16 +33,16 @@ namespace TF2Items.Parsers
             WeaponsFilter = DefaultWeaponsFilter;
         }
 
-        public IDictionary<WeaponIdentifier, Weapon> ParseAsDictionary(string filePath)
+        public IDictionary<WeaponIdentifier, Tf2Weapon> ParseAsDictionary(string filePath)
         {
             return ParseSingle(filePath)
                         .ToDictionary(f => f.Id);
         }
-        public IList<Weapon> Parse(string filePath)
+        public IList<Tf2Weapon> Parse(string filePath)
         {
             return ParseSingle(filePath).ToList();
         }
-        public IEnumerable<Weapon> ParseSingle(string filePath)
+        public IEnumerable<Tf2Weapon> ParseSingle(string filePath)
         {
             using (NDC.Push("parse"))
             {
@@ -53,7 +53,7 @@ namespace TF2Items.Parsers
             }
         }
 
-        private IEnumerable<Weapon> AddWeapons(List<DataNode> nodes)
+        private IEnumerable<Tf2Weapon> AddWeapons(List<DataNode> nodes)
         {
             DataNode itemsNode = nodes.Find(n => n.Key == "items");
             if (itemsNode == null)
@@ -74,7 +74,7 @@ namespace TF2Items.Parsers
                             continue;
                         }
 
-                        Weapon weapon = CreateWeapon(node);
+                        Tf2Weapon weapon = CreateWeapon(node);
                         if (weapon == null)
                             continue;
 
@@ -86,16 +86,16 @@ namespace TF2Items.Parsers
             }
         }
 
-        private Weapon CreateWeapon(DataNode node)
+        private Tf2Weapon CreateWeapon(DataNode node)
         {
             WeaponIdentifier weaponIdentifier;
             if (!Primitives.ParseWeaponIdentifier(node.Key, out weaponIdentifier))
                 return null;
 
-            return new Weapon(weaponIdentifier);
+            return new Tf2Weapon(weaponIdentifier);
         }
 
-        private void AddStats(Weapon weapon, List<DataNode> nodes)
+        private void AddStats(Tf2Weapon weapon, List<DataNode> nodes)
         {
             using (NDC.Push("Property"))
             {
@@ -118,7 +118,7 @@ namespace TF2Items.Parsers
             }
         }
 
-        private IEnumerable<WeaponAttribute> CreateAttributes(List<DataNode> nodes)
+        private IEnumerable<Tf2WeaponAttribute> CreateAttributes(List<DataNode> nodes)
         {
             foreach (DataNode node in nodes)
             {
@@ -143,13 +143,13 @@ namespace TF2Items.Parsers
                     Log.Warn("could not find attribute class");
                     continue;
                 }
-                if (string.IsNullOrEmpty(value ))
+                if (string.IsNullOrEmpty(value))
                 {
                     Log.Warn("could not find value");
                     continue;
                 }
 
-                yield return WeaponAttribute.FromItemsGameWeapon(attributeClass, node.Key, value);
+                yield return new Tf2WeaponAttribute(attributeClass, node.Key, value);
             }
         }
     }

@@ -24,19 +24,19 @@ namespace TF2Items.Parsers.Tests
                                                                              new WeaponCollection
                                                                              {
                                                                                  Users = UserIdentifier.FromStreamIds("STEAM_0:1:13776935", "STEAM_0:1:17919459"),
-                                                                                 Weapons = new List<Weapon>
+                                                                                 Weapons = new List<ConfigWeapon>
                                                                                            {
-                                                                                               new Weapon(WeaponIdentifier.FromId(12))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(12))
                                                                                                {
                                                                                                    Quality = 5,
                                                                                                    Level = 100,
                                                                                                    AdminFlags = "a",
-                                                                                                   Attributes = new List<WeaponAttribute>
+                                                                                                   Attributes = new List<ConfigWeaponAttribute>
                                                                                                                 {
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
+                                                                                                                    new ConfigWeaponAttribute(134,   2),
+                                                                                                                    new ConfigWeaponAttribute(  2, 100),
+                                                                                                                    new ConfigWeaponAttribute(  4,  10),
+                                                                                                                    new ConfigWeaponAttribute(  6,   .25f),
                                                                                                                 }
                                                                                                }
                                                                                            }
@@ -59,64 +59,64 @@ namespace TF2Items.Parsers.Tests
                                                                              new WeaponCollection
                                                                              {
                                                                                  Users = UserIdentifier.FromStreamIds("STEAM_0:1:13776935", "STEAM_0:1:17919459"),
-                                                                                 Weapons = new List<Weapon>
+                                                                                 Weapons = new List<ConfigWeapon>
                                                                                            {
-                                                                                               new Weapon(WeaponIdentifier.FromId(12))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(12))
                                                                                                {
                                                                                                    Quality = 5,
                                                                                                    Level = 100,
                                                                                                    AdminFlags = "a",
-                                                                                                   Attributes = new List<WeaponAttribute>
+                                                                                                   Attributes = new List<ConfigWeaponAttribute>
                                                                                                                 {
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
+                                                                                                                    new ConfigWeaponAttribute(134,   2),
+                                                                                                                    new ConfigWeaponAttribute(  2, 100),
+                                                                                                                    new ConfigWeaponAttribute(  4,  10),
+                                                                                                                    new ConfigWeaponAttribute(  6,   .25f),
                                                                                                                 }
                                                                                                },
-                                                                                               new Weapon(WeaponIdentifier.FromId(12))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(12))
                                                                                                {
                                                                                                    Quality = 4,
                                                                                                    Level = 50,
                                                                                                },
-                                                                                               new Weapon(WeaponIdentifier.FromId(18))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(18))
                                                                                                {
                                                                                                    Quality = 1,
                                                                                                    Level = 100,
-                                                                                                   Attributes = new List<WeaponAttribute>
+                                                                                                   Attributes = new List<ConfigWeaponAttribute>
                                                                                                                 {
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
+                                                                                                                    new ConfigWeaponAttribute(134,   2),
+                                                                                                                    new ConfigWeaponAttribute(  2, 100),
+                                                                                                                    new ConfigWeaponAttribute(  4,  10),
+                                                                                                                    new ConfigWeaponAttribute(  6,   .25f),
                                                                                                                 }
                                                                                                },
-                                                                                               new Weapon(WeaponIdentifier.FromId(45))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(45))
                                                                                                {
                                                                                                    Quality = 3,
                                                                                                    Level = 10,
-                                                                                                   Attributes = new List<WeaponAttribute>
+                                                                                                   Attributes = new List<ConfigWeaponAttribute>
                                                                                                                 {
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   2),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  2, 100),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  4,  10),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  6,   .25f),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 16, 500),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 26, 250),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 31,  10),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(123,   3),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(134,   4),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(  3,   .17f),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons( 97,   .6f),
-                                                                                                                    WeaponAttribute.FromTf2ItemsWeapons(106,   .5f),
+                                                                                                                    new ConfigWeaponAttribute(134,   2),
+                                                                                                                    new ConfigWeaponAttribute(  2, 100),
+                                                                                                                    new ConfigWeaponAttribute(  4,  10),
+                                                                                                                    new ConfigWeaponAttribute(  6,   .25f),
+                                                                                                                    new ConfigWeaponAttribute( 16, 500),
+                                                                                                                    new ConfigWeaponAttribute( 26, 250),
+                                                                                                                    new ConfigWeaponAttribute( 31,  10),
+                                                                                                                    new ConfigWeaponAttribute(123,   3),
+                                                                                                                    new ConfigWeaponAttribute(134,   4),
+                                                                                                                    new ConfigWeaponAttribute(  3,   .17f),
+                                                                                                                    new ConfigWeaponAttribute( 97,   .6f),
+                                                                                                                    new ConfigWeaponAttribute(106,   .5f),
                                                                                                                 }
                                                                                                },
-                                                                                               new Weapon(WeaponIdentifier.FromId(4))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(4))
                                                                                                {
                                                                                                    Quality = 9,
                                                                                                    Level = 10,
                                                                                                },
-                                                                                               new Weapon(WeaponIdentifier.Any())
+                                                                                               new ConfigWeapon(WeaponIdentifier.Any())
                                                                                                {
                                                                                                    Quality = 6,
                                                                                                },
@@ -124,14 +124,14 @@ namespace TF2Items.Parsers.Tests
                                                                              },
                                                                              new WeaponCollection
                                                                              {
-                                                                                 Weapons = new List<Weapon>
+                                                                                 Weapons = new List<ConfigWeapon>
                                                                                            {
-                                                                                               new Weapon(WeaponIdentifier.FromId(4))
+                                                                                               new ConfigWeapon(WeaponIdentifier.FromId(4))
                                                                                                {
                                                                                                    Quality =  2,
                                                                                                    Level = 50,
                                                                                                },
-                                                                                               new Weapon(WeaponIdentifier.Any())
+                                                                                               new ConfigWeapon(WeaponIdentifier.Any())
                                                                                                {
                                                                                                    AdminFlags = "z",
                                                                                                    Quality = 6
@@ -165,13 +165,13 @@ namespace TF2Items.Parsers.Tests
 
             for (int i = 0; i < actualWeaponCollection.Weapons.Count; i++)
             {
-                Weapon actualWeapon = actualWeaponCollection.Weapons[i];
-                Weapon expectedWeapon = expectedWeaponCollection.Weapons[i];
+                ConfigWeapon actualWeapon = actualWeaponCollection.Weapons[i];
+                ConfigWeapon expectedWeapon = expectedWeaponCollection.Weapons[i];
                 AssertEquality(actualWeapon, expectedWeapon);
             }
         }
 
-        private void AssertEquality(Weapon actualWeapon, Weapon expectedWeapon)
+        private void AssertEquality(ConfigWeapon actualWeapon, ConfigWeapon expectedWeapon)
         {
             Assert.That(actualWeapon.Id,            Is.EqualTo(expectedWeapon.Id),          "Weapon.Id");
             Assert.That(actualWeapon.Name,          Is.EqualTo(expectedWeapon.Name),        "Weapon.Name");
@@ -181,19 +181,16 @@ namespace TF2Items.Parsers.Tests
 
             for (int i = 0; i < actualWeapon.Attributes.Count; i++)
             {
-                WeaponAttribute actualAttribute = actualWeapon.Attributes[i];
-                WeaponAttribute expectedAttribute = expectedWeapon.Attributes[i];
+                ConfigWeaponAttribute actualAttribute = actualWeapon.Attributes[i];
+                ConfigWeaponAttribute expectedAttribute = expectedWeapon.Attributes[i];
                 AssertEquality(actualAttribute, expectedAttribute);
             }
         }
 
-        private void AssertEquality(WeaponAttribute actualAttribute, WeaponAttribute expectedAttribute)
+        private void AssertEquality(ConfigWeaponAttribute actualAttribute, ConfigWeaponAttribute expectedAttribute)
         {
             Assert.That(actualAttribute.Id,         Is.EqualTo(expectedAttribute.Id),           "expectedAttribute.Id");
-            Assert.That(actualAttribute.Name,       Is.EqualTo(expectedAttribute.Name),         "expectedAttribute.Name");
             Assert.That(actualAttribute.Value,      Is.EqualTo(expectedAttribute.Value),        "expectedAttribute.Value");
-            Assert.That(actualAttribute.EffectType, Is.EqualTo(expectedAttribute.EffectType),   "expectedAttribute.EffectType");
-            Assert.That(actualAttribute.Format,     Is.EqualTo(expectedAttribute.Format),       "expectedAttribute.Format");
         }
     }
 }

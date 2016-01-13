@@ -54,7 +54,7 @@ namespace TF2Items.Parsers
                     string idRaw = node.Key;
                     using (NDC.Push(idRaw))
                     {
-                        Weapon weapon = CreateWeapon(idRaw);
+                        ConfigWeapon weapon = CreateWeapon(idRaw);
                         if (weapon == null)
                             continue;
 
@@ -66,7 +66,7 @@ namespace TF2Items.Parsers
             }
         }
 
-        private void AddWeaponAttributes(Weapon weapon, List<DataNode> nodes)
+        private void AddWeaponAttributes(ConfigWeapon weapon, List<DataNode> nodes)
         {
             using (NDC.Push("Attribute"))
             {
@@ -74,7 +74,7 @@ namespace TF2Items.Parsers
                 {
                     using (NDC.Push(node.Key))
                     {
-                        WeaponAttribute attribute = CreateWeaponAttribute(weapon, node);
+                        ConfigWeaponAttribute attribute = CreateWeaponAttribute(weapon, node);
                         if (attribute == null)
                             continue;
 
@@ -105,17 +105,17 @@ namespace TF2Items.Parsers
             return collection;
         }
 
-        private static Weapon CreateWeapon(string idRaw)
+        private static ConfigWeapon CreateWeapon(string idRaw)
         {
             WeaponIdentifier weaponId;
             if (!Primitives.ParseWeaponIdentifier(idRaw, out weaponId))
                 return null;
 
-            Weapon weapon = new Weapon(weaponId);
+            ConfigWeapon weapon = new ConfigWeapon(weaponId);
             return weapon;
         }
 
-        private WeaponAttribute CreateWeaponAttribute(Weapon weapon, DataNode node)
+        private ConfigWeaponAttribute CreateWeaponAttribute(ConfigWeapon weapon, DataNode node)
         {
             if (node.Key == "quality")
             {
@@ -153,8 +153,8 @@ namespace TF2Items.Parsers
             int id;
             if (!Primitives.TryParse(pair[0], "attribute-id", out id))
                 return null;
-            
-            WeaponAttribute attribute = WeaponAttribute.FromTf2ItemsWeapons(id, pair[1]);
+
+            ConfigWeaponAttribute attribute = new ConfigWeaponAttribute(id, pair[1]);
             return attribute;
         }
     }

@@ -19,9 +19,9 @@ namespace TF2Items.Parsers.Tests
         public void ParsesItemsGame()
         {
             string filepath = TestDeployment.GetFile("items_game.txt");
-            IList<Weapon> weapons = new ItemsGameWeaponsParser().Parse(filepath);
+            IList<Tf2Weapon> weapons = new ItemsGameWeaponsParser().Parse(filepath);
 
-            Weapon weaponWithAttributes = weapons.FirstOrDefault(w => w.Attributes.Count >0);
+            Tf2Weapon weaponWithAttributes = weapons.FirstOrDefault(w => w.Attributes.Count >0);
 
             Assert.That(weapons, Is.Not.Null);
             Assert.That(weapons.Count, Is.Not.EqualTo(0));
@@ -32,9 +32,9 @@ namespace TF2Items.Parsers.Tests
         public void ParsesItemsGameAsDictionary()
         {
             string filepath = TestDeployment.GetFile("items_game.txt");
-            IDictionary<WeaponIdentifier, Weapon> weapons = new ItemsGameWeaponsParser().ParseAsDictionary(filepath);
+            IDictionary<WeaponIdentifier, Tf2Weapon> weapons = new ItemsGameWeaponsParser().ParseAsDictionary(filepath);
 
-            Weapon weaponWithAttributes = weapons.FirstOrDefault(w => w.Value.Attributes.Count >0).Value;
+            Tf2Weapon weaponWithAttributes = weapons.FirstOrDefault(w => w.Value.Attributes.Count >0).Value;
 
             Assert.That(weapons, Is.Not.Null);
             Assert.That(weapons.Count, Is.Not.EqualTo(0));

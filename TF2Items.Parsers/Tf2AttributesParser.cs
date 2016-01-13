@@ -7,9 +7,9 @@ using ValveFormat;
 
 namespace TF2Items.Parsers
 {
-    public class ItemsGameAttributesParser 
+    public class Tf2AttributesParser 
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ItemsGameAttributesParser));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Tf2AttributesParser));
         
         public Func<DataNode, bool> WeaponsFilter { get; set; }
 
@@ -28,22 +28,22 @@ namespace TF2Items.Parsers
                                                                return true;
                                                            };
 
-        public ItemsGameAttributesParser()
+        public Tf2AttributesParser()
         {
             WeaponsFilter = DefaultWeaponsFilter;
         }
 
-        public IDictionary<int, WeaponAttribute> ParseAsDictionary(string filePath)
+        public IDictionary<int, Tf2Attribute> ParseAsDictionary(string filePath)
         {
             return ParseSingle(filePath)
                         .Where(f => f.Id.HasValue)
                         .ToDictionary(f => f.Id.Value);
         }
-        public IList<WeaponAttribute> Parse(string filePath)
+        public IList<Tf2Attribute> Parse(string filePath)
         {
             return ParseSingle(filePath).ToList();
         }
-        public IEnumerable<WeaponAttribute> ParseSingle(string filePath)
+        public IEnumerable<Tf2Attribute> ParseSingle(string filePath)
         {
             using (NDC.Push("parse"))
             {
@@ -54,7 +54,7 @@ namespace TF2Items.Parsers
             }
         }
 
-        private IEnumerable<WeaponAttribute> CreateWeaponAttributes(List<DataNode> nodes)
+        private IEnumerable<Tf2Attribute> CreateWeaponAttributes(List<DataNode> nodes)
         {
             DataNode itemsNode = nodes.Find(n => n.Key == "attributes");
             if (itemsNode == null)
@@ -75,7 +75,7 @@ namespace TF2Items.Parsers
                             continue;
                         }
 
-                        WeaponAttribute attribute = CreateWeaponAttribute(node);
+                        Tf2Attribute attribute = CreateWeaponAttribute(node);
                         if (attribute == null)
                             continue;
 
@@ -86,7 +86,7 @@ namespace TF2Items.Parsers
             }
         }
 
-        private WeaponAttribute CreateWeaponAttribute(DataNode node)
+        private Tf2Attribute CreateWeaponAttribute(DataNode node)
         {
             string name = null;
             string format = String.Empty;
@@ -122,7 +122,7 @@ namespace TF2Items.Parsers
             if (!Primitives.TryParse(node.Key, "Key", out id))
                 return null;
 
-            return WeaponAttribute.FromItemsGameAttributes(id, attributeClass, name, format, effectType);
+            return new Tf2Attribute(id, attributeClass, name, format, effectType);
         }
     }
 }

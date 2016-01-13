@@ -18,7 +18,7 @@ namespace TF2Items.Parsers.Tests
         public void ParsesItemsGame()
         {
             string filepath = TestDeployment.GetFile("items_game.txt");
-            IList<WeaponAttribute> attributes = new ItemsGameAttributesParser().Parse(filepath);
+            IList<Tf2Attribute> attributes = new Tf2AttributesParser().Parse(filepath);
 
             Assert.That(attributes, Is.Not.Null);
             Assert.That(attributes.Count, Is.Not.EqualTo(0));
@@ -28,7 +28,7 @@ namespace TF2Items.Parsers.Tests
         public void ParsesItemsGameAsDictionary()
         {
             string filepath = TestDeployment.GetFile("items_game.txt");
-            IDictionary<int, WeaponAttribute> attributes = new ItemsGameAttributesParser().ParseAsDictionary(filepath);
+            IDictionary<int, Tf2Attribute> attributes = new Tf2AttributesParser().ParseAsDictionary(filepath);
 
             Assert.That(attributes, Is.Not.Null);
             Assert.That(attributes.Count, Is.Not.EqualTo(0));

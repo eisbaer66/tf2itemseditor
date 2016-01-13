@@ -45,7 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ItemsGameAttributesParser.cs" />
+    <Compile Include="Tf2AttributesParser.cs" />
     <Compile Include="ItemsGameWeaponsParser.cs" />
     <Compile Include="Primitives.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
