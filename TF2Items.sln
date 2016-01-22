@@ -24,6 +24,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6F5652
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TF2Items.ValvePak", "TF2Items.ValvePak\TF2Items.ValvePak.csproj", "{7383D68E-D953-4817-B085-91343DA49870}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{9E58BB9B-53AC-4370-B493-46BB03A18F6A}"
+	ProjectSection(SolutionItems) = preProject
+		tools\HLExtract.exe = tools\HLExtract.exe
+		tools\HLLib.dll = tools\HLLib.dll
+		tools\VTFCmd.exe = tools\VTFCmd.exe
+		tools\VTFLib.dll = tools\VTFLib.dll
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TF2Items.ValvePak.Tests", "TF2Items.ValvePak.Tests\TF2Items.ValvePak.Tests.csproj", "{A17DBE32-E285-4090-BFE3-636E448029DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -120,13 +132,37 @@ Global
 		{B963FE5B-CFED-4709-B3AB-920F9D122C4E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B963FE5B-CFED-4709-B3AB-920F9D122C4E}.Release|Win32.ActiveCfg = Release|Any CPU
 		{B963FE5B-CFED-4709-B3AB-920F9D122C4E}.Release|x86.ActiveCfg = Release|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Release|Win32.ActiveCfg = Release|Any CPU
+		{7383D68E-D953-4817-B085-91343DA49870}.Release|x86.ActiveCfg = Release|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Release|Win32.ActiveCfg = Release|Any CPU
+		{A17DBE32-E285-4090-BFE3-636E448029DB}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		VisualSVNWorkingCopyRoot = .
-		BuildVersion_BuildVersioningStyle = None.None.None.Increment
 		BuildVersion_DetectChanges = False
+		BuildVersion_BuildVersioningStyle = None.None.None.Increment
+		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
 EndGlobal
