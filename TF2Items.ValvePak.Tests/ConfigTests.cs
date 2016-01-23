@@ -3,6 +3,7 @@
 namespace TF2Items.ValvePak.Tests
 {
     [TestFixture]
+    [Category("Debug")]
     public class ConfigTests
     {
         [Test]
