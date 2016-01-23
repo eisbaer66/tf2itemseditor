@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using log4net;
 using NUnit.Framework;
 using TF2Items.Core;
 
@@ -10,10 +11,16 @@ namespace TF2Items.ValvePak.Tests
     [Category("VPK")]
     public class ValvePakServiceExtractFileTests
     {
+        private ILog _log;
+
         [SetUp]
         public void Setup()
         {
             LogConfigurator.ForTest();
+            Directory.SetCurrentDirectory(TestHelper.TestDir);
+
+            _log = LogManager.GetLogger(typeof(ValvePakServiceExtractFileTests));
+            _log.Debug("cwd: "+Directory.GetCurrentDirectory());
         }
 
         [Test]
