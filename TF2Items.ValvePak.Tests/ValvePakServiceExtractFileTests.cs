@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using log4net;
 using NUnit.Framework;
+using Rhino.Mocks;
 using TF2Items.Core;
 
 namespace TF2Items.ValvePak.Tests
@@ -10,18 +10,40 @@ namespace TF2Items.ValvePak.Tests
     [Category("VPK")]
     public class ValvePakServiceExtractFileTests
     {
-        private ILog _log;
+        private MockRepository _mockRepository;
+        private IValveTextureFormatService _vtfService;
 
         [SetUp]
         public void Setup()
         {
             LogConfigurator.ForTest();
+
+            _mockRepository = new MockRepository();
+            _vtfService = _mockRepository.StrictMock<IValveTextureFormatService>();
+        }
+
+        [Test]
+        public void ThrowsExceptionIfConfigIsNull()
+        {
+            Assert.That(() => new ValvePakService(null, new SteamConfig(), _vtfService), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void ThrowsExceptionIfSteamConfigIsNull()
+        {
+            Assert.That(() => new ValvePakService(new Config(), null, _vtfService), Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void ThrowsExceptionIfVtfServiceIsNull()
+        {
+            Assert.That(() => new ValvePakService(new Config(), new SteamConfig(), null), Throws.ArgumentNullException);
         }
 
         [Test]
         public async Task IntoGivenDirectory()
         {
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig(), _vtfService);
             string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf", TestHelper.TestDir);
 
             AssertFile(filePath);
@@ -30,7 +52,7 @@ namespace TF2Items.ValvePak.Tests
         [Test]
         public async Task IntoTempDirectory()
         {
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig(), _vtfService);
             string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf");
 
             AssertFile(filePath);
@@ -40,7 +62,7 @@ namespace TF2Items.ValvePak.Tests
         [Test]
         public async Task TrimmsBackslashes()
         {
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig(), _vtfService);
             string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf\", TestHelper.TestDir + "\\");
 
             AssertFile(filePath);

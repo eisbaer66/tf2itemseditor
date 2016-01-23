@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using log4net;
 using NUnit.Framework;
-using TF2Items.Core;
 
 namespace TF2Items.ValvePak.Tests
 {
     [TestFixture]
-    public class ValvePakServiceConvertVtfTests
+    public class ValveTextureFormatServiceTests
     {
         private ILog _log;
 
@@ -17,7 +15,7 @@ namespace TF2Items.ValvePak.Tests
         public void Setup()
         {
             LogConfigurator.ForTest();
-            _log = LogManager.GetLogger(typeof(ValvePakServiceConvertVtfTests));
+            _log = LogManager.GetLogger(typeof(ValveTextureFormatServiceTests));
 
             IEnumerable<string> files = new List<string>
                                         {
@@ -32,9 +30,15 @@ namespace TF2Items.ValvePak.Tests
         }
 
         [Test]
+        public void ThrowsExceptionIfConfigIsNull()
+        {
+            Assert.That(() => new ValveTextureFormatService(null), Throws.ArgumentNullException);
+        }
+
+        [Test]
         public async Task IntoGivenDirectory()
         {
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValveTextureFormatService valvePakService = new ValveTextureFormatService(new Config());
             string filePath = await valvePakService.ConvertVtf(Path.Combine(TestHelper.TestDir, @"c_bet_rocketlauncher_large.vtf"), TestHelper.TestDir);
 
             AssertFile(filePath);
@@ -45,14 +49,14 @@ namespace TF2Items.ValvePak.Tests
         {
             File.Create(Path.Combine(TestHelper.TestDir, "c_bet_rocketlauncher_large.png")).Close();
 
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValveTextureFormatService valvePakService = new ValveTextureFormatService(new Config());
             Assert.That(async () => await valvePakService.ConvertVtf(Path.Combine(TestHelper.TestDir, @"c_bet_rocketlauncher_large.vtf"), TestHelper.TestDir), Throws.InstanceOf<IOException>());
         }
 
         [Test]
         public async Task IntoTempDirectory()
         {
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValveTextureFormatService valvePakService = new ValveTextureFormatService(new Config());
             string filePath = await valvePakService.ConvertVtf(Path.Combine(TestHelper.TestDir, @"c_bet_rocketlauncher_large.vtf"));
 
             AssertFile(filePath);
@@ -64,7 +68,7 @@ namespace TF2Items.ValvePak.Tests
         {
             File.Create(Path.Combine(TestHelper.TestDir, "c_bet_rocketlauncher_large.png")).Close();
 
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValveTextureFormatService valvePakService = new ValveTextureFormatService(new Config());
             string filePath = await valvePakService.ConvertVtf(Path.Combine(TestHelper.TestDir, @"c_bet_rocketlauncher_large.vtf"));
 
             AssertFile(filePath);
@@ -73,7 +77,7 @@ namespace TF2Items.ValvePak.Tests
         [Test]
         public async Task TrimmsBackslashes()
         {
-            ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
+            ValveTextureFormatService valvePakService = new ValveTextureFormatService(new Config());
             string filePath = await valvePakService.ConvertVtf(Path.Combine(TestHelper.TestDir, @"c_bet_rocketlauncher_large.vtf"), TestHelper.TestDir + "\\");
 
             AssertFile(filePath);
