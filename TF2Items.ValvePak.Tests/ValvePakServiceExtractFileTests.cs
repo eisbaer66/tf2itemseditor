@@ -20,7 +20,7 @@ namespace TF2Items.ValvePak.Tests
         public async Task IntoGivenDirectory()
         {
             ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
-            string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf", Environment.CurrentDirectory);
+            string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf", TestHelper.TestDir);
 
             AssertFile(filePath);
         }
@@ -39,7 +39,7 @@ namespace TF2Items.ValvePak.Tests
         public async Task TrimmsBackslashes()
         {
             ValvePakService valvePakService = new ValvePakService(new Config(), new SteamConfig());
-            string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf\", Environment.CurrentDirectory + "\\");
+            string filePath = await valvePakService.ExtractFile(@"root\materials\backpack\weapons\c_models\c_bet_rocketlauncher\c_bet_rocketlauncher_large.vtf\", TestHelper.TestDir + "\\");
 
             AssertFile(filePath);
         }
