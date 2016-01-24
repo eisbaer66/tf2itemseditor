@@ -116,6 +116,9 @@ namespace TF2Items.Parsers
                             case "name":
                                 weapon.Name = node.Value;
                                 break;
+                            case "image_inventory":
+                                weapon.ImageDirectory = node.Value;
+                                break;
                             case "attributes":
                                 weapon.Attributes = CreateAttributes(node.SubNodes).ToList();
                                 break;

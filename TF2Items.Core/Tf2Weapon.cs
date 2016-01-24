@@ -14,6 +14,7 @@ namespace TF2Items.Core
 
         public WeaponIdentifier Id { get; set; }
         public string Name { get; set; }
+        public string ImageDirectory { get; set; }
         public IList<Tf2WeaponAttribute> Attributes { get; set; }
     }
 }

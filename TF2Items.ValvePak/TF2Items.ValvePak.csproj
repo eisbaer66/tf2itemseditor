@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config.cs" />
+    <Compile Include="IValvePakService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValvePakService.cs" />
     <Compile Include="ValveTextureFormatService.cs" />

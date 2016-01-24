@@ -8,7 +8,7 @@ using TF2Items.Core;
 
 namespace TF2Items.ValvePak
 {
-    public class ValvePakService
+    public class ValvePakService : IValvePakService
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ValvePakService));
 
@@ -28,32 +28,42 @@ namespace TF2Items.ValvePak
             _config = config;
             _steamconfig = steamconfig;
             _vtfService = vtfService;
-            _tempFileCollection = new TempFileCollection(Path.GetTempPath(), false);
         }
 
         public string TextureVpk { get { return Path.Combine(_steamconfig.TeamFortress2Directory, "tf", "tf2_textures_dir.vpk"); }}
 
         public async Task<string> ExtractWeaponIcon(string imageInventory)
         {
-            return await ExtractWeaponIcon(imageInventory, _tempFileCollection.TempDir);
+            string path = await ExtractWeaponIcon(imageInventory, _tempFileCollection.TempDir);
+            if (String.IsNullOrEmpty(path))
+                return null;
+            _tempFileCollection.AddFile(path, false);
+            return path;
         }
+
         public async Task<string> ExtractWeaponIcon(string imageInventory, string outputPath)
         {
             imageInventory = imageInventory.Trim('\\');
             outputPath = outputPath.Trim('\\');
             string extension = ".vtf";
-            string filename = Path.GetDirectoryName(imageInventory) + extension;
-            string pathInPackage = Path.Combine("root", "materials", imageInventory, filename);
+            string pathInPackage = "root/materials/" + imageInventory + extension;
 
-            string vtfFilePath = await ExtractFile(pathInPackage, _tempFileCollection.TempDir);
-            _tempFileCollection.AddFile(vtfFilePath, false);
+            string vtfFilePath = await ExtractFile(pathInPackage, outputPath);
+            if (!File.Exists(vtfFilePath))
+                return null;
 
-            return await _vtfService.ConvertVtf(vtfFilePath, outputPath);
+            string pngFilePath = await _vtfService.ConvertVtf(vtfFilePath, outputPath, true);
+
+            File.Delete(vtfFilePath);
+
+            return pngFilePath;
         }
 
         public async Task<string> ExtractFile(string pathInPackage)
         {
-            return await ExtractFile(pathInPackage, _tempFileCollection.TempDir);
+            string path = await ExtractFile(pathInPackage, _tempFileCollection.TempDir);
+            _tempFileCollection.AddFile(path, false);
+            return path;
         }
 
         public async Task<string> ExtractFile(string pathInPackage, string outputPath)

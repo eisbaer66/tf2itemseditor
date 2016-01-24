@@ -31,11 +31,11 @@ namespace TF2Items.Ui.ViewModel
         /// </summary>
         public ViewModelLocator()
         {
-            //StandardKernel kernel = new StandardKernel(new NinjectSettings{LoadExtensions = false}, new DesignTime.DesignTimeModule(), new FuncModule());
-            NinjectSettings ninjectSettings = new NinjectSettings{LoadExtensions = false};
-            StandardKernel kernel = ViewModelBase.IsInDesignModeStatic
-                ? new StandardKernel(ninjectSettings, new DesignTime.DesignTimeModule(), new FuncModule())
-                : new StandardKernel(ninjectSettings, new RunTimeModule(), new FuncModule());
+            NinjectSettings ninjectSettings = new NinjectSettings { LoadExtensions = false };
+            StandardKernel kernel = new StandardKernel(ninjectSettings, new DesignTime.DesignTimeModule(), new FuncModule());
+            //StandardKernel kernel = ViewModelBase.IsInDesignModeStatic
+            //    ? new StandardKernel(ninjectSettings, new DesignTime.DesignTimeModule(), new FuncModule())
+            //    : new StandardKernel(ninjectSettings, new RunTimeModule(), new FuncModule());
 
             NinjectServiceLocator ninjectServiceLocator = new NinjectServiceLocator(kernel);
             ServiceLocator.SetLocatorProvider(() => ninjectServiceLocator);

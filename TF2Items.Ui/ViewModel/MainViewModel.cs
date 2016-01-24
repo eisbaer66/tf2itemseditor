@@ -1,5 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using TF2Items.Core;
@@ -66,6 +68,7 @@ namespace TF2Items.Ui.ViewModel
 
     public class Tf2WeaponViewModel : ViewModelBase
     {
+        private readonly IWeaponIconService _iconService;
         private Tf2Weapon _model;
 
         public Tf2Weapon Model
@@ -74,9 +77,19 @@ namespace TF2Items.Ui.ViewModel
             set
             {
                 _model = value;
+                Image = new NotifyTaskCompletion<string>(GetImage());
+
                 RaisePropertyChanged(() => Model);
                 RaisePropertyChanged(() => Name);
             }
+        }
+
+        private async Task<string> GetImage()
+        {
+            string iconPath = await _iconService.Get(_model);
+            if (string.IsNullOrEmpty(iconPath))
+                return "/TF2Items.Ui;component/assets/icons/error.png";
+            return Path.Combine(Directory.GetCurrentDirectory(), iconPath);
         }
 
         public string Name
@@ -84,9 +97,11 @@ namespace TF2Items.Ui.ViewModel
             get { return _model.Name; }
         }
 
-        public string Image
+        public NotifyTaskCompletion<string> Image { get; private set; }
+
+        public Tf2WeaponViewModel(IWeaponIconService iconService)
         {
-            get { return @"C:\Users\Jan\Documents\GitHub\tf2itemseditor_vso\tmp\c_bet_rocketlauncher\c_bet_rocketlauncher_large.png"; }
+            _iconService = iconService;
         }
     }
 }
