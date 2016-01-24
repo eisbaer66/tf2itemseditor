@@ -7,7 +7,15 @@ using ValveFormat;
 
 namespace TF2Items.Parsers
 {
-    public class ItemsGameWeaponsParser 
+    public interface IItemsGameWeaponsParser
+    {
+        Func<DataNode, bool> WeaponsFilter { get; set; }
+        IDictionary<WeaponIdentifier, Tf2Weapon> ParseAsDictionary(string filePath);
+        IList<Tf2Weapon> Parse(string filePath);
+        IEnumerable<Tf2Weapon> ParseSingle(string filePath);
+    }
+
+    public class ItemsGameWeaponsParser : IItemsGameWeaponsParser
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ItemsGameWeaponsParser));
         

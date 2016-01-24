@@ -14,9 +14,6 @@ namespace TF2Items.Core
 
         public WeaponIdentifier Id { get; set; }
         public string Name { get; set; }
-        public int? Quality { get; set; }
-        public int? Level { get; set; }
-        public string AdminFlags { get; set; }
         public IList<Tf2WeaponAttribute> Attributes { get; set; }
     }
 }
