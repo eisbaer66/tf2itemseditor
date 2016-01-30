@@ -13,7 +13,7 @@ namespace TF2Items.Ui.DesignTime
             Bind<ISteamConfig>().To<SteamConfig>();
             Bind<IWeaponIconConfig>().To<WeaponIconConfig>();
             Bind<IWeaponIconService>().To<WeaponIconService>();
-            Bind<TF2Items.ValvePak.IConfig>().To<TF2Items.ValvePak.Config>();
+            Bind<IConfig>().To<Config>();
             Bind<IValvePakService>().To<ValvePakService>();
             Bind<IValveTextureFormatService>().To<ValveTextureFormatService>();
             Bind<ISettingsService>().To<SettingsService>();

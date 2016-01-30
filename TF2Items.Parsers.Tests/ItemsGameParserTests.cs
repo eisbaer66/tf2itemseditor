@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using log4net.Config;
 using NUnit.Framework;
 using TF2Items.Core;
@@ -16,10 +17,10 @@ namespace TF2Items.Parsers.Tests
         }
 
         [Test]
-        public void ParsesItemsGame()
+        public async Task ParsesItemsGame()
         {
             string filepath = TestDeployment.GetFile("items_game.txt");
-            IList<Tf2Weapon> weapons = new ItemsGameWeaponsParser().Parse(filepath);
+            IList<Tf2Weapon> weapons = await new ItemsGameWeaponsParser().Parse(filepath);
 
             Tf2Weapon weaponWithAttributes = weapons.FirstOrDefault(w => w.Attributes.Count >0);
 
@@ -29,10 +30,10 @@ namespace TF2Items.Parsers.Tests
         }
 
         [Test]
-        public void ParsesItemsGameAsDictionary()
+        public async Task ParsesItemsGameAsDictionary()
         {
             string filepath = TestDeployment.GetFile("items_game.txt");
-            IDictionary<WeaponIdentifier, Tf2Weapon> weapons = new ItemsGameWeaponsParser().ParseAsDictionary(filepath);
+            IDictionary<WeaponIdentifier, Tf2Weapon> weapons = await new ItemsGameWeaponsParser().ParseAsDictionary(filepath);
 
             Tf2Weapon weaponWithAttributes = weapons.FirstOrDefault(w => w.Value.Attributes.Count >0).Value;
 

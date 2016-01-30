@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TF2Items.Core;
 using TF2Items.Parsers;
 using ValveFormat;
@@ -10,18 +11,19 @@ namespace TF2Items.Ui.DesignTime
     class ItemsGameWeaponsParser : IItemsGameWeaponsParser
     {
         public Func<DataNode, bool> WeaponsFilter { get; set; }
-        public IDictionary<WeaponIdentifier, Tf2Weapon> ParseAsDictionary(string filePath)
+        public async Task<IDictionary<WeaponIdentifier, Tf2Weapon>> ParseAsDictionary(string filePath)
         {
-            return ParseSingle(filePath)
+            return (await ParseSingle(filePath))
                 .ToDictionary(f => f.Id);
         }
 
-        public IList<Tf2Weapon> Parse(string filePath)
+        public async Task<IList<Tf2Weapon>> Parse(string filePath)
         {
-            return ParseSingle(filePath).ToList();
+            return (await ParseSingle(filePath))
+                .ToList();
         }
 
-        public IEnumerable<Tf2Weapon> ParseSingle(string filePath)
+        public async Task<IEnumerable<Tf2Weapon>> ParseSingle(string filePath)
         {
             return new List<Tf2Weapon>
                    {

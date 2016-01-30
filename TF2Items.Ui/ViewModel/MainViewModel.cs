@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using TF2Items.Core;
 using TF2Items.Ui.Services;
 
@@ -37,8 +38,8 @@ namespace TF2Items.Ui.ViewModel
                 RaisePropertyChanged(() => Weapons);
             }
         }
-        
-        public RelayCommand ReadAllCommand { get; set; }
+
+        public AsyncRelayCommand ReadAllCommand { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -48,16 +49,21 @@ namespace TF2Items.Ui.ViewModel
             _itemsGameService = itemsGameService;
             _getWeaponViewModel = getWeaponViewModel;
             Weapons = new ObservableCollection<Tf2WeaponViewModel>();
-            ReadAllCommand = new RelayCommand(GetWeapons);
-
-            GetWeapons();
-
+            ReadAllCommand = new AsyncRelayCommand(GetWeapons);
+#if DEBUG
+            if (IsInDesignMode)
+            {
+                Task.Run(() => GetWeapons()).Wait();
+            }
+#endif
         }
 
-        private void GetWeapons()
+        private async Task GetWeapons()
         {
+            List<Tf2Weapon> weapons = (await _itemsGameService.Get()).ToList();
+
             Weapons.Clear();
-            foreach (Tf2Weapon weapon in _itemsGameService.Get())
+            foreach (Tf2Weapon weapon in weapons)
             {
                 Tf2WeaponViewModel weaponViewModel = _getWeaponViewModel();
                 weaponViewModel.Model = weapon;

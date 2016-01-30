@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TF2Items.Core;
 using TF2Items.Parsers;
 
@@ -6,7 +7,7 @@ namespace TF2Items.Ui.Services
 {
     public interface ITf2WeaponService
     {
-        IEnumerable<Tf2Weapon> Get();
+        Task<IEnumerable<Tf2Weapon>> Get();
     }
 
     public class Tf2WeaponService : ITf2WeaponService
@@ -20,9 +21,9 @@ namespace TF2Items.Ui.Services
             _settingsService = settingsService;
         }
 
-        public IEnumerable<Tf2Weapon> Get()
+        public async Task<IEnumerable<Tf2Weapon>> Get()
         {
-            return _itemsGameParser.ParseSingle(_settingsService.ItemsGameTxt);
+            return await _itemsGameParser.ParseSingle(_settingsService.ItemsGameTxt);
         }
     }
 }

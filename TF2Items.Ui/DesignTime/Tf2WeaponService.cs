@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TF2Items.Core;
 using TF2Items.Ui.Services;
 
@@ -14,9 +15,9 @@ namespace TF2Items.Ui.DesignTime
             _service = service;
         }
 
-        public IEnumerable<Tf2Weapon> Get()
+        public async Task<IEnumerable<Tf2Weapon>> Get()
         {
-            return _service.Get().Take(100);
+            return (await _service.Get()).Take(100);
         }
     }
 }

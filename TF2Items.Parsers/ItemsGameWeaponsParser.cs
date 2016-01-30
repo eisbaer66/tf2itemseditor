@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using log4net;
 using TF2Items.Core;
 using ValveFormat;
@@ -10,9 +11,9 @@ namespace TF2Items.Parsers
     public interface IItemsGameWeaponsParser
     {
         Func<DataNode, bool> WeaponsFilter { get; set; }
-        IDictionary<WeaponIdentifier, Tf2Weapon> ParseAsDictionary(string filePath);
-        IList<Tf2Weapon> Parse(string filePath);
-        IEnumerable<Tf2Weapon> ParseSingle(string filePath);
+        Task<IDictionary<WeaponIdentifier, Tf2Weapon>> ParseAsDictionary(string filePath);
+        Task<IList<Tf2Weapon>> Parse(string filePath);
+        Task<IEnumerable<Tf2Weapon>> ParseSingle(string filePath);
     }
 
     public class ItemsGameWeaponsParser : IItemsGameWeaponsParser
@@ -41,21 +42,22 @@ namespace TF2Items.Parsers
             WeaponsFilter = DefaultWeaponsFilter;
         }
 
-        public IDictionary<WeaponIdentifier, Tf2Weapon> ParseAsDictionary(string filePath)
+        public async Task<IDictionary<WeaponIdentifier, Tf2Weapon>> ParseAsDictionary(string filePath)
         {
-            return ParseSingle(filePath)
+            return (await ParseSingle(filePath))
                         .ToDictionary(f => f.Id);
         }
-        public IList<Tf2Weapon> Parse(string filePath)
+        public async Task<IList<Tf2Weapon>> Parse(string filePath)
         {
-            return ParseSingle(filePath).ToList();
+            return (await ParseSingle(filePath)).ToList();
         }
-        public IEnumerable<Tf2Weapon> ParseSingle(string filePath)
+        public async Task<IEnumerable<Tf2Weapon>> ParseSingle(string filePath)
         {
             using (NDC.Push("parse"))
             {
                 ValveFormatParser parser = new ValveFormatParser(filePath);
-                parser.LoadFile();
+
+                await  Task.Run(() => parser.LoadFile());
 
                 return AddWeapons(parser.RootNode.SubNodes);
             }

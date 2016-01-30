@@ -4,9 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="clr-namespace:TF2Items.Ui"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:core="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d" 
              DataContext="{Binding Main, Source={StaticResource Locator}}"
              d:DesignHeight="800" d:DesignWidth="800">
+    <i:Interaction.Triggers>
+        <core:EventTrigger EventName="Loaded">
+            <core:InvokeCommandAction Command="{Binding ReadAllCommand}"></core:InvokeCommandAction>
+        </core:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

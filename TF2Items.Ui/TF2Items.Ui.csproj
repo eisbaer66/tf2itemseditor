@@ -108,6 +108,7 @@
     <Compile Include="Services\IWeaponIconConfig.cs" />
     <Compile Include="Services\Tf2WeaponService.cs" />
     <Compile Include="Services\IWeaponIconService.cs" />
+    <Compile Include="ViewModel\AsyncRelayCommand.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
@@ -162,7 +163,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TF2Items.Core\TF2Items.Core.csproj">
