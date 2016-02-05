@@ -100,21 +100,25 @@
     <Compile Include="DesignTime\ItemsGameWeaponsParser.cs" />
     <Compile Include="DesignTime\SteamConfig.cs" />
     <Compile Include="DesignTime\Tf2WeaponService.cs" />
+    <Compile Include="Dispatch\RunNotifyTaskCompletion.cs" />
     <Compile Include="LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NotifyTaskCompletion.cs" />
+    <Compile Include="Dispatch\NotifyTaskCompletion.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\IWeaponIconConfig.cs" />
     <Compile Include="Services\Tf2WeaponService.cs" />
     <Compile Include="Services\IWeaponIconService.cs" />
-    <Compile Include="ViewModel\AsyncRelayCommand.cs" />
+    <Compile Include="SmartCollection.cs" />
+    <Compile Include="Dispatch\AsyncRelayCommand.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />
+    <Compile Include="ViewModel\Tf2WeaponViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Views\Tf2WeaponListView.xaml.cs">
       <DependentUpon>Tf2WeaponListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VirtualizingWrapPanel.cs" />
     <Page Include="LoadingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

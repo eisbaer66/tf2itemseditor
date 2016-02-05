@@ -26,6 +26,55 @@ namespace TF2Items.Core
 
             return dictionary.Values.All(value => value == 0);
         }
-         
+
+        public static CompareResult<T> Compare<T, TKey>(this IEnumerable<T> oldItems, IEnumerable<T> newItems, Func<T, TKey> key)
+        {
+            Dictionary<TKey, T> oldItemsDict = oldItems.ToDictionary(key);
+            Dictionary<TKey, T> newItemsDict = newItems.ToDictionary(key);
+
+            CompareResult<T> result = new CompareResult<T>();
+
+            foreach (KeyValuePair<TKey, T> pair in oldItemsDict)
+            {
+                if (!newItemsDict.ContainsKey(pair.Key))
+                {
+                    result.RemovedItems.Add(pair.Value);
+                    continue;
+                }
+
+                result.UpdatedItems.Add(new CompareResult<T>.Update {OldItem = pair.Value, NewItem = newItemsDict[pair.Key]});
+            }
+
+            foreach (KeyValuePair<TKey, T> pair in newItemsDict)
+            {
+                if (oldItemsDict.ContainsKey(pair.Key))
+                    continue;
+                result.NewItems.Add(pair.Value);
+            }
+
+            return result;
+        }
+    }
+
+    public class CompareResult<T>
+    {
+        public class Update
+        {
+            public T OldItem { get; set; }
+            public T NewItem { get; set; }
+        }
+
+        public IList<T> RemovedItems { get; set; }
+
+        public IList<Update> UpdatedItems { get; set; }
+
+        public IList<T> NewItems { get; set; }
+
+        public CompareResult()
+        {
+            RemovedItems = new List<T>();
+            UpdatedItems = new List<Update>();
+            NewItems = new List<T>();
+        }
     }
 }

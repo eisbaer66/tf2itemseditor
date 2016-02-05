@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace TF2Items.Ui
+namespace TF2Items.Ui.Dispatch
 {
     public sealed class NotifyTaskCompletion<TResult> : INotifyPropertyChanged
     {

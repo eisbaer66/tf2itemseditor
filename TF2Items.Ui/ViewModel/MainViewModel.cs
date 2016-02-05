@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using TF2Items.Core;
+using TF2Items.Ui.Dispatch;
 using TF2Items.Ui.Services;
 
 namespace TF2Items.Ui.ViewModel
@@ -27,9 +29,9 @@ namespace TF2Items.Ui.ViewModel
         private readonly ITf2WeaponService _itemsGameService;
         private readonly Func<Tf2WeaponViewModel> _getWeaponViewModel;
 
-        private ObservableCollection<Tf2WeaponViewModel> _weapons;
+        private SmartCollection<Tf2WeaponViewModel, WeaponIdentifier> _weapons;
 
-        public ObservableCollection<Tf2WeaponViewModel> Weapons
+        public SmartCollection<Tf2WeaponViewModel, WeaponIdentifier> Weapons
         {
             get { return _weapons; }
             set
@@ -48,66 +50,34 @@ namespace TF2Items.Ui.ViewModel
         {
             _itemsGameService = itemsGameService;
             _getWeaponViewModel = getWeaponViewModel;
-            Weapons = new ObservableCollection<Tf2WeaponViewModel>();
+            Weapons = new SmartCollection<Tf2WeaponViewModel, WeaponIdentifier>(vm => vm.Model.Id);
             ReadAllCommand = new AsyncRelayCommand(GetWeapons);
 #if DEBUG
             if (IsInDesignMode)
             {
-                Task.Run(() => GetWeapons()).Wait();
+                Task.Run(() => ReadAllCommand.Execute(null)).Wait();
             }
 #endif
         }
 
         private async Task GetWeapons()
         {
-            List<Tf2Weapon> weapons = (await _itemsGameService.Get()).ToList();
+            IEnumerable<Tf2WeaponViewModel> viewModels = await GetWeaponViewModels();
 
-            Weapons.Clear();
-            foreach (Tf2Weapon weapon in weapons)
-            {
-                Tf2WeaponViewModel weaponViewModel = _getWeaponViewModel();
-                weaponViewModel.Model = weapon;
-                Weapons.Add(weaponViewModel);
-            }
-        }
-    }
-
-    public class Tf2WeaponViewModel : ViewModelBase
-    {
-        private readonly IWeaponIconService _iconService;
-        private Tf2Weapon _model;
-
-        public Tf2Weapon Model
-        {
-            get { return _model; }
-            set
-            {
-                _model = value;
-                Image = new NotifyTaskCompletion<string>(GetImage());
-
-                RaisePropertyChanged(() => Model);
-                RaisePropertyChanged(() => Name);
-            }
+            Application.Current.Dispatcher.Invoke(() => Weapons.SmartReset(viewModels, (o, n) => o.Model = n.Model));
         }
 
-        private async Task<string> GetImage()
+        private async Task<IEnumerable<Tf2WeaponViewModel>> GetWeaponViewModels()
         {
-            string iconPath = await _iconService.Get(_model);
-            if (string.IsNullOrEmpty(iconPath))
-                return "/TF2Items.Ui;component/assets/icons/error.png";
-            return Path.Combine(Directory.GetCurrentDirectory(), iconPath);
-        }
-
-        public string Name
-        {
-            get { return _model.Name; }
-        }
-
-        public NotifyTaskCompletion<string> Image { get; private set; }
-
-        public Tf2WeaponViewModel(IWeaponIconService iconService)
-        {
-            _iconService = iconService;
+            List<Tf2WeaponViewModel> viewModels = (await _itemsGameService.Get())
+                .Select(w =>
+                        {
+                            Tf2WeaponViewModel weaponViewModel = _getWeaponViewModel();
+                            weaponViewModel.Model = w;
+                            return weaponViewModel;
+                        })
+                .ToList();
+            return viewModels;
         }
     }
 }

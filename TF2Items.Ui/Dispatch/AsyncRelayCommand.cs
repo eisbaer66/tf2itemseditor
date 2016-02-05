@@ -2,10 +2,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 
-namespace TF2Items.Ui.ViewModel
+namespace TF2Items.Ui.Dispatch
 {
-    public class AsyncRelayCommand :ICommand
+    public class AsyncRelayCommand : ViewModelBase, ICommand
     {
         private readonly Func<Task> _execute;
         private readonly Func<bool> _canExecute;
@@ -24,9 +25,15 @@ namespace TF2Items.Ui.ViewModel
             remove { CommandManager.RequerySuggested -= value; }
         }
 
+        public bool IsExecuting
+        {
+            get { return _isExecuting > 0; }
+        }
+
         public void RaiseCanExecuteChanged()
         {
             CommandManager.InvalidateRequerySuggested();
+            base.RaisePropertyChanged(() => IsExecuting);
         }
 
         public bool CanExecute(object parameter)
@@ -44,7 +51,7 @@ namespace TF2Items.Ui.ViewModel
 
             try
             {
-                await _execute();
+                await Task.Run(async () => await _execute());
             }
             finally
             {

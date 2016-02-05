@@ -17,15 +17,17 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Text="Weapons" HorizontalAlignment="Center" FontSize="35" FontWeight="Bold" />
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Weapons}" Margin="0,10,0,28" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF282723">
+        <ListBox Grid.Row="2" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF282723">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True"></WrapPanel>
+                    <ui:VirtualizingWrapPanel IsItemsHost="True"></ui:VirtualizingWrapPanel>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
@@ -48,7 +50,10 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Viewbox Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10" Visibility="{Binding ReadAllCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}" >
+            <ui:LoadingControl Height="300" Width="300"/>
+        </Viewbox>
 
-        <Button x:Name="btnLoadAllEmployees" Content="List all weapons" Grid.Row="2" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllCommand}" />
+        <Button x:Name="btnLoadAllEmployees" Content="List all weapons" Grid.Row="4" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllCommand}" />
     </Grid>
 </UserControl>
