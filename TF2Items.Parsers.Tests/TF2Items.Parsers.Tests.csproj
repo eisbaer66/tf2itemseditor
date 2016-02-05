@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ItemsGameAttributesParserTests.cs" />
     <Compile Include="ItemsGameParserTests.cs" />
+    <Compile Include="ItemsGamePrefabsParserTests.cs" />
     <Compile Include="TestDeployment.cs" />
     <Compile Include="Tf2ItemsWeaponsParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

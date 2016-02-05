@@ -45,11 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemsGamePrefabsParser.cs" />
+    <Compile Include="StatsParser.cs" />
     <Compile Include="Tf2AttributesParser.cs" />
     <Compile Include="ItemsGameWeaponsParser.cs" />
     <Compile Include="Primitives.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tf2ItemsWeaponsParser.cs" />
+    <Compile Include="Tf2Prefab.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TF2Items.Core\TF2Items.Core.csproj">

@@ -37,9 +37,12 @@ namespace TF2Items.Parsers
                                                                return true;
                                                            };
 
-        public ItemsGameWeaponsParser()
+        private readonly IStatsParser _statsParser;
+
+        public ItemsGameWeaponsParser(IStatsParser statsParser)
         {
             WeaponsFilter = DefaultWeaponsFilter;
+            _statsParser = statsParser;
         }
 
         public async Task<IDictionary<WeaponIdentifier, Tf2Weapon>> ParseAsDictionary(string filePath)
@@ -88,7 +91,7 @@ namespace TF2Items.Parsers
                         if (weapon == null)
                             continue;
 
-                        AddStats(weapon, node.SubNodes);
+                        _statsParser.AddStats(weapon, node.SubNodes);
 
                         yield return weapon;
                     }
@@ -103,67 +106,6 @@ namespace TF2Items.Parsers
                 return null;
 
             return new Tf2Weapon(weaponIdentifier);
-        }
-
-        private void AddStats(Tf2Weapon weapon, List<DataNode> nodes)
-        {
-            using (NDC.Push("Property"))
-            {
-                foreach (DataNode node in nodes)
-                {
-                    using (NDC.Push(node.Key))
-                    {
-                        switch (node.Key)
-                        {
-                            case "name":
-                                weapon.Name = node.Value;
-                                break;
-                            case "image_inventory":
-                                weapon.ImageDirectory = node.Value;
-                                break;
-                            case "attributes":
-                                weapon.Attributes = CreateAttributes(node.SubNodes).ToList();
-                                break;
-
-                        }
-                    }
-                }
-            }
-        }
-
-        private IEnumerable<Tf2WeaponAttribute> CreateAttributes(List<DataNode> nodes)
-        {
-            foreach (DataNode node in nodes)
-            {
-                string value = null;
-                string attributeClass = null;
-
-                foreach (DataNode subNode in node.SubNodes)
-                {
-                    switch (subNode.Key)
-                    {
-                        case "attribute_class":
-                            attributeClass = subNode.Value;
-                            break;
-                        case "value":
-                            value = subNode.Value;
-                            break;
-                    }
-
-                }
-                if (string.IsNullOrEmpty(attributeClass))
-                {
-                    Log.Warn("could not find attribute class");
-                    continue;
-                }
-                if (string.IsNullOrEmpty(value))
-                {
-                    Log.Warn("could not find value");
-                    continue;
-                }
-
-                yield return new Tf2WeaponAttribute(attributeClass, node.Key, value);
-            }
         }
     }
 }

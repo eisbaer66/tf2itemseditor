@@ -18,7 +18,9 @@ namespace TF2Items.Ui.ViewModel
             Bind<IValveTextureFormatService>().To<ValveTextureFormatService>();
             Bind<ISettingsService>().To<SettingsService>();
             Bind<ITf2WeaponService>().To<Tf2WeaponService>();
+            Bind<IStatsParser>().To<StatsParser>();
             Bind<IItemsGameWeaponsParser>().To<ItemsGameWeaponsParser>();
+            Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
         }
     }
 }
