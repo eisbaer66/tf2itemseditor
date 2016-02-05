@@ -60,6 +60,12 @@ namespace TF2Items.ValvePak
                 if (!File.Exists(vtfFilePath))
                     return null;
             }
+            else
+            {
+                string normalizedVtfFilePath = vtfFilePath.Replace("_large", "");
+                File.Move(vtfFilePath, normalizedVtfFilePath);
+                vtfFilePath = normalizedVtfFilePath;
+            }
 
             string pngFilePath = await _vtfService.ConvertVtf(vtfFilePath, outputPath, true);
 

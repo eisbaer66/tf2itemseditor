@@ -31,6 +31,9 @@ namespace TF2Items.Parsers
                             case "image_inventory":
                                 weapon.ImageDirectory = node.Value;
                                 break;
+                            case "prefab":
+                                weapon.PrefabName = node.Value;
+                                break;
                             case "attributes":
                                 weapon.Attributes = CreateAttributes(node.SubNodes).ToList();
                                 break;

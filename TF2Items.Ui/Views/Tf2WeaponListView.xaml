@@ -50,9 +50,13 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Viewbox Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10" Visibility="{Binding ReadAllCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}" >
-            <ui:LoadingControl Height="300" Width="300"/>
-        </Viewbox>
+        <Grid Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+            <Border Background="#FF282723" Opacity=".5">
+            </Border>
+            <Viewbox Margin="10" >
+                <ui:LoadingControl Height="300" Width="300"/>
+            </Viewbox>
+        </Grid>
 
         <Button x:Name="btnLoadAllEmployees" Content="List all weapons" Grid.Row="4" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllCommand}" />
     </Grid>

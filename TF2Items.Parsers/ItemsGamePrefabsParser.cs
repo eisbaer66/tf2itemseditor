@@ -27,7 +27,7 @@ namespace TF2Items.Parsers
         public async Task<IDictionary<string, Tf2Prefab>> ParseAsDictionary(string filePath)
         {
             return (await ParseSingle(filePath))
-                .ToDictionary(f => f.PrefabName);
+                .ToDictionary(f => f.Id);
         }
         public async Task<IList<Tf2Prefab>> Parse(string filePath)
         {
@@ -74,7 +74,7 @@ namespace TF2Items.Parsers
 
         private Tf2Prefab CreateWeapon(DataNode node)
         {
-            return new Tf2Prefab{PrefabName = node.Key};
+            return new Tf2Prefab{Id = node.Key};
         }
     }
 }
