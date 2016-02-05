@@ -1,9 +1,11 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using icebear;
 using log4net;
+using Nito.AsyncEx;
 using TF2Items.Core;
 
 namespace TF2Items.ValvePak
@@ -11,6 +13,7 @@ namespace TF2Items.ValvePak
     public class ValvePakService : IValvePakService
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ValvePakService));
+        private static readonly AsyncLock Lock = new AsyncLock();
 
         private readonly TempFileCollection _tempFileCollection;
         private readonly IConfig _config;
@@ -76,6 +79,7 @@ namespace TF2Items.ValvePak
 
             string fileName = Path.GetFileName(pathInPackage);
 
+            using (await Lock.LockAsync())
             using (NDC.Push(string.Format("[extracting {0}]", fileName)))
             {
                 Log.Debug(string.Format("pathInPackage: '{0}'", pathInPackage));

@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using icebear;
 using log4net;
+using Nito.AsyncEx;
 
 namespace TF2Items.ValvePak
 {
@@ -16,6 +17,7 @@ namespace TF2Items.ValvePak
     public class ValveTextureFormatService : IValveTextureFormatService
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ValveTextureFormatService));
+        private static readonly AsyncLock Lock = new AsyncLock();
 
         private readonly IConfig _config;
 
@@ -46,6 +48,7 @@ namespace TF2Items.ValvePak
 
             string fileName = Path.GetFileName(vtfFilePath);
 
+            using (await Lock.LockAsync())
             using (NDC.Push(string.Format("[converting {0}]", fileName)))
             {
                 Log.Debug(string.Format("vtfFilePath: '{0}'", vtfFilePath));
