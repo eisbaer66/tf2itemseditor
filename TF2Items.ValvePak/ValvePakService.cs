@@ -1,7 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using icebear;
 using log4net;
@@ -28,9 +27,11 @@ namespace TF2Items.ValvePak
                 throw new ArgumentNullException("steamconfig");
             if (vtfService == null)
                 throw new ArgumentNullException("vtfService");
+
             _config = config;
             _steamconfig = steamconfig;
             _vtfService = vtfService;
+            _tempFileCollection = new TempFileCollection(Path.GetTempPath());
         }
 
         public string TextureVpk { get { return Path.Combine(_steamconfig.TeamFortress2Directory, "tf", "tf2_textures_dir.vpk"); }}
@@ -49,11 +50,16 @@ namespace TF2Items.ValvePak
             imageInventory = imageInventory.Trim('\\');
             outputPath = outputPath.Trim('\\');
             string extension = ".vtf";
-            string pathInPackage = "root/materials/" + imageInventory + extension;
+            string pathInPackage = "root/materials/" + imageInventory + "_large"+ extension;
 
             string vtfFilePath = await ExtractFile(pathInPackage, outputPath);
             if (!File.Exists(vtfFilePath))
-                return null;
+            {
+                pathInPackage = "root/materials/" + imageInventory + extension;
+                vtfFilePath = await ExtractFile(pathInPackage, outputPath);
+                if (!File.Exists(vtfFilePath))
+                    return null;
+            }
 
             string pngFilePath = await _vtfService.ConvertVtf(vtfFilePath, outputPath, true);
 
