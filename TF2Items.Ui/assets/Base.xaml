@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="ItemBackgroundColor" >#FF312D2C</Color>
+    <Color x:Key="ItemHighlightBackgroundColor" >#FF665D5B</Color>
+    <Color x:Key="ForegroundColor" >#FFECE3CB</Color>
+    <Color x:Key="ButtonBackgroundColor" >#FF766B5E</Color>
+    <Color x:Key="ButtonPressedBackgroundColor" >#FF924738</Color>
+    <SolidColorBrush x:Key="ItemBackground" Color="{DynamicResource ItemBackgroundColor}"/>
+    <SolidColorBrush x:Key="ItemHighlightBackground" Color="{DynamicResource ItemHighlightBackgroundColor}"/>
+    <SolidColorBrush x:Key="Foreground" Color="{DynamicResource ForegroundColor}"/>
+    <SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource ButtonBackgroundColor}"/>
+    <SolidColorBrush x:Key="ButtonPressedBackground" Color="{DynamicResource ButtonPressedBackgroundColor}"/>
+</ResourceDictionary>
