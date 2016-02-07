@@ -28,10 +28,10 @@
 
 		<TextBox Grid.Row="2" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
-        <ListBox Grid.Row="4" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF282723">
+        <ListBox Grid.Row="4" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="#FF282723">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ui:VirtualizingWrapPanel IsItemsHost="True"></ui:VirtualizingWrapPanel>
+                    <ui:VirtualizingWrapPanel IsItemsHost="True" ></ui:VirtualizingWrapPanel>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>

@@ -105,6 +105,7 @@
       <DependentUpon>LoadingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dispatch\NotifyTaskCompletion.cs" />
+    <Compile Include="ScrollHelper.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\IWeaponIconConfig.cs" />
     <Compile Include="Services\Tf2WeaponService.cs" />
