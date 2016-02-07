@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -394,6 +395,18 @@ namespace TF2Items.Ui
         {
             base.OnItemsChanged(sender, args);
             _abstractPanel = null;
+
+            switch (args.Action)
+            {
+                case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Replace:
+                    RemoveInternalChildRange(args.Position.Index, args.ItemUICount);
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    RemoveInternalChildRange(args.OldPosition.Index, args.ItemUICount);
+                    break;
+            }
+
             ResetScrollInfo();
         }
 

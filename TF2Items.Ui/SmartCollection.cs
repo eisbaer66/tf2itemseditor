@@ -29,33 +29,25 @@ namespace TF2Items.Ui
             _key = key;
         }
 
-        public void AddRange(IEnumerable<T> range)
-        {
-            foreach (var item in range)
-            {
-                Items.Add(item);
-            }
-                
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, range));
-        }
-
         public void Reset(IEnumerable<T> range)
         {
             this.Items.Clear();
 
-            AddRange(range);
+            foreach (var item in range)
+            {
+                Items.Add(item);
+            }
+
+            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, range));
         }
 
         public void SmartReset(IEnumerable<T> viewModels, Action<T, T> update)
         {
             CompareResult<T> compare = Items.Compare(viewModels, _key);
 
-            foreach (T removedItem in compare.RemovedItems)
-            {
-                Remove(removedItem);
-            }
+            Remove(compare.RemovedItems);
             foreach (CompareResult<T>.Update updatedItem in compare.UpdatedItems)
             {
                 update(updatedItem.OldItem, updatedItem.NewItem);
@@ -66,6 +58,22 @@ namespace TF2Items.Ui
                 Add(item);
             }
 
+        }
+
+        public void AddRange(IEnumerable<T> range)
+        {
+            foreach (T item in range)
+            {
+                Add(item);
+            }
+        }
+
+        public void Remove(IEnumerable<T> items)
+        {
+            foreach (T item in items)
+            {
+                Remove(item);
+            }
         }
     }
 }

@@ -18,13 +18,17 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="10" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="10" />
             <RowDefinition Height="*" />
             <RowDefinition Height="10" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Text="Weapons" HorizontalAlignment="Center" FontSize="35" FontWeight="Bold" />
 
-        <ListBox Grid.Row="2" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF282723">
+		<TextBox Grid.Row="2" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+
+        <ListBox Grid.Row="4" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#FF282723">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ui:VirtualizingWrapPanel IsItemsHost="True"></ui:VirtualizingWrapPanel>
@@ -50,7 +54,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Grid Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+        <Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
             <Border Background="#FF282723" Opacity=".5">
             </Border>
             <Viewbox Margin="10" >
@@ -58,6 +62,6 @@
             </Viewbox>
         </Grid>
 
-        <Button x:Name="btnLoadAllEmployees" Content="List all weapons" Grid.Row="4" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllCommand}" />
+        <Button Grid.Row="6" x:Name="btnLoadAllEmployees" Content="List all weapons" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllCommand}" />
     </Grid>
 </UserControl>

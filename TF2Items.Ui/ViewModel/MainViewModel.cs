@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,7 +30,9 @@ namespace TF2Items.Ui.ViewModel
         private readonly ITf2WeaponService _itemsGameService;
         private readonly Func<Tf2WeaponViewModel> _getWeaponViewModel;
 
+        private IList<Tf2WeaponViewModel> _allWeapons;
         private SmartCollection<Tf2WeaponViewModel, WeaponIdentifier> _weapons;
+        private string _filter;
 
         public SmartCollection<Tf2WeaponViewModel, WeaponIdentifier> Weapons
         {
@@ -38,6 +41,17 @@ namespace TF2Items.Ui.ViewModel
             {
                 _weapons = value;
                 RaisePropertyChanged(() => Weapons);
+            }
+        }
+
+        public string Filter
+        {
+            get { return _filter; }
+            set
+            {
+                _filter = value;
+                FilterWeapons();
+                RaisePropertyChanged(() => Filter);
             }
         }
 
@@ -60,6 +74,16 @@ namespace TF2Items.Ui.ViewModel
 #endif
         }
 
+        private void FilterWeapons()
+        {
+            Func<Tf2WeaponViewModel, bool> matches = w => CultureInfo.InvariantCulture.CompareInfo.IndexOf(w.Name, _filter, CompareOptions.IgnoreCase) >= 0;
+            List<Tf2WeaponViewModel> weaponsNotMatchingFilter = Weapons.Where(w => !matches(w)).ToList();
+            Weapons.Remove(weaponsNotMatchingFilter);
+
+            List<Tf2WeaponViewModel> weaponsMatchingFilter = _allWeapons.Where(w => matches(w) && !Weapons.Contains(w)).ToList();
+            Weapons.AddRange(weaponsMatchingFilter);
+        }
+
         private async Task GetWeapons()
         {
             IEnumerable<Tf2WeaponViewModel> viewModels = await GetWeaponViewModels();
@@ -69,7 +93,7 @@ namespace TF2Items.Ui.ViewModel
 
         private async Task<IEnumerable<Tf2WeaponViewModel>> GetWeaponViewModels()
         {
-            List<Tf2WeaponViewModel> viewModels = (await _itemsGameService.Get())
+            _allWeapons = (await _itemsGameService.Get())
                 .Select(w =>
                         {
                             Tf2WeaponViewModel weaponViewModel = _getWeaponViewModel();
@@ -77,7 +101,7 @@ namespace TF2Items.Ui.ViewModel
                             return weaponViewModel;
                         })
                 .ToList();
-            return viewModels;
+            return _allWeapons;
         }
     }
 }
