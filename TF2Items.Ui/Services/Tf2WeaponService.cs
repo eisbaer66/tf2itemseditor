@@ -11,6 +11,7 @@ namespace TF2Items.Ui.Services
     public interface ITf2WeaponService
     {
         Task<IEnumerable<Tf2Weapon>> Get();
+        Task<IEnumerable<Tf2Attribute>> GetAttributes();
     }
 
     public class Tf2WeaponService : ITf2WeaponService
@@ -18,12 +19,14 @@ namespace TF2Items.Ui.Services
         private static readonly ILog Log = LogManager.GetLogger(typeof(Tf2WeaponService));
 
         private readonly IItemsGameWeaponsParser _weaponsParser;
+        private readonly ITf2AttributesParser _attributeParser;
         private readonly IItemsGamePrefabsParser _prefabsParser;
         private readonly ISettingsService _settingsService;
 
-        public Tf2WeaponService(IItemsGameWeaponsParser weaponsParser, ISettingsService settingsService, IItemsGamePrefabsParser prefabsParser)
+        public Tf2WeaponService(IItemsGameWeaponsParser weaponsParser, ITf2AttributesParser attributeParser, IItemsGamePrefabsParser prefabsParser, ISettingsService settingsService)
         {
             _weaponsParser = weaponsParser;
+            _attributeParser = attributeParser;
             _settingsService = settingsService;
             _prefabsParser = prefabsParser;
         }
@@ -36,6 +39,11 @@ namespace TF2Items.Ui.Services
 
 
             return weapons.Select(w => Hydrate(w, prefabs));
+        }
+
+        public async Task<IEnumerable<Tf2Attribute>> GetAttributes()
+        {
+            return await _attributeParser.ParseSingle(_settingsService.ItemsGameTxt);
         }
 
         private IDictionary<string, Tf2Prefab> Hydrate(IDictionary<string, Tf2Prefab> prefabs)

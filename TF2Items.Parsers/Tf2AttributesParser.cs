@@ -1,17 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using log4net;
 using TF2Items.Core;
 using ValveFormat;
 
 namespace TF2Items.Parsers
 {
-    public class Tf2AttributesParser 
+    public interface ITf2AttributesParser
+    {
+        Func<DataNode, bool> Filter { get; set; }
+        Task<IDictionary<int, Tf2Attribute>> ParseAsDictionary(string filePath);
+        Task<IList<Tf2Attribute>> Parse(string filePath);
+        Task<IEnumerable<Tf2Attribute>> ParseSingle(string filePath);
+    }
+
+    public class Tf2AttributesParser : ITf2AttributesParser
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Tf2AttributesParser));
         
-        public Func<DataNode, bool> WeaponsFilter { get; set; }
+        public Func<DataNode, bool> Filter { get; set; }
 
         public Func<DataNode, bool> DefaultWeaponsFilter = node =>
                                                            {
@@ -30,25 +39,27 @@ namespace TF2Items.Parsers
 
         public Tf2AttributesParser()
         {
-            WeaponsFilter = DefaultWeaponsFilter;
+            Filter = DefaultWeaponsFilter;
         }
 
-        public IDictionary<int, Tf2Attribute> ParseAsDictionary(string filePath)
+        public async Task<IDictionary<int, Tf2Attribute>> ParseAsDictionary(string filePath)
         {
-            return ParseSingle(filePath)
+            return (await ParseSingle(filePath))
                         .Where(f => f.Id.HasValue)
                         .ToDictionary(f => f.Id.Value);
         }
-        public IList<Tf2Attribute> Parse(string filePath)
+        public async Task<IList<Tf2Attribute>> Parse(string filePath)
         {
-            return ParseSingle(filePath).ToList();
+            return (await ParseSingle(filePath))
+                            .ToList();
         }
-        public IEnumerable<Tf2Attribute> ParseSingle(string filePath)
+        public async Task<IEnumerable<Tf2Attribute>> ParseSingle(string filePath)
         {
             using (NDC.Push("parse"))
             {
                 ValveFormatParser parser = new ValveFormatParser(filePath);
-                parser.LoadFile();
+
+                await Task.Run(() => parser.LoadFile());
 
                 return CreateWeaponAttributes(parser.RootNode.SubNodes);
             }
@@ -69,9 +80,9 @@ namespace TF2Items.Parsers
                 {
                     using (NDC.Push(node.Key))
                     {
-                        if (!WeaponsFilter(node))
+                        if (!Filter(node))
                         {
-                            Log.Info("ignored due to WeaponsFilter");
+                            Log.Info("ignored due to Filter");
                             continue;
                         }
 

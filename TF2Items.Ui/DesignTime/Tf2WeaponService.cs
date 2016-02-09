@@ -19,5 +19,10 @@ namespace TF2Items.Ui.DesignTime
         {
             return (await _service.Get()).Take(100);
         }
+
+        public async Task<IEnumerable<Tf2Attribute>> GetAttributes()
+        {
+            return (await _service.GetAttributes()).Take(100);
+        }
     }
 }

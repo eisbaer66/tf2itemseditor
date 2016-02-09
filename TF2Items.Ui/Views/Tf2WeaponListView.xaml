@@ -11,170 +11,14 @@
              d:DesignHeight="800" d:DesignWidth="800"
 			 Background="#FF282723"
 			 Padding="15">
-	<UserControl.Resources>
-
-        <ResourceDictionary>
-
-            <LinearGradientBrush x:Key="TextBoxBorder" EndPoint="0,20" MappingMode="Absolute" StartPoint="0,0">
-                <GradientStop Color="#ABADB3" Offset="0.05" />
-                <GradientStop Color="#E2E3EA" Offset="0.07" />
-                <GradientStop Color="#E3E9EF" Offset="1" />
-            </LinearGradientBrush>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="FontFamily" Value="/TF2Items.Ui;component/assets/fonts/#TF2 Secondary" />
-                <Setter Property="TextTrimming" Value="None" />
-                <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
-            </Style>
-            <Style x:Key="TextBoxStyle" BasedOn="{x:Null}" TargetType="{x:Type TextBox}">
-                <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />-->
-                <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
-                <Setter Property="Background" Value="{DynamicResource ItemBackground}" />
-                <Setter Property="BorderBrush" Value="#FFE9E3C9" />
-                <Setter Property="BorderThickness" Value="3" />
-                <Setter Property="Padding" Value="1" />
-                <Setter Property="AllowDrop" Value="true" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
-                <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border x:Name="border"
-                                    Padding="{TemplateBinding BorderThickness}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="10">
-                                <ScrollViewer x:Name="PART_ContentHost"
-                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsFocused" Value="true">
-                                    <Setter Property="Background" Value="{DynamicResource ItemHighlightBackground}" />
-                                </Trigger>
-                                <Trigger Property="IsKeyboardFocused" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource ItemHighlightBackground}" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="{DynamicResource ItemHighlightBackground}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true" />
-                            <Condition Property="IsSelectionActive" Value="false" />
-                        </MultiTrigger.Conditions>
-                        <Setter Property="SelectionBrush"
-                                Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
-                    </MultiTrigger>
-                </Style.Triggers>
-            </Style>
-            <Style TargetType="{x:Type Button}">
-                <Setter Property="FontFamily" Value="/TF2Items.Ui;component/assets/fonts/#TF2 Build" />
-                <Setter Property="Background" Value="{DynamicResource ButtonBackground}" />
-                <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="3" />
-                <Setter Property="Padding" Value="15" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ButtonBase}">
-                            <Border CornerRadius="10"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter
-                                    ContentTemplate="{TemplateBinding ContentTemplate}"
-                                    Content="{TemplateBinding Content}"
-                                    ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                    Margin="{TemplateBinding Padding}"
-                                    RecognizesAccessKey="True"
-                                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="ToggleButton.IsChecked" Value="True">
-                                    <Setter Property="BorderBrush" Value="#FFE9E3C6" />
-                                </Trigger>
-                                <Trigger Property="IsFocused" Value="true">
-                                    <Setter Property="BorderBrush" Value="#FFE9E3C6" />
-                                </Trigger>
-                                <Trigger Property="IsKeyboardFocused" Value="True">
-                                    <Setter Property="BorderBrush" Value="#FFE9E3C6" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="{DynamicResource ButtonPressedBackground}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Foreground" Value="#FFADADAD" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type ListBoxItem}">
-                <Setter Property="Background" Value="{DynamicResource ItemBackground}"/>
-            	<Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            	<Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-            	<Setter Property="Padding" Value="2,0,0,0"/>
-            	<Setter Property="Template">
-            		<Setter.Value>
-            			<ControlTemplate TargetType="{x:Type ListBoxItem}">
-            				<Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-            					<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-            				</Border>
-            				<ControlTemplate.Triggers>
-            					<Trigger Property="IsSelected" Value="true">
-            						<Setter Property="Background" Value="{DynamicResource ButtonPressedBackground}"/>
-            						<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-            					</Trigger>
-            					<MultiTrigger>
-            						<MultiTrigger.Conditions>
-                                        <Condition Property="IsMouseOver" Value="true"/>
-                                        <Condition Property="IsSelected" Value="false"/>
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="Background" Value="{DynamicResource ItemHighlightBackground}"/>
-                                </MultiTrigger>
-            					<MultiTrigger>
-            						<MultiTrigger.Conditions>
-            							<Condition Property="IsSelected" Value="true"/>
-            							<Condition Property="Selector.IsSelectionActive" Value="false"/>
-            						</MultiTrigger.Conditions>
-            						<!--<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>-->
-            						<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-            					</MultiTrigger>
-            					<Trigger Property="IsEnabled" Value="false">
-            						<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-            					</Trigger>
-            				</ControlTemplate.Triggers>
-            			</ControlTemplate>
-            		</Setter.Value>
-            	</Setter>
-            </Style>
-
-
-
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/TF2Items.Ui;component/assets/ScrollBars.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-
-	</UserControl.Resources>
 	<UserControl.DataContext>
-		<Binding Path="Main" Source="{StaticResource Locator}"/>
+		<Binding Path="Main.WeaponList" Source="{StaticResource Locator}"/>
 	</UserControl.DataContext>
     <core:Interaction.Triggers>
         <core:EventTrigger EventName="Loaded">
-            <core:InvokeCommandAction Command="{Binding ReadAllCommand}"/>
+            <core:InvokeCommandAction Command="{Binding ReadAllWeaponsCommand}"/>
         </core:EventTrigger>
- </core:Interaction.Triggers>
+    </core:Interaction.Triggers>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -220,13 +64,13 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-		<Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+		<Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllWeaponsCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
 			<Border Background="#FF282723" Opacity=".5"/>
 			<Viewbox Margin="10" >
 				<ui:LoadingControl Height="300" Width="300"/>
 			</Viewbox>
 		</Grid>
 
-		<Button Grid.Row="6" x:Name="btnLoadAllEmployees" Content="Reload all weapons" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllCommand}" />
+		<Button Grid.Row="6" x:Name="btnLoadAllEmployees" Content="Reload all weapons" FontSize="30" FontWeight="Bold" Command="{Binding ReadAllWeaponsCommand}" />
 	</Grid>
 </UserControl>
