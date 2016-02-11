@@ -1,3 +1,4 @@
+﻿using System.ComponentModel;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using TF2Items.Core;
@@ -6,10 +7,15 @@ using TF2Items.Ui.Services;
 
 namespace TF2Items.Ui.ViewModel
 {
-    public class Tf2WeaponViewModel : ViewModelBase
+    public class WeaponDetailsViewModel : ViewModelBase
     {
-        private readonly IWeaponIconService _iconService;
         private Tf2Weapon _model;
+        private readonly IWeaponIconService _weaponIconService;
+
+        public WeaponDetailsViewModel(IWeaponIconService weaponIconService)
+        {
+            _weaponIconService = weaponIconService;
+        }
 
         public Tf2Weapon Model
         {
@@ -18,27 +24,17 @@ namespace TF2Items.Ui.ViewModel
             {
                 _model = value;
                 Image = new RunNotifyTaskCompletion<string>(GetImage);
-
+                
                 RaisePropertyChanged(() => Model);
-                RaisePropertyChanged(() => Name);
+                RaisePropertyChanged(() => Image);
             }
         }
 
         private async Task<string> GetImage()
         {
-            return  await _iconService.Get(_model);
-        }
-
-        public string Name
-        {
-            get { return _model.Name; }
+            return await _weaponIconService.Get(_model);
         }
 
         public RunNotifyTaskCompletion<string> Image { get; private set; }
-
-        public Tf2WeaponViewModel(IWeaponIconService iconService)
-        {
-            _iconService = iconService;
-        }
     }
 }

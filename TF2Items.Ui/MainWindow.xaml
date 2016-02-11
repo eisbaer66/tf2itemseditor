@@ -3,15 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:TF2Items.Ui.Views"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        Title="MainWindow" Height="700" Width="1004">
+        Title="MainWindow" Height="700" Width="1504">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
+            <ColumnDefinition Width="4"></ColumnDefinition>
+            <ColumnDefinition Width="2*" MinWidth="300"></ColumnDefinition>
             <ColumnDefinition Width="4"></ColumnDefinition>
             <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <views:Tf2WeaponListView></views:Tf2WeaponListView>
         <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" />
-        <views:Tf2AttributeListView Grid.Column="2"></views:Tf2AttributeListView>
+        <views:WeaponDetailView Grid.Column="2"></views:WeaponDetailView>
+        <GridSplitter Grid.Column="3" Width="4" HorizontalAlignment="Stretch" />
+        <views:Tf2AttributeListView Grid.Column="4"></views:Tf2AttributeListView>
     </Grid>
 </Window>

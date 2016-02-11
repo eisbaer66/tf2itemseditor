@@ -117,16 +117,21 @@
     <Compile Include="Dispatch\AsyncRelayCommand.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />
+    <Compile Include="ViewModel\Messenges\SelectWeapon.cs" />
     <Compile Include="ViewModel\Tf2AttributeListViewModel.cs" />
     <Compile Include="ViewModel\Tf2AttributeViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponListViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\WeaponDetailsViewModel.cs" />
     <Compile Include="Views\Tf2AttributeListView.xaml.cs">
       <DependentUpon>Tf2AttributeListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Tf2WeaponListView.xaml.cs">
       <DependentUpon>Tf2WeaponListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WeaponDetailView.xaml.cs">
+      <DependentUpon>WeaponDetailView.xaml</DependentUpon>
     </Compile>
     <Compile Include="VirtualizingWrapPanel.cs" />
     <Page Include="assets\Base.xaml">
@@ -162,6 +167,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Tf2WeaponListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WeaponDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -223,6 +232,7 @@
     <Resource Include="assets\icons\Pictogram_minus.png" />
     <Resource Include="assets\icons\Pictogram_plus.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

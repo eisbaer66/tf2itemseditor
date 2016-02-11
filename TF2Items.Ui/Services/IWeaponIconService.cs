@@ -23,6 +23,8 @@ namespace TF2Items.Ui.Services
 
         public async Task<string> Get(Tf2Weapon weapon)
         {
+            if (weapon == null)
+                return null;
             if (string.IsNullOrEmpty(weapon.ImageDirectory))
                 return null;
 
@@ -34,10 +36,14 @@ namespace TF2Items.Ui.Services
             string completeCacheDirectory = Path.Combine(_config.CacheDirectory, cacheSubDirectory);
             string cachePath = Path.Combine(completeCacheDirectory, filename);
             if (File.Exists(cachePath))
-                return cachePath;
+                return Path.Combine(Directory.GetCurrentDirectory(), cachePath);
 
             AssureExistence(completeCacheDirectory);
-            return await _vpkService.ExtractWeaponIcon(weapon.ImageDirectory, completeCacheDirectory);
+            string iconPath = await _vpkService.ExtractWeaponIcon(weapon.ImageDirectory, completeCacheDirectory);
+
+            if (string.IsNullOrEmpty(iconPath))
+                return "/TF2Items.Ui;component/assets/icons/error.png";
+            return Path.Combine(Directory.GetCurrentDirectory(), iconPath);
         }
 
         private void AssureExistence(string dir)

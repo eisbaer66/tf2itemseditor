@@ -4,6 +4,7 @@
     <Style TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="/TF2Items.Ui;component/assets/fonts/#TF2 Secondary" />
         <Setter Property="TextTrimming" Value="None" />
+        <Setter Property="FontSize" Value="26" />
         <Setter Property="Foreground" Value="{DynamicResource Foreground}" />
     </Style>
     <Style x:Key="TextBoxStyle" BasedOn="{x:Null}" TargetType="{x:Type TextBox}">

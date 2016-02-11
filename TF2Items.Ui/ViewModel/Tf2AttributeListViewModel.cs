@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
@@ -86,8 +87,14 @@ namespace TF2Items.Ui.ViewModel
             Func<Tf2AttributeViewModel, bool> matches = w =>
                                                         {
                                                             bool nameContainsPhrase = CultureInfo.InvariantCulture.CompareInfo.IndexOf(w.Model.Name, _filter, CompareOptions.IgnoreCase) >= 0;
+                                                            if (nameContainsPhrase)
+                                                                return true;
+
                                                             bool classContainsPhrase = CultureInfo.InvariantCulture.CompareInfo.IndexOf(w.Model.Class, _filter, CompareOptions.IgnoreCase) >= 0;
-                                                            return nameContainsPhrase && classContainsPhrase;
+                                                            if (classContainsPhrase)
+                                                                return true;
+
+                                                            return false;
                                                         };
             List<Tf2AttributeViewModel> weaponsNotMatchingFilter = Attributes.Where(w => !matches(w)).ToList();
             Attributes.Remove(weaponsNotMatchingFilter);

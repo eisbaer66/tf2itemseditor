@@ -35,10 +35,15 @@
 			<TextBlock Margin="0,0,5,0" FontSize="26" VerticalAlignment="Center">Filter:</TextBlock>
 			<TextBox FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Secondary" FontSize="26" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" Style="{DynamicResource TextBoxStyle}" />
 		</DockPanel>
-		
 
-		<ListBox Grid.Row="4" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0">
-			<ListBox.ItemsPanel>
+
+        <ListBox x:Name="list" Grid.Row="4" ItemsSource="{Binding Weapons}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectWeaponCommand}" CommandParameter="{Binding ElementName=list, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListBox.ItemsPanel>
 				<ItemsPanelTemplate>
 					<ui:VirtualizingWrapPanel IsItemsHost="True" />
 				</ItemsPanelTemplate>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace TF2Items.Ui
@@ -12,7 +11,14 @@ namespace TF2Items.Ui
         {
             try
             {
-                return new BitmapImage(new Uri((string)value));
+                if (value == null)
+                    return new BitmapImage();
+
+                string str = (string)value;
+                if (string.IsNullOrEmpty(str))
+                {
+                    return new BitmapImage(new Uri(str));
+                }
             }
             catch (Exception)
             {

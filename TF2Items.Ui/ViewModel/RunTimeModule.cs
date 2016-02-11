@@ -22,6 +22,8 @@ namespace TF2Items.Ui.ViewModel
             Bind<IItemsGameWeaponsParser>().To<ItemsGameWeaponsParser>();
             Bind<ITf2AttributesParser>().To<Tf2AttributesParser>();
             Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
+
+            Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();
         }
     }
 }

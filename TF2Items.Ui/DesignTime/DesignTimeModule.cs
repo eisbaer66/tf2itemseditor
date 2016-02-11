@@ -2,6 +2,7 @@ using Ninject.Modules;
 using TF2Items.Core;
 using TF2Items.Parsers;
 using TF2Items.Ui.Services;
+using TF2Items.Ui.ViewModel;
 using TF2Items.ValvePak;
 
 namespace TF2Items.Ui.DesignTime
@@ -23,6 +24,8 @@ namespace TF2Items.Ui.DesignTime
             Bind<IItemsGameWeaponsParser>().To<Parsers.ItemsGameWeaponsParser>();
             Bind<ITf2AttributesParser>().To<Tf2AttributesParser>();
             Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
+
+            Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();
         }
     }
 }

@@ -5,9 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using TF2Items.Core;
 using TF2Items.Ui.Dispatch;
 using TF2Items.Ui.Services;
+using TF2Items.Ui.ViewModel.Messenges;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -28,6 +31,7 @@ namespace TF2Items.Ui.ViewModel
 
             Weapons = new SmartCollection<Tf2WeaponViewModel, WeaponIdentifier>(vm => vm.Model.Id);
             ReadAllWeaponsCommand = new AsyncRelayCommand(GetWeapons);
+            SelectWeaponCommand = new RelayCommand<Tf2WeaponViewModel>(SelectWeapon);
 #if DEBUG
             if (IsInDesignMode)
             {
@@ -39,7 +43,17 @@ namespace TF2Items.Ui.ViewModel
 #endif
         }
 
+        private void SelectWeapon(Tf2WeaponViewModel vm)
+        {
+            if (vm == null)
+                return;
+            if (vm.Model == null)
+                return;
+            Messenger.Default.Send(new SelectWeapon { Weapon = vm .Model});
+        }
+
         public AsyncRelayCommand ReadAllWeaponsCommand { get; set; }
+        public RelayCommand<Tf2WeaponViewModel> SelectWeaponCommand { get; set; }
 
         public SmartCollection<Tf2WeaponViewModel, WeaponIdentifier> Weapons
         {
@@ -79,6 +93,12 @@ namespace TF2Items.Ui.ViewModel
                     return weaponViewModel;
                 })
                 .ToList();
+#if DEBUG
+            if (IsInDesignMode)
+            {
+                SelectWeapon(_allWeapons[0]);
+            }
+#endif
             return _allWeapons;
         }
 

@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
 using GalaSoft.MvvmLight;
-using TF2Items.Core;
-using TF2Items.Ui.Dispatch;
-using TF2Items.Ui.Services;
+using GalaSoft.MvvmLight.Messaging;
+using TF2Items.Ui.ViewModel.Messenges;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -27,6 +21,7 @@ namespace TF2Items.Ui.ViewModel
     {
         private Tf2WeaponListViewModel _weaponList;
         private Tf2AttributeListViewModel _attributeList;
+        private WeaponDetailsViewModel _weaponDetails;
 
         public Tf2WeaponListViewModel WeaponList
         {
@@ -48,10 +43,28 @@ namespace TF2Items.Ui.ViewModel
             }
         }
 
-        public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList)
+        public WeaponDetailsViewModel WeaponDetails
+        {
+            get { return _weaponDetails; }
+            set
+            {
+                _weaponDetails = value;
+                RaisePropertyChanged(() => WeaponDetails);
+            }
+        }
+
+        public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails)
         {
             _weaponList = weaponList;
             _attributeList = attributeList;
+            _weaponDetails = weaponDetails;
+
+            Messenger.Default.Register<SelectWeapon>(this, SelectWeapon);
+        }
+
+        private void SelectWeapon(SelectWeapon msg)
+        {
+            WeaponDetails.Model = msg.Weapon;
         }
     }
 }
