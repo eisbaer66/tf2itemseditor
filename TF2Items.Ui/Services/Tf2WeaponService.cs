@@ -12,6 +12,7 @@ namespace TF2Items.Ui.Services
     {
         Task<IEnumerable<Tf2Weapon>> Get();
         Task<IEnumerable<Tf2Attribute>> GetAttributes();
+        Task<IDictionary<string, Tf2Attribute>> GetAttributesAsClassDictionary();
     }
 
     public class Tf2WeaponService : ITf2WeaponService
@@ -39,6 +40,13 @@ namespace TF2Items.Ui.Services
 
 
             return weapons.Select(w => Hydrate(w, prefabs));
+        }
+
+        public async Task<IDictionary<string, Tf2Attribute>> GetAttributesAsClassDictionary()
+        {
+            return (await _attributeParser.ParseSingle(_settingsService.ItemsGameTxt))
+                .ToLookup(a => a.Class)
+                .ToDictionary(p => p.Key, p => p.FirstOrDefault());
         }
 
         public async Task<IEnumerable<Tf2Attribute>> GetAttributes()

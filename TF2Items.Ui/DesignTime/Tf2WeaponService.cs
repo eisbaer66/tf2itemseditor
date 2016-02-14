@@ -20,6 +20,11 @@ namespace TF2Items.Ui.DesignTime
             return (await _service.Get()).Take(100);
         }
 
+        public async Task<IDictionary<string, Tf2Attribute>> GetAttributesAsClassDictionary()
+        {
+            return (await _service.GetAttributesAsClassDictionary()).Take(100).ToDictionary(p => p.Key, p => p.Value);
+        }
+
         public async Task<IEnumerable<Tf2Attribute>> GetAttributes()
         {
             return (await _service.GetAttributes()).Take(100);

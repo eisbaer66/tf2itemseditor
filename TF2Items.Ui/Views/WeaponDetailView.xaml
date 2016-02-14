@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ui="clr-namespace:TF2Items.Ui"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800"
 			 Background="#FF282723"
@@ -52,7 +53,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0">Id:</TextBlock>
             <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Model.Id}" />
@@ -62,6 +63,45 @@
             <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Model.ImageDirectory}" />
             <TextBlock Grid.Row="3" Grid.Column="0">PrefabName:</TextBlock>
             <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Model.PrefabName}" />
+        </Grid>
+
+
+        <ListBox Grid.Row="3" ItemsSource="{Binding Attributes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel IsItemsHost="True" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Margin="10" Padding="5" BorderBrush="#FFE9E3C9" BorderThickness="3" CornerRadius="10"
+                            Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Background}" >
+                        <Grid Height="50" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*" MinWidth="0"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="0" Margin="5, 0, 5, 5">
+                                <TextBlock Text="{Binding Format}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                            </Viewbox>
+                            <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
+                                <TextBlock Text="{Binding Model.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                            </Viewbox>
+                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5">
+                                <TextBlock Text="{Binding Model.Value}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                            </Viewbox>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAttributesCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+            <Border Background="#FF282723" Opacity=".5"/>
+            <Viewbox Margin="10" >
+                <ui:LoadingControl Height="300" Width="300"/>
+            </Viewbox>
         </Grid>
     </Grid>
 </UserControl>

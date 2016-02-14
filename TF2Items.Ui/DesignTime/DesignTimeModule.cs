@@ -22,7 +22,8 @@ namespace TF2Items.Ui.DesignTime
             Bind<ITf2WeaponService>().To<Services.Tf2WeaponService>().WhenInjectedInto<Tf2WeaponService>();
             Bind<IStatsParser>().To<StatsParser>();
             Bind<IItemsGameWeaponsParser>().To<Parsers.ItemsGameWeaponsParser>();
-            Bind<ITf2AttributesParser>().To<Tf2AttributesParser>();
+            Bind<ITf2AttributesParser>().To<Tf2AttributesParserCache>();
+            Bind<ITf2AttributesParser>().To<Tf2AttributesParser>().WhenInjectedExactlyInto<Tf2AttributesParserCache>();
             Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
 
             Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();

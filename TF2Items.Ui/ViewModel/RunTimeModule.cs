@@ -20,7 +20,8 @@ namespace TF2Items.Ui.ViewModel
             Bind<ITf2WeaponService>().To<Tf2WeaponService>();
             Bind<IStatsParser>().To<StatsParser>();
             Bind<IItemsGameWeaponsParser>().To<ItemsGameWeaponsParser>();
-            Bind<ITf2AttributesParser>().To<Tf2AttributesParser>();
+            Bind<ITf2AttributesParser>().To<Tf2AttributesParserCache>();
+            Bind<ITf2AttributesParser>().To<Tf2AttributesParser>().WhenInjectedExactlyInto<Tf2AttributesParserCache>();
             Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
 
             Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();

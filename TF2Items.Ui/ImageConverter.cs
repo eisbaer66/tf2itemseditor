@@ -17,8 +17,9 @@ namespace TF2Items.Ui
                 string str = (string)value;
                 if (string.IsNullOrEmpty(str))
                 {
-                    return new BitmapImage(new Uri(str));
+                    return new BitmapImage();
                 }
+                return new BitmapImage(new Uri(str));
             }
             catch (Exception)
             {

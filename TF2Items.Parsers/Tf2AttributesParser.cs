@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,166 @@ namespace TF2Items.Parsers
         Task<IDictionary<int, Tf2Attribute>> ParseAsDictionary(string filePath);
         Task<IList<Tf2Attribute>> Parse(string filePath);
         Task<IEnumerable<Tf2Attribute>> ParseSingle(string filePath);
+    }
+
+    public class Tf2AttributesParserCache : ITf2AttributesParser
+    {
+        private readonly ITf2AttributesParser _parser;
+        private IDictionary<int, Tf2Attribute> _dict;
+        private IList<Tf2Attribute> _list;
+        private CachingEnumarable<Tf2Attribute> _enum;
+
+        public Func<DataNode, bool> Filter
+        {
+            get { return _parser.Filter; }
+            set { _parser.Filter = value; }
+        }
+
+        public async Task<IDictionary<int, Tf2Attribute>> ParseAsDictionary(string filePath)
+        {
+            if (_dict != null)
+                return _dict;
+
+            IDictionary<int, Tf2Attribute> dictionary = await _parser.ParseAsDictionary(filePath);
+            _dict = dictionary;
+            return _dict;
+        }
+
+        public async Task<IList<Tf2Attribute>> Parse(string filePath)
+        {
+            if (_list != null)
+                return _list;
+
+            IList<Tf2Attribute> attributes = await _parser.Parse(filePath);
+            _list = attributes;
+            return _list;
+        }
+
+        public async Task<IEnumerable<Tf2Attribute>> ParseSingle(string filePath)
+        {
+            if (_enum != null)
+                return _enum;
+
+            IEnumerable<Tf2Attribute> attributes = await _parser.ParseSingle(filePath);
+            _enum = new CachingEnumarable<Tf2Attribute>(attributes);
+            return _enum;
+        }
+
+        public Tf2AttributesParserCache(ITf2AttributesParser parser)
+        {
+            _parser = parser;
+        }
+    }
+
+    public class CachingEnumarable<T> : IEnumerable<T>
+    {
+        private readonly IEnumerable<T> _enumerable;
+        private IList<T> _cache;
+
+        public CachingEnumarable(IEnumerable<T> enumerable)
+        {
+            _enumerable = enumerable;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            if (_cache != null)
+                return _cache.GetEnumerator();
+
+            return new CachingEnumerator<T>(_enumerable.GetEnumerator(), c => _cache = c);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            if (_cache != null)
+                return _cache.GetEnumerator();
+
+            return new CachingEnumerator(((IEnumerable)_enumerable).GetEnumerator(), c => _cache = c.Cast<T>().ToList());
+        }
+    }
+
+    public class CachingEnumerator : IEnumerator
+    {
+        private readonly IEnumerator _enumerator;
+        private readonly Action<IList> _finished;
+        private readonly IList _cache;
+
+        public CachingEnumerator(IEnumerator enumerator, Action<IList> finished)
+        {
+            _enumerator = enumerator;
+            _finished = finished;
+            _cache = new ArrayList();
+        }
+
+        public bool MoveNext()
+        {
+            bool moveNext = _enumerator.MoveNext();
+            if (moveNext)
+                _cache.Add(Current);
+            else
+                _finished(_cache);
+
+            return moveNext;
+        }
+
+        public void Reset()
+        {
+            _enumerator.Reset();
+        }
+
+        public object Current
+        {
+            get { return _enumerator.Current; }
+        }
+
+        object IEnumerator.Current
+        {
+            get { return _enumerator.Current; }
+        }
+    }
+    public class CachingEnumerator<T> : IEnumerator<T>
+    {
+        private readonly IEnumerator<T> _enumerator;
+        private readonly Action<IList<T>> _finished;
+        private readonly IList<T> _cache;
+
+        public CachingEnumerator(IEnumerator<T> enumerator, Action<IList<T>>  finished)
+        {
+            _enumerator = enumerator;
+            _finished = finished;
+            _cache = new List<T>();
+        }
+
+        public void Dispose()
+        {
+            _enumerator.Dispose();
+        }
+
+        public bool MoveNext()
+        {
+            bool moveNext = _enumerator.MoveNext();
+            if (moveNext)
+                _cache.Add(Current);
+            else
+                _finished(_cache);
+
+            return moveNext;
+        }
+
+        public void Reset()
+        {
+            _enumerator.Reset();
+        }
+
+        public T Current
+        {
+            get { return _enumerator.Current; }
+        }
+
+        object IEnumerator.Current
+        {
+            get { return _enumerator.Current; }
+        }
     }
 
     public class Tf2AttributesParser : ITf2AttributesParser
