@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ui="clr-namespace:TF2Items.Ui"
+             xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800"
 			 Background="#FF282723"
@@ -66,7 +67,10 @@
         </Grid>
 
 
-        <ListBox Grid.Row="3" ItemsSource="{Binding Attributes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch">
+        <ListBox Grid.Row="3" ItemsSource="{Binding Attributes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch"
+                 
+                 dragDrop:DragDrop.IsDropTarget="True" 
+                 dragDrop:DragDrop.DropHandler="{Binding}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel IsItemsHost="True" />

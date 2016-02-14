@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ui="clr-namespace:TF2Items.Ui"
+             xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:viewModel="clr-namespace:TF2Items.Ui.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="600" 
              d:DesignWidth="1000"
@@ -18,6 +20,33 @@
             <i:InvokeCommandAction Command="{Binding ReadAllAttributesCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <UserControl.Resources>
+        <DataTemplate x:Key="AttributeTemplate" DataType="{x:Type viewModel:Tf2AttributeViewModel}">
+            <Border Margin="10" Padding="5" BorderBrush="#FFE9E3C9" BorderThickness="3" CornerRadius="10"
+                            Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Background}" >
+                <Grid Height="50" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*" MinWidth="0"/>
+                        <ColumnDefinition Width="0"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Grid.Column="0" Source="{Binding Image, Converter={StaticResource ImageConverter}}" VerticalAlignment="Center" Height="40" />
+
+                    <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
+                        <TextBlock Text="{Binding Model.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                    </Viewbox>
+                    <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5">
+                        <TextBlock Text="{Binding Model.Class}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                    </Viewbox>
+                    <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="3" Margin="5, 0, 5, 5">
+                        <TextBlock Text="{Binding Format}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                    </Viewbox>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -36,39 +65,22 @@
         </DockPanel>
 
 
-        <ListBox Grid.Row="4" ItemsSource="{Binding Attributes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch">
+        <ListBox Grid.Row="4" 
+                 ItemsSource="{Binding Attributes}" 
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ui:ScrollHelper.ScrollSpeed=".1" 
+                 Background="Transparent" 
+                 BorderThickness="0"
+                 HorizontalContentAlignment="Stretch"
+                 ItemTemplate="{StaticResource AttributeTemplate}"
+                 dragDrop:DragDrop.IsDragSource="True" 
+                 dragDrop:DragDrop.DragAdornerTemplate="{StaticResource AttributeTemplate}"
+                 dragDrop:DragDrop.DragHandler="{Binding}">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel IsItemsHost="True" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border Margin="10" Padding="5" BorderBrush="#FFE9E3C9" BorderThickness="3" CornerRadius="10"
-                            Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Background}" >
-                        <Grid Height="50" >
-                            <Grid.ColumnDefinitions>
-								<ColumnDefinition Width="50"/>
-								<ColumnDefinition Width="*" MinWidth="0"/>
-								<ColumnDefinition Width="0"/>
-								<ColumnDefinition Width="50"/>
-							</Grid.ColumnDefinitions>
-
-                            <Image Grid.Column="0" Source="{Binding Image, Converter={StaticResource ImageConverter}}" VerticalAlignment="Center" Height="40" />
-
-                            <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
-                                <TextBlock Text="{Binding Model.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
-                            </Viewbox>
-                            <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5">
-                                <TextBlock Text="{Binding Model.Class}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
-                            </Viewbox>
-                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="3" Margin="5, 0, 5, 5">
-                                <TextBlock Text="{Binding Format}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
-                            </Viewbox>
-                        </Grid>
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
         </ListBox>
         <Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllAttributesCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
             <Border Background="#FF282723" Opacity=".5"/>
