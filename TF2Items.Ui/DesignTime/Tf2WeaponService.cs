@@ -22,7 +22,7 @@ namespace TF2Items.Ui.DesignTime
 
         public async Task<IDictionary<string, Tf2Attribute>> GetAttributesAsClassDictionary()
         {
-            return (await _service.GetAttributesAsClassDictionary()).Take(100).ToDictionary(p => p.Key, p => p.Value);
+            return await _service.GetAttributesAsClassDictionary();
         }
 
         public async Task<IEnumerable<Tf2Attribute>> GetAttributes()

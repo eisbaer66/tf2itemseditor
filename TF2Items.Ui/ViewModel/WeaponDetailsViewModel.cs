@@ -54,6 +54,9 @@ namespace TF2Items.Ui.ViewModel
 
         private async Task GetAttributes()
         {
+            if (Model == null)
+                return;
+
             IDictionary<string, Tf2Attribute> attributes = await _attributeService.GetAttributesAsClassDictionary();
             IEnumerable<WeaponDetailsAttributeViewModel> viewModels = Model.Attributes.Select(a =>
                                                                                    {

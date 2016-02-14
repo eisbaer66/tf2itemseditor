@@ -96,7 +96,7 @@ namespace TF2Items.Ui.ViewModel
 #if DEBUG
             if (IsInDesignMode)
             {
-                SelectWeapon(_allWeapons[0]);
+                SelectWeapon(_allWeapons[7]);
             }
 #endif
             return _allWeapons;
