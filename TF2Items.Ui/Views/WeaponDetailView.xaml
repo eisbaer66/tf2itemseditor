@@ -85,16 +85,20 @@
                                 <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*" MinWidth="0"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="50"/>
                             </Grid.ColumnDefinitions>
                             
-                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="0" Margin="5, 0, 5, 5">
-                                <TextBlock Text="{Binding Format}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
-                            </Viewbox>
+                            <Image Grid.Column="0" Source="{Binding Image, Converter={StaticResource ImageConverter}}" VerticalAlignment="Center" Height="40" />
+                            
                             <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
-                                <TextBlock Text="{Binding Model.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                                <TextBlock Text="{Binding Attribute.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
                             </Viewbox>
                             <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5">
-                                <TextBlock Text="{Binding Model.Value}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                                <TextBlock Text="{Binding Value}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                            </Viewbox>
+
+                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="3" Margin="5, 0, 5, 5">
+                                <TextBlock Text="{Binding Format}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
                             </Viewbox>
                         </Grid>
                     </Border>

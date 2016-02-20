@@ -39,6 +39,12 @@ namespace TF2Items.Core
 
             return attribute;
         }
+
+        public virtual Tf2WeaponAttribute GetDefaultWeaponAttribute()
+        {
+            Tf2Attribute attribute = Get(1);
+            return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "1");
+        }
     }
 
     public class AttributeClassAdditive : AttributeClass
@@ -49,6 +55,12 @@ namespace TF2Items.Core
                 return GetNegativeAttribute();
             return GetPositiveAttribute();
         }
+
+        public override Tf2WeaponAttribute GetDefaultWeaponAttribute()
+        {
+            Tf2Attribute attribute = GetPositiveAttribute();
+            return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "0");
+        }
     }
 
     public class AttributeClassAdditivePercentage : AttributeClass
@@ -58,6 +70,12 @@ namespace TF2Items.Core
             if (value < 0)
                 return GetNegativeAttribute();
             return GetPositiveAttribute();
+        }
+
+        public override Tf2WeaponAttribute GetDefaultWeaponAttribute()
+        {
+            Tf2Attribute attribute = GetPositiveAttribute();
+            return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "0");
         }
     }
 

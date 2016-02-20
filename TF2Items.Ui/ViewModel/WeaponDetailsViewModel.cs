@@ -18,8 +18,8 @@ namespace TF2Items.Ui.ViewModel
         private readonly IWeaponIconService _weaponIconService;
         private readonly ITf2WeaponService _attributeService;
         private readonly Func<WeaponDetailsAttributeViewModel> _getVm;
-        private SmartCollection<WeaponDetailsAttributeViewModel, int?> _attributes;
-        private IDictionary<string, Tf2Attribute> _tf2attributes;
+        private SmartCollection<WeaponDetailsAttributeViewModel, string> _attributes;
+        private IDictionary<string, AttributeClass> _attributeClasses;
 
         public WeaponDetailsViewModel(IWeaponIconService weaponIconService, ITf2WeaponService attributeService, Func<WeaponDetailsAttributeViewModel> getVm)
         {
@@ -27,7 +27,7 @@ namespace TF2Items.Ui.ViewModel
             _attributeService = attributeService;
             _getVm = getVm;
 
-            Attributes = new SmartCollection<WeaponDetailsAttributeViewModel, int?>(vm => vm.Tf2Attribute.Id);
+            Attributes = new SmartCollection<WeaponDetailsAttributeViewModel, string>(vm => vm.Model.Name);
             ReadAttributesCommand = new AsyncRelayCommand(GetAttributes);
 #if DEBUG
             if (IsInDesignMode)
@@ -59,14 +59,13 @@ namespace TF2Items.Ui.ViewModel
             if (Model == null)
                 return;
 
-            _tf2attributes = await _attributeService.GetAttributesAsClassDictionary();
+            _attributeClasses = await _attributeService.GetAttributeClassesAsDictionary();
             IEnumerable<WeaponDetailsAttributeViewModel> viewModels = Model.Attributes.Select(a =>
                                                                                    {
-                                                                                       Tf2Attribute attribute = _tf2attributes[a.Class];
+                                                                                       AttributeClass attribute = _attributeClasses[a.Class];
 
                                                                                        WeaponDetailsAttributeViewModel vm = _getVm();
-                                                                                       vm.Model = a;
-                                                                                       vm.Tf2Attribute = attribute;
+                                                                                       vm.Model = attribute;
                                                                                        return vm;
                                                                                    });
 
@@ -82,7 +81,7 @@ namespace TF2Items.Ui.ViewModel
 
         public RunNotifyTaskCompletion<string> Image { get; private set; }
 
-        public SmartCollection<WeaponDetailsAttributeViewModel, int?> Attributes
+        public SmartCollection<WeaponDetailsAttributeViewModel, string> Attributes
         {
             get { return _attributes; }
             set
@@ -94,13 +93,13 @@ namespace TF2Items.Ui.ViewModel
 
         public void DragOver(IDropInfo dropInfo)
         {
-            if (_tf2attributes == null)
+            if (_attributeClasses == null)
                 return;
             Tf2AttributeViewModel tf2AttributeViewModel = dropInfo.Data as Tf2AttributeViewModel;
             if (tf2AttributeViewModel == null)
                 return;
 
-            bool attributeAlreadyExists = Attributes.Any(vm => vm.Tf2Attribute.Class == tf2AttributeViewModel.Model.Class);
+            bool attributeAlreadyExists = Attributes.Any(vm => vm.Model.Name == tf2AttributeViewModel.Model.Class);
             if (attributeAlreadyExists)
                 return;
 
@@ -110,35 +109,93 @@ namespace TF2Items.Ui.ViewModel
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (_tf2attributes == null)
+            if (_attributeClasses == null)
                 return;
             Tf2AttributeViewModel tf2AttributeViewModel = dropInfo.Data as Tf2AttributeViewModel;
             if (tf2AttributeViewModel == null)
                 return;
 
             WeaponDetailsAttributeViewModel vm = _getVm();
-            Tf2Attribute tf2Attribute = tf2AttributeViewModel.Model;
-            vm.Model = new Tf2WeaponAttribute(tf2Attribute.Class, tf2Attribute.Name, "0");
-            vm.Tf2Attribute = _tf2attributes[tf2Attribute.Class];
+            vm.Model = tf2AttributeViewModel.Class;
             Attributes.Add(vm);
         }
     }
 
-    public class WeaponDetailsAttributeViewModel
+    public class WeaponDetailsAttributeViewModel :ViewModelBase
     {
-        public Tf2WeaponAttribute Model { get; set; }
-        public Tf2Attribute Tf2Attribute { get; set; }
+        private AttributeClass _model;
+        private Tf2Attribute _attribute;
+        private Tf2WeaponAttribute _weaponAttribute;
+        private string _value;
+
+        public AttributeClass Model
+        {
+            get { return _model; }
+            set
+            {
+                _model = value;
+                RaisePropertyChanged(() => Model);
+
+                WeaponAttribute = value.GetDefaultWeaponAttribute();
+                Value = _weaponAttribute.Value;
+            }
+        }
+
+        public Tf2WeaponAttribute WeaponAttribute
+        {
+            get { return _weaponAttribute; }
+            set
+            {
+                _weaponAttribute = value;
+                RaisePropertyChanged(() => WeaponAttribute);
+            }
+        }
+
+        public string Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                RaisePropertyChanged(() => Value);
+
+                float f;
+                if (float.TryParse(value, out f))
+                    Attribute = _model.Get(f);
+            }
+        }
+
+        public Tf2Attribute Attribute
+        {
+            get { return _attribute; }
+            set
+            {
+                _attribute = value;
+                RaisePropertyChanged(() => Attribute);
+                RaisePropertyChanged(() => Format);
+            }
+        }
+
+        public string Image
+        {
+            get
+            {
+                return Attribute.EffectType == "positive"
+                    ? "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_plus.png"
+                    : "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_minus.png";
+            }
+        }
 
         public string Format
         {
             get
             {
-                switch (Tf2Attribute.Format)
+                switch (Attribute.Format)
                 {
                     case "value_is_percentage":
                         return "%";
                     case "value_is_inverted_percentage":
-                        return "-%";
+                        return "%";
                     case "value_is_additive_percentage":
                         return "+%";
                     case "value_is_additive":
@@ -149,8 +206,8 @@ namespace TF2Items.Ui.ViewModel
                         return "OR";
                     default:
                         {
-                            Debug.WriteLine(Tf2Attribute.Format);
-                            return Tf2Attribute.Format.Replace("_", Environment.NewLine);
+                            Debug.WriteLine(Attribute.Format);
+                            return Attribute.Format.Replace("_", Environment.NewLine);
                         }
                 }
             }

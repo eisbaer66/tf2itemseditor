@@ -73,11 +73,11 @@ namespace TF2Items.Ui.ViewModel
 
         private async Task<IEnumerable<Tf2AttributeViewModel>> GetAttributeViewModels()
         {
-            _allAttributes = (await _itemsGameService.GetAttributes())
+            _allAttributes = (await _itemsGameService.GetAttributeClasses())
                 .Select(a =>
                         {
                             Tf2AttributeViewModel attributeViewModel = _getAttributeViewModel();
-                            attributeViewModel.Model = a;
+                            attributeViewModel.Class = a;
                             return attributeViewModel;
                         })
                 .ToList();
