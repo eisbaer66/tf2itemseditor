@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:TF2Items.Ui.ViewModel" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <ui:BooleanToVisibilityConverterInverse x:Key="BooleanToVisibilityConverterInverse"/>
             <ui:ImageConverter x:Key="ImageConverter"/>
 
             <ResourceDictionary.MergedDictionaries>

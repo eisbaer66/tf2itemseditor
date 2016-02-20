@@ -118,6 +118,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BooleanToVisibilityConverterInverse.cs" />
     <Compile Include="DesignTime\DesignTimeModule.cs" />
     <Compile Include="DesignTime\ItemsGameWeaponsParser.cs" />
     <Compile Include="DesignTime\SteamConfig.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="SmartCollection.cs" />
     <Compile Include="Dispatch\AsyncRelayCommand.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\Messenges\RemoveWeaponAttribute.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />
     <Compile Include="ViewModel\Messenges\SelectWeapon.cs" />
     <Compile Include="ViewModel\Tf2AttributeListViewModel.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="ViewModel\Tf2WeaponListViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="ViewModel\WeaponDetailsAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetailsViewModel.cs" />
     <Compile Include="Views\Tf2AttributeListView.xaml.cs">
       <DependentUpon>Tf2AttributeListView.xaml</DependentUpon>

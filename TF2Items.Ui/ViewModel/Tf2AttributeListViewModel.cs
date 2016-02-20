@@ -108,6 +108,8 @@ namespace TF2Items.Ui.ViewModel
         void IDragSource.StartDrag(IDragInfo dragInfo)
         {
             Tf2AttributeViewModel viewModel = dragInfo.SourceItem as Tf2AttributeViewModel;
+            if (viewModel == null)
+                return;
 
             dragInfo.Effects = DragDropEffects.Copy|DragDropEffects.Move;
             dragInfo.Data = viewModel;

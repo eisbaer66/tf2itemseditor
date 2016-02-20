@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,6 +8,7 @@ using GongSolutions.Wpf.DragDrop;
 using TF2Items.Core;
 using TF2Items.Ui.Dispatch;
 using TF2Items.Ui.Services;
+using TF2Items.Ui.ViewModel.Messenges;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -29,6 +29,8 @@ namespace TF2Items.Ui.ViewModel
 
             Attributes = new SmartCollection<WeaponDetailsAttributeViewModel, string>(vm => vm.Model.Name);
             ReadAttributesCommand = new AsyncRelayCommand(GetAttributes);
+            MessengerInstance.Register<RemoveWeaponAttribute>(this, RemoveAttribute);
+
 #if DEBUG
             if (IsInDesignMode)
             {
@@ -38,6 +40,12 @@ namespace TF2Items.Ui.ViewModel
                 }).Wait();
             }
 #endif
+        }
+
+        private void RemoveAttribute(RemoveWeaponAttribute msg)
+        {
+            WeaponDetailsAttributeViewModel vm = Attributes.FirstOrDefault(a => a.Model.Name == msg.Class);
+            Attributes.Remove(vm);
         }
 
         public Tf2Weapon Model
@@ -66,6 +74,8 @@ namespace TF2Items.Ui.ViewModel
 
                                                                                        WeaponDetailsAttributeViewModel vm = _getVm();
                                                                                        vm.Model = attribute;
+                                                                                       vm.Predefined = true;
+                                                                                       vm.Value = a.Value;
                                                                                        return vm;
                                                                                    });
 
@@ -119,99 +129,5 @@ namespace TF2Items.Ui.ViewModel
             vm.Model = tf2AttributeViewModel.Class;
             Attributes.Add(vm);
         }
-    }
-
-    public class WeaponDetailsAttributeViewModel :ViewModelBase
-    {
-        private AttributeClass _model;
-        private Tf2Attribute _attribute;
-        private Tf2WeaponAttribute _weaponAttribute;
-        private string _value;
-
-        public AttributeClass Model
-        {
-            get { return _model; }
-            set
-            {
-                _model = value;
-                RaisePropertyChanged(() => Model);
-
-                WeaponAttribute = value.GetDefaultWeaponAttribute();
-                Value = _weaponAttribute.Value;
-            }
-        }
-
-        public Tf2WeaponAttribute WeaponAttribute
-        {
-            get { return _weaponAttribute; }
-            set
-            {
-                _weaponAttribute = value;
-                RaisePropertyChanged(() => WeaponAttribute);
-            }
-        }
-
-        public string Value
-        {
-            get { return _value; }
-            set
-            {
-                _value = value;
-                RaisePropertyChanged(() => Value);
-
-                float f;
-                if (float.TryParse(value, out f))
-                    Attribute = _model.Get(f);
-            }
-        }
-
-        public Tf2Attribute Attribute
-        {
-            get { return _attribute; }
-            set
-            {
-                _attribute = value;
-                RaisePropertyChanged(() => Attribute);
-                RaisePropertyChanged(() => Format);
-            }
-        }
-
-        public string Image
-        {
-            get
-            {
-                return Attribute.EffectType == "positive"
-                    ? "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_plus.png"
-                    : "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_minus.png";
-            }
-        }
-
-        public string Format
-        {
-            get
-            {
-                switch (Attribute.Format)
-                {
-                    case "value_is_percentage":
-                        return "%";
-                    case "value_is_inverted_percentage":
-                        return "%";
-                    case "value_is_additive_percentage":
-                        return "+%";
-                    case "value_is_additive":
-                        return "+";
-                    case "value_is_or":
-                        return "OR";
-                    case "value_is_particle_index":
-                        return "OR";
-                    default:
-                        {
-                            Debug.WriteLine(Attribute.Format);
-                            return Attribute.Format.Replace("_", Environment.NewLine);
-                        }
-                }
-            }
-        }
-
     }
 }

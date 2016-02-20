@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace TF2Items.Core
@@ -44,6 +45,19 @@ namespace TF2Items.Core
         {
             Tf2Attribute attribute = Get(1);
             return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "1");
+        }
+
+        public virtual string Format(float value)
+        {
+            return value.ToString();
+        }
+
+        public virtual float Deformat(string value, float oldValue)
+        {
+            float f;
+            if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
+                return oldValue;
+            return f;
         }
     }
 
@@ -96,6 +110,19 @@ namespace TF2Items.Core
             if (value < 1)
                 return GetNegativeAttribute();
             return GetPositiveAttribute();
+        }
+
+        public override string Format(float value)
+        {
+            return (value*100).ToString();
+        }
+
+        public override float Deformat(string value, float oldValue)
+        {
+            float f;
+            if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
+                return oldValue;
+            return f / 100;
         }
     }
 }
