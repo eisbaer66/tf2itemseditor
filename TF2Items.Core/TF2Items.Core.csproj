@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeClass.cs" />
     <Compile Include="ConfigWeapon.cs" />
     <Compile Include="ConfigWeaponAttribute.cs" />
     <Compile Include="Enumerableutil.cs" />

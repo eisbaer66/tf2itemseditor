@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using log4net;
@@ -13,6 +14,8 @@ namespace TF2Items.Ui.Services
         Task<IEnumerable<Tf2Weapon>> Get();
         Task<IEnumerable<Tf2Attribute>> GetAttributes();
         Task<IDictionary<string, Tf2Attribute>> GetAttributesAsClassDictionary();
+        Task<IDictionary<string, AttributeClass>> GetAttributeClassesAsDictionary();
+        Task<IEnumerable<AttributeClass>> GetAttributeClasses();
     }
 
     public class Tf2WeaponService : ITf2WeaponService
@@ -52,6 +55,52 @@ namespace TF2Items.Ui.Services
         public async Task<IEnumerable<Tf2Attribute>> GetAttributes()
         {
             return await _attributeParser.ParseSingle(_settingsService.ItemsGameTxt);
+        }
+
+        public async Task<IDictionary<string, AttributeClass>> GetAttributeClassesAsDictionary()
+        {
+            return (await GetAttributeClasses())
+                .ToLookup(a => a.Name)
+                .ToDictionary(p => p.Key, p => p.FirstOrDefault());
+        }
+
+        public async Task<IEnumerable<AttributeClass>> GetAttributeClasses()
+        {
+            return (await GetAttributes())
+                .GroupBy(a => new {a.Class, a.Format})
+                .Select(g =>
+                        {
+                            AttributeClass attributeClass;
+                            switch (g.Key.Format)
+                            {
+                                case "value_is_percentage":
+                                    attributeClass = new AttributeClassPercentage();
+                                    break;
+                                case "value_is_inverted_percentage":
+                                    attributeClass = new AttributeClassInvertedPercentage();
+                                    break;
+                                case "value_is_additive_percentage":
+                                    attributeClass = new AttributeClassAdditivePercentage();
+                                    break;
+                                case "value_is_additive":
+                                    attributeClass = new AttributeClassAdditive();
+                                    break;
+                                case "value_is_or":
+                                    attributeClass = new AttributeClass();
+                                    break;
+                                case "value_is_particle_index":
+                                    attributeClass = new AttributeClass();
+                                    break;
+                                default:
+                                    Debug.WriteLine(g.Key.Format);
+                                    attributeClass = new AttributeClass();
+                                    break;
+                            }
+
+                            attributeClass.Name = g.Key.Class;
+                            attributeClass.Attributes = g.ToList();
+                            return attributeClass;
+                        });
         }
 
         private IDictionary<string, Tf2Prefab> Hydrate(IDictionary<string, Tf2Prefab> prefabs)

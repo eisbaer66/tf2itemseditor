@@ -19,5 +19,10 @@ namespace TF2Items.Core
         public string Class { get; set; }
         public string Format { get; set; }
         public string EffectType { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Id: {0}, Name: {1}, Class: {2}", Id, Name, Class);
+        }
     }
 }

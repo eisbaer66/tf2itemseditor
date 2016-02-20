@@ -61,6 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeClassAdditivePercentageTests.cs" />
+    <Compile Include="AttributeClassAdditiveTests.cs" />
+    <Compile Include="AttributeClassInvertedPercentageTests.cs" />
+    <Compile Include="AttributeClassPercentageTests.cs" />
+    <Compile Include="AttributeClassTests.cs" />
     <Compile Include="ServerConfigurationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsersTests.cs" />
