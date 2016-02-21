@@ -6,6 +6,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ui="clr-namespace:TF2Items.Ui"
              xmlns:dragDrop="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="470"
 			 Background="#FF282723"
 			 Padding="15">
@@ -66,7 +67,8 @@
         </Grid>
 
 
-        <ListBox Grid.Row="3" ItemsSource="{Binding Attributes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0" 
+        <ListBox Grid.Row="3" 
+                 ItemsSource="{Binding Attributes}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ui:ScrollHelper.ScrollSpeed=".1" Background="Transparent" BorderThickness="0" 
                  HorizontalContentAlignment="Stretch"
                  
                  dragDrop:DragDrop.IsDropTarget="True" 
@@ -80,6 +82,15 @@
                 <DataTemplate>
                     <Border Margin="10" Padding="5" BorderBrush="#FFE9E3C9" BorderThickness="3" CornerRadius="10"
                             Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Background}" >
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditAttributeCommand}" />
+                        </Border.InputBindings>
+                        <!--<i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <command:EventToCommand 
+                                    Command="{Binding EditAttributeCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>-->
                         <Grid Height="50" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="50"/>
@@ -93,8 +104,25 @@
                             <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
                                 <TextBlock Text="{Binding Attribute.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
                             </Viewbox>
-                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5">
+                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5"
+                                     Visibility="{Binding Editing, Converter={StaticResource BooleanToVisibilityConverterInverse}}">
                                 <TextBlock Text="{Binding ValuePretty}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                            </Viewbox>
+                            <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5"
+                                     Visibility="{Binding Editing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBox Text="{Binding ValuePretty, UpdateSourceTrigger=PropertyChanged}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32"
+                                         ui:FocusExtension.IsFocused="{Binding IsFocused}"
+                                         ui:MouseCaptureExtension.CaptureMouse="{Binding IsFocused}"
+                                         ui:SelectAllExtension.SelectAll="{Binding IsFocused}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostFocus">
+                                            <i:InvokeCommandAction Command="{Binding EndEditingCommand}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Key="Enter" Command="{Binding EndEditingCommand}" />
+                                    </TextBox.InputBindings>
+                                </TextBox>
                             </Viewbox>
 
                             <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="3" Margin="5, 0, 5, 5">

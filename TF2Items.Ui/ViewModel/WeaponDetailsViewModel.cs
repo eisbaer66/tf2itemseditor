@@ -17,19 +17,20 @@ namespace TF2Items.Ui.ViewModel
         private Tf2Weapon _model;
         private readonly IWeaponIconService _weaponIconService;
         private readonly ITf2WeaponService _attributeService;
-        private readonly Func<WeaponDetailsAttributeViewModel> _getVm;
+        private readonly IWeaponDetailsAttributeViewModelFactory _vmFactory;
         private SmartCollection<WeaponDetailsAttributeViewModel, string> _attributes;
         private IDictionary<string, AttributeClass> _attributeClasses;
 
-        public WeaponDetailsViewModel(IWeaponIconService weaponIconService, ITf2WeaponService attributeService, Func<WeaponDetailsAttributeViewModel> getVm)
+        public WeaponDetailsViewModel(IWeaponIconService weaponIconService, ITf2WeaponService attributeService, IWeaponDetailsAttributeViewModelFactory vmFactory)
         {
             _weaponIconService = weaponIconService;
             _attributeService = attributeService;
-            _getVm = getVm;
+            _vmFactory = vmFactory;
 
             Attributes = new SmartCollection<WeaponDetailsAttributeViewModel, string>(vm => vm.Model.Name);
             ReadAttributesCommand = new AsyncRelayCommand(GetAttributes);
             MessengerInstance.Register<RemoveWeaponAttribute>(this, RemoveAttribute);
+            MessengerInstance.Register<EditWeaponAttribute>(this, EditWeaponAttribute);
 
 #if DEBUG
             if (IsInDesignMode)
@@ -42,10 +43,18 @@ namespace TF2Items.Ui.ViewModel
 #endif
         }
 
+        private void EditWeaponAttribute(EditWeaponAttribute msg)
+        {
+            WeaponDetailsAttributeViewModel vm = Attributes.FirstOrDefault(a => a.Model.Name == msg.Class);
+            EditAttribute(vm);
+        }
+
         private void RemoveAttribute(RemoveWeaponAttribute msg)
         {
             WeaponDetailsAttributeViewModel vm = Attributes.FirstOrDefault(a => a.Model.Name == msg.Class);
             Attributes.Remove(vm);
+
+            _vmFactory.Revoke(Model, vm);
         }
 
         public Tf2Weapon Model
@@ -72,12 +81,20 @@ namespace TF2Items.Ui.ViewModel
                                                                                    {
                                                                                        AttributeClass attribute = _attributeClasses[a.Class];
 
-                                                                                       WeaponDetailsAttributeViewModel vm = _getVm();
-                                                                                       vm.Model = attribute;
-                                                                                       vm.Predefined = true;
-                                                                                       vm.Value = a.Value;
+                                                                                       WeaponDetailsAttributeViewModel vm = _vmFactory.Get(a, Model, attribute);
                                                                                        return vm;
                                                                                    });
+#if DEBUG
+            if (IsInDesignMode)
+            {
+                bool lastValue = false;
+                foreach (WeaponDetailsAttributeViewModel vm in viewModels)
+                {
+                    lastValue = !lastValue;
+                    vm.Editing = lastValue;
+                }
+            }
+#endif
 
             Application.Current.Dispatcher.Invoke(() => Attributes.SmartReset(viewModels, (o, n) => {}));
         }
@@ -98,6 +115,14 @@ namespace TF2Items.Ui.ViewModel
             {
                 _attributes = value;
                 RaisePropertyChanged(() => Attributes);
+            }
+        }
+
+        public void EditAttribute(WeaponDetailsAttributeViewModel attribute)
+        {
+            foreach (WeaponDetailsAttributeViewModel vm in Attributes)
+            {
+                vm.Editing = vm.Model.Name == attribute.Model.Name;
             }
         }
 
@@ -125,8 +150,8 @@ namespace TF2Items.Ui.ViewModel
             if (tf2AttributeViewModel == null)
                 return;
 
-            WeaponDetailsAttributeViewModel vm = _getVm();
-            vm.Model = tf2AttributeViewModel.Class;
+            Tf2WeaponAttribute weaponAttribute = tf2AttributeViewModel.Class.GetDefaultWeaponAttribute();
+            WeaponDetailsAttributeViewModel vm = _vmFactory.Get(weaponAttribute, Model, tf2AttributeViewModel.Class);
             Attributes.Add(vm);
         }
     }

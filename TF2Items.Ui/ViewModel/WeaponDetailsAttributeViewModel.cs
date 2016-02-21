@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using TF2Items.Core;
@@ -14,10 +15,13 @@ namespace TF2Items.Ui.ViewModel
         private Tf2Attribute _attribute;
         private Tf2WeaponAttribute _weaponAttribute;
         private float _value;
+        private bool _editing;
 
         public WeaponDetailsAttributeViewModel()
         {
             RemoveCommand = new RelayCommand(Remove, CanRemove);
+            EditAttributeCommand = new RelayCommand(EditAttribute);
+            EndEditingCommand = new RelayCommand(EndEditing);
         }
 
         private bool CanRemove()
@@ -30,7 +34,20 @@ namespace TF2Items.Ui.ViewModel
             MessengerInstance.Send(new RemoveWeaponAttribute{Class = _model.Name});
         }
 
-        public RelayCommand RemoveCommand { get; set; }
+        private void EditAttribute()
+        {
+            MessengerInstance.Send(new EditWeaponAttribute{Class = _model.Name});
+        }
+
+        private void EndEditing()
+        {
+            Editing = false;
+        }
+
+        public bool Predefined { get; set; }
+        public ICommand RemoveCommand { get; set; }
+        public ICommand EditAttributeCommand { get; set; }
+        public ICommand EndEditingCommand { get; set; }
 
         public AttributeClass Model
         {
@@ -63,8 +80,10 @@ namespace TF2Items.Ui.ViewModel
                 float f;
                 if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
                     return;
+
                 _value = f;
                 RaisePropertyChanged(() => Value);
+                RaisePropertyChanged(() => ValuePretty);
 
                 Attribute = _model.Get(f);
             }
@@ -80,8 +99,8 @@ namespace TF2Items.Ui.ViewModel
                     return;
                 
                 _value = f;
-
                 RaisePropertyChanged(() => Value);
+                RaisePropertyChanged(() => ValuePretty);
 
                 Attribute = _model.Get(_value);
             }
@@ -94,6 +113,7 @@ namespace TF2Items.Ui.ViewModel
             {
                 _attribute = value;
                 RaisePropertyChanged(() => Attribute);
+                RaisePropertyChanged(() => Image);
                 RaisePropertyChanged(() => Format);
             }
         }
@@ -135,6 +155,20 @@ namespace TF2Items.Ui.ViewModel
             }
         }
 
-        public bool Predefined { get; set; }
+        public bool Editing
+        {
+            get { return _editing; }
+            set
+            {
+                _editing = value;
+                RaisePropertyChanged(() => Editing);
+                RaisePropertyChanged(() => IsFocused);
+            }
+        }
+
+        public bool IsFocused
+        {
+            get { return _editing; }
+        }
     }
 }

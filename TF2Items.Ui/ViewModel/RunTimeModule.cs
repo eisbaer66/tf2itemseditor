@@ -1,3 +1,5 @@
+using System.Linq;
+using Ninject;
 using Ninject.Modules;
 using TF2Items.Core;
 using TF2Items.Parsers;
@@ -23,6 +25,8 @@ namespace TF2Items.Ui.ViewModel
             Bind<ITf2AttributesParser>().To<Tf2AttributesParserCache>();
             Bind<ITf2AttributesParser>().To<Tf2AttributesParser>().WhenInjectedExactlyInto<Tf2AttributesParserCache>();
             Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
+
+            Bind<IWeaponDetailsAttributeViewModelFactory>().To<WeaponDetailsAttributeViewModelFactory>();
 
             Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();
         }

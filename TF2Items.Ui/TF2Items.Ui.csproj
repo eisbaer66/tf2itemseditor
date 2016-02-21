@@ -124,6 +124,7 @@
     <Compile Include="DesignTime\SteamConfig.cs" />
     <Compile Include="DesignTime\Tf2WeaponService.cs" />
     <Compile Include="Dispatch\RunNotifyTaskCompletion.cs" />
+    <Compile Include="FocusExtension.cs" />
     <Compile Include="ImageConverter.cs" />
     <Compile Include="LoadingControl.xaml.cs">
       <DependentUpon>LoadingControl.xaml</DependentUpon>
@@ -136,6 +137,8 @@
     <Compile Include="Services\IWeaponIconService.cs" />
     <Compile Include="SmartCollection.cs" />
     <Compile Include="Dispatch\AsyncRelayCommand.cs" />
+    <Compile Include="ViewModel\IWeaponDetailsAttributeViewModelFactory.cs" />
+    <Compile Include="ViewModel\Messenges\EditWeaponAttribute.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Messenges\RemoveWeaponAttribute.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />

@@ -54,9 +54,13 @@ namespace TF2Items.Core
 
         public virtual float Deformat(string value, float oldValue)
         {
+            if (string.IsNullOrEmpty(value))
+                value = GetDefaultWeaponAttribute().Value;
+
             float f;
             if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
                 return oldValue;
+
             return f;
         }
     }
@@ -119,9 +123,15 @@ namespace TF2Items.Core
 
         public override float Deformat(string value, float oldValue)
         {
+            if (string.IsNullOrEmpty(value))
+            {
+                return base.Deformat(value, oldValue);
+            }
+
             float f;
             if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
                 return oldValue;
+
             return f / 100;
         }
     }
