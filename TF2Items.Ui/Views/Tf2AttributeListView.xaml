@@ -82,7 +82,7 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <Grid Grid.Row="4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllAttributesCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+        <Grid Grid.Row="2" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAllAttributesCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
             <Border Background="#FF282723" Opacity=".5"/>
             <Viewbox Margin="10" >
                 <ui:LoadingControl Height="300" Width="300"/>
