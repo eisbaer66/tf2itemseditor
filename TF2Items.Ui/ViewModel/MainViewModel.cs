@@ -53,6 +53,11 @@ namespace TF2Items.Ui.ViewModel
             }
         }
 
+        public bool ShowWeaponDetails
+        {
+            get { return _weaponDetails != null && _weaponDetails.Model != null; }
+        }
+
         public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails)
         {
             _weaponList = weaponList;
@@ -65,6 +70,7 @@ namespace TF2Items.Ui.ViewModel
         private void SelectWeapon(SelectWeapon msg)
         {
             WeaponDetails.Model = msg.Weapon;
+            RaisePropertyChanged(() => ShowWeaponDetails);
         }
     }
 }

@@ -14,7 +14,8 @@
         </Grid.ColumnDefinitions>
         <views:Tf2WeaponListView></views:Tf2WeaponListView>
         <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" />
-        <views:WeaponDetailView Grid.Column="2"></views:WeaponDetailView>
+        <views:StartView Grid.Column="2"></views:StartView>
+        <views:WeaponDetailView Grid.Column="2" Visibility="{Binding ShowWeaponDetails, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <GridSplitter Grid.Column="3" Width="4" HorizontalAlignment="Stretch" />
         <views:Tf2AttributeListView Grid.Column="4"></views:Tf2AttributeListView>
     </Grid>
