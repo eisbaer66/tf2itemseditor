@@ -105,6 +105,25 @@ namespace TF2Items.Core
                 return GetPositiveAttribute();
             return GetNegativeAttribute();
         }
+
+        public override string Format(float value)
+        {
+            return (value * 100).ToString();
+        }
+
+        public override float Deformat(string value, float oldValue)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return base.Deformat(value, oldValue);
+            }
+
+            float f;
+            if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
+                return oldValue;
+
+            return f / 100;
+        }
     }
 
     public class AttributeClassPercentage : AttributeClass

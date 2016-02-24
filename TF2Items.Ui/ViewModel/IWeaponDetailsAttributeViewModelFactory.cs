@@ -27,7 +27,6 @@ namespace TF2Items.Ui.ViewModel
             {
                 WeaponDetailsAttributeViewModel vm = _getVm();
                 vm.Model = attribute;
-                vm.Predefined = true;
                 vm.Value = tf2WeaponAttribute.Value;
 
                 _cache.Add(key, vm);

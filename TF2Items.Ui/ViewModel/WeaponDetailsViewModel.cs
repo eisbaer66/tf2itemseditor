@@ -82,6 +82,7 @@ namespace TF2Items.Ui.ViewModel
                                                                                        AttributeClass attribute = _attributeClasses[a.Class];
 
                                                                                        WeaponDetailsAttributeViewModel vm = _vmFactory.Get(a, Model, attribute);
+                                                                                       vm.Predefined = true;
                                                                                        return vm;
                                                                                    });
 #if DEBUG
