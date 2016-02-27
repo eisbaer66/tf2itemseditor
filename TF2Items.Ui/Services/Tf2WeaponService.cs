@@ -15,6 +15,7 @@ namespace TF2Items.Ui.Services
         Task<IEnumerable<Tf2Attribute>> GetAttributes();
         Task<IDictionary<string, Tf2Attribute>> GetAttributesAsClassDictionary();
         Task<IDictionary<string, AttributeClass>> GetAttributeClassesAsDictionary();
+        Task<IDictionary<int, AttributeClass>> GetAttributeClassesAsAttributeIdDictionary();
         Task<IEnumerable<AttributeClass>> GetAttributeClasses();
     }
 
@@ -62,6 +63,21 @@ namespace TF2Items.Ui.Services
             return (await GetAttributeClasses())
                 .ToLookup(a => a.Name)
                 .ToDictionary(p => p.Key, p => p.FirstOrDefault());
+        }
+
+        public async Task<IDictionary<int, AttributeClass>> GetAttributeClassesAsAttributeIdDictionary()
+        {
+            return (await GetAttributeClasses())
+                .SelectMany(c =>
+                            {
+                                return c.Attributes.Select(a => new
+                                                                {
+                                                                    Class = c,
+                                                                    Attribute = a,
+                                                                });
+                            })
+                .ToLookup(p => p.Attribute.Id, p => p.Class)
+                .ToDictionary(p => p.Key.Value, p => p.FirstOrDefault());
         }
 
         public async Task<IEnumerable<AttributeClass>> GetAttributeClasses()

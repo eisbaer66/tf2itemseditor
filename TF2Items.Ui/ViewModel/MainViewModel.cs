@@ -19,6 +19,7 @@ namespace TF2Items.Ui.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private readonly IConfigWeaponService _configWeaponService;
         private Tf2WeaponListViewModel _weaponList;
         private Tf2AttributeListViewModel _attributeList;
         private WeaponDetailsViewModel _weaponDetails;
@@ -58,11 +59,12 @@ namespace TF2Items.Ui.ViewModel
             get { return _weaponDetails != null && _weaponDetails.Model != null; }
         }
 
-        public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails)
+        public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails, IConfigWeaponService configWeaponService)
         {
             _weaponList = weaponList;
             _attributeList = attributeList;
             _weaponDetails = weaponDetails;
+            _configWeaponService = configWeaponService;
 
             Messenger.Default.Register<SelectWeapon>(this, SelectWeapon);
         }
@@ -70,6 +72,7 @@ namespace TF2Items.Ui.ViewModel
         private void SelectWeapon(SelectWeapon msg)
         {
             WeaponDetails.Model = msg.Weapon;
+            WeaponDetails.ConfigWeapon = _configWeaponService.GetConfigWeaponFor(msg.Weapon);
             RaisePropertyChanged(() => ShowWeaponDetails);
         }
     }

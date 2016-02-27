@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,12 +13,16 @@ namespace TF2Items.Ui.ViewModel
 {
     public class WeaponDetailsViewModel : ViewModelBase, IDropTarget
     {
-        private Tf2Weapon _model;
         private readonly IWeaponIconService _weaponIconService;
         private readonly ITf2WeaponService _attributeService;
+        private Tf2Weapon _model;
+        private ConfigWeapon _configWeapon;
         private readonly IWeaponDetailsAttributeViewModelFactory _vmFactory;
         private SmartCollection<WeaponDetailsAttributeViewModel, string> _attributes;
         private IDictionary<string, AttributeClass> _attributeClasses;
+        private IDictionary<int, AttributeClass> _attributeClassesByAttributeId;
+        private IList<WeaponDetailsAttributeViewModel> _tf2AttributeViewModels;
+        private IList<WeaponDetailsAttributeViewModel> _configAttributeViewModels;
 
         public WeaponDetailsViewModel(IWeaponIconService weaponIconService, ITf2WeaponService attributeService, IWeaponDetailsAttributeViewModelFactory vmFactory)
         {
@@ -28,7 +31,7 @@ namespace TF2Items.Ui.ViewModel
             _vmFactory = vmFactory;
 
             Attributes = new SmartCollection<WeaponDetailsAttributeViewModel, string>(vm => vm.Model.Name);
-            ReadAttributesCommand = new AsyncRelayCommand(GetAttributes);
+            ReadAttributesCommand = new AsyncRelayCommand(ReadAttributeClasses);
             MessengerInstance.Register<RemoveWeaponAttribute>(this, RemoveAttribute);
             MessengerInstance.Register<EditWeaponAttribute>(this, EditWeaponAttribute);
 
@@ -52,9 +55,13 @@ namespace TF2Items.Ui.ViewModel
         private void RemoveAttribute(RemoveWeaponAttribute msg)
         {
             WeaponDetailsAttributeViewModel vm = Attributes.FirstOrDefault(a => a.Model.Name == msg.Class);
-            Attributes.Remove(vm);
+            if (vm == null)
+                return;
 
+            ConfigWeaponAttribute existingAttribute = _configWeapon.Attributes.FirstOrDefault(a => a.Id == vm.WeaponAttribute.Id);
+            _configWeapon.Attributes.Remove(existingAttribute);
             _vmFactory.Revoke(Model, vm);
+            UpdateConfigAttributes();
         }
 
         public Tf2Weapon Model
@@ -64,40 +71,93 @@ namespace TF2Items.Ui.ViewModel
             {
                 _model = value;
                 Image = new RunNotifyTaskCompletion<string>(GetImage);
-                ReadAttributesCommand.Execute(null);
-                
+
+                UpdateTf2Attributes();
                 RaisePropertyChanged(() => Model);
                 RaisePropertyChanged(() => Image);
             }
         }
 
-        private async Task GetAttributes()
+        public ConfigWeapon ConfigWeapon
         {
-            if (Model == null)
+            get { return _configWeapon; }
+            set
+            {
+                _configWeapon = value;
+
+                UpdateConfigAttributes();
+                RaisePropertyChanged(() => ConfigWeapon);
+            }
+        }
+
+        private async Task ReadAttributeClasses()
+        {
+            _attributeClasses = await _attributeService.GetAttributeClassesAsDictionary();
+            _attributeClassesByAttributeId = await _attributeService.GetAttributeClassesAsAttributeIdDictionary();
+        }
+
+        private void UpdateConfigAttributes()
+        {
+            if (ConfigWeapon == null)
+                return;
+            if (_attributeClasses == null)
                 return;
 
-            _attributeClasses = await _attributeService.GetAttributeClassesAsDictionary();
-            IEnumerable<WeaponDetailsAttributeViewModel> viewModels = Model.Attributes.Select(a =>
-                                                                                   {
-                                                                                       AttributeClass attribute = _attributeClasses[a.Class];
+            _configAttributeViewModels = ConfigWeapon.Attributes
+                                                     .Select(a =>
+                                                             {
+                                                                 int? attributeId = a.Id;
+                                                                 if (!attributeId.HasValue)
+                                                                     return null;
 
-                                                                                       WeaponDetailsAttributeViewModel vm = _vmFactory.Get(a, Model, attribute);
-                                                                                       vm.Predefined = true;
-                                                                                       return vm;
-                                                                                   });
+                                                                 AttributeClass attributeClass = _attributeClassesByAttributeId[attributeId.Value];
+
+                                                                 WeaponDetailsAttributeViewModel vm = _vmFactory.Get(a, Model, attributeClass);
+                                                                 return vm;
+                                                             })
+                                                     .Where(vm => vm != null)
+                                                     .ToList();
 #if DEBUG
             if (IsInDesignMode)
             {
                 bool lastValue = false;
-                foreach (WeaponDetailsAttributeViewModel vm in viewModels)
+                foreach (WeaponDetailsAttributeViewModel vm in _configAttributeViewModels)
                 {
                     lastValue = !lastValue;
                     vm.Editing = lastValue;
                 }
             }
 #endif
+            UpdateAttributeList();
+        }
 
-            Application.Current.Dispatcher.Invoke(() => Attributes.SmartReset(viewModels, (o, n) => {}));
+        private void UpdateTf2Attributes()
+        {
+            if (Model == null)
+                return;
+            if (_attributeClasses == null)
+                return;
+
+            _tf2AttributeViewModels = Model.Attributes
+                                           .Select(a =>
+                                                   {
+                                                       AttributeClass attribute = _attributeClasses[a.Class];
+
+                                                       WeaponDetailsAttributeViewModel vm = _vmFactory.Get(a, Model, attribute);
+                                                       vm.Predefined = true;
+                                                       return vm;
+                                                   })
+                                           .ToList();
+            UpdateAttributeList();
+        }
+
+        private void UpdateAttributeList()
+        {
+            IEnumerable<WeaponDetailsAttributeViewModel> viewModels = _tf2AttributeViewModels ?? new WeaponDetailsAttributeViewModel[0];
+            if (_configAttributeViewModels != null)
+                viewModels = viewModels.Concat(_configAttributeViewModels);
+
+            Application.Current.Dispatcher.Invoke(() => Attributes.SmartReset(viewModels, (o, n) => { }));
         }
 
         private async Task<string> GetImage()
@@ -151,9 +211,9 @@ namespace TF2Items.Ui.ViewModel
             if (tf2AttributeViewModel == null)
                 return;
 
-            Tf2WeaponAttribute weaponAttribute = tf2AttributeViewModel.Class.GetDefaultWeaponAttribute();
-            WeaponDetailsAttributeViewModel vm = _vmFactory.Get(weaponAttribute, Model, tf2AttributeViewModel.Class);
-            Attributes.Add(vm);
+            ConfigWeaponAttribute weaponAttribute = tf2AttributeViewModel.Class.GetDefaultWeaponAttribute();
+            _configWeapon.Attributes.Add(weaponAttribute);
+            UpdateConfigAttributes();
         }
     }
 }

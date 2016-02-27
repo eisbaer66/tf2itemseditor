@@ -41,10 +41,10 @@ namespace TF2Items.Core
             return attribute;
         }
 
-        public virtual Tf2WeaponAttribute GetDefaultWeaponAttribute()
+        public virtual ConfigWeaponAttribute GetDefaultWeaponAttribute()
         {
             Tf2Attribute attribute = Get(1);
-            return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "1");
+            return new ConfigWeaponAttribute(attribute.Id.Value, "1");
         }
 
         public virtual string Format(float value)
@@ -74,10 +74,10 @@ namespace TF2Items.Core
             return GetPositiveAttribute();
         }
 
-        public override Tf2WeaponAttribute GetDefaultWeaponAttribute()
+        public override ConfigWeaponAttribute GetDefaultWeaponAttribute()
         {
             Tf2Attribute attribute = GetPositiveAttribute();
-            return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "0");
+            return new ConfigWeaponAttribute(attribute.Id.Value, "0");
         }
     }
 
@@ -90,10 +90,10 @@ namespace TF2Items.Core
             return GetPositiveAttribute();
         }
 
-        public override Tf2WeaponAttribute GetDefaultWeaponAttribute()
+        public override ConfigWeaponAttribute GetDefaultWeaponAttribute()
         {
             Tf2Attribute attribute = GetPositiveAttribute();
-            return new Tf2WeaponAttribute(attribute.Class, attribute.Name, "0");
+            return new ConfigWeaponAttribute(attribute.Id.Value, "0");
         }
     }
 

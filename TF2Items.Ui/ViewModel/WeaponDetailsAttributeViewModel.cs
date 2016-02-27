@@ -13,7 +13,7 @@ namespace TF2Items.Ui.ViewModel
     {
         private AttributeClass _model;
         private Tf2Attribute _attribute;
-        private Tf2WeaponAttribute _weaponAttribute;
+        private ConfigWeaponAttribute _weaponAttribute;
         private float _value;
         private bool _editing;
 
@@ -62,7 +62,7 @@ namespace TF2Items.Ui.ViewModel
             }
         }
 
-        public Tf2WeaponAttribute WeaponAttribute
+        public ConfigWeaponAttribute WeaponAttribute
         {
             get { return _weaponAttribute; }
             set

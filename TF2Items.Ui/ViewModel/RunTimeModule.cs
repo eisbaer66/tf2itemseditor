@@ -1,10 +1,8 @@
-using System.Linq;
-using Ninject;
 using Ninject.Modules;
 using TF2Items.Core;
 using TF2Items.Parsers;
-using TF2Items.Ui.Services;
 using TF2Items.ValvePak;
+using Ninject.Extensions.Conventions;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -12,22 +10,22 @@ namespace TF2Items.Ui.ViewModel
     {
         public override void Load()
         {
-            Bind<ISteamConfig>().To<SteamConfig>();
-            Bind<IWeaponIconConfig>().To<WeaponIconConfig>();
-            Bind<IWeaponIconService>().To<WeaponIconService>();
-            Bind<TF2Items.ValvePak.IConfig>().To<TF2Items.ValvePak.Config>();
-            Bind<IValvePakService>().To<ValvePakService>().InSingletonScope();
-            Bind<IValveTextureFormatService>().To<ValveTextureFormatService>();
-            Bind<ISettingsService>().To<SettingsService>();
-            Bind<ITf2WeaponService>().To<Tf2WeaponService>();
-            Bind<IStatsParser>().To<StatsParser>();
-            Bind<IItemsGameWeaponsParser>().To<ItemsGameWeaponsParser>();
-            Bind<ITf2AttributesParser>().To<Tf2AttributesParserCache>();
+            this.Bind(x => x
+                .FromThisAssembly()
+                .IncludingNonePublicTypes()
+                .SelectAllClasses()
+                .NotInNamespaceOf<DesignTime.Tf2WeaponService>()
+                .Join.FromAssemblyContaining<SteamConfig>()
+                .SelectAllClasses()
+                .Join.FromAssemblyContaining<IValvePakService>()
+                .SelectAllClasses()
+                .Join.FromAssemblyContaining<ItemsGameWeaponsParser>()
+                .SelectAllClasses()
+                .Excluding<Tf2AttributesParserCache>()
+                .BindAllInterfaces()
+                .Configure(c => c.InSingletonScope()));
+
             Bind<ITf2AttributesParser>().To<Tf2AttributesParser>().WhenInjectedExactlyInto<Tf2AttributesParserCache>();
-            Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
-
-            Bind<IWeaponDetailsAttributeViewModelFactory>().To<WeaponDetailsAttributeViewModelFactory>();
-
             Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();
         }
     }

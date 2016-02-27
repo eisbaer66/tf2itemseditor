@@ -30,6 +30,11 @@ namespace TF2Items.Ui.DesignTime
             return await _service.GetAttributeClassesAsDictionary();
         }
 
+        public async Task<IDictionary<int, AttributeClass>> GetAttributeClassesAsAttributeIdDictionary()
+        {
+            return await _service.GetAttributeClassesAsAttributeIdDictionary();
+        }
+
         public async Task<IEnumerable<AttributeClass>> GetAttributeClasses()
         {
             return (await _service.GetAttributeClasses()).Take(100);

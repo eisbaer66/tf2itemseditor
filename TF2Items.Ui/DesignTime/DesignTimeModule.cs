@@ -1,3 +1,4 @@
+using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TF2Items.Core;
 using TF2Items.Parsers;
@@ -7,26 +8,17 @@ using TF2Items.ValvePak;
 
 namespace TF2Items.Ui.DesignTime
 {
-    public class DesignTimeModule : NinjectModule
+    public class DesignTimeModule : RunTimeModule
     {
         public override void Load()
         {
-            Bind<ISteamConfig>().To<SteamConfig>();
-            Bind<IWeaponIconConfig>().To<WeaponIconConfig>();
-            Bind<IWeaponIconService>().To<WeaponIconService>();
-            Bind<IConfig>().To<Config>();
-            Bind<IValvePakService>().To<ValvePakService>();
-            Bind<IValveTextureFormatService>().To<ValveTextureFormatService>();
-            Bind<ISettingsService>().To<SettingsService>();
-            Bind<ITf2WeaponService>().To<Tf2WeaponService>();
-            Bind<ITf2WeaponService>().To<Services.Tf2WeaponService>().WhenInjectedInto<Tf2WeaponService>();
-            Bind<IStatsParser>().To<StatsParser>();
-            Bind<IItemsGameWeaponsParser>().To<Parsers.ItemsGameWeaponsParser>();
-            Bind<ITf2AttributesParser>().To<Tf2AttributesParserCache>();
-            Bind<ITf2AttributesParser>().To<Tf2AttributesParser>().WhenInjectedExactlyInto<Tf2AttributesParserCache>();
-            Bind<IItemsGamePrefabsParser>().To<ItemsGamePrefabsParser>();
+            base.Load();
 
-            Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();
+            Rebind<ISteamConfig>().To<SteamConfig>().InSingletonScope();
+            Rebind<IWeaponIconConfig>().To<WeaponIconConfig>().InSingletonScope();
+            Rebind<IConfig>().To<Config>().InSingletonScope();
+            Rebind<ITf2WeaponService>().To<Tf2WeaponService>().InSingletonScope();
+            Bind<ITf2WeaponService>().To<Services.Tf2WeaponService>().WhenInjectedInto<Tf2WeaponService>();
         }
     }
 }

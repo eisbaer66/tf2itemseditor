@@ -6,7 +6,8 @@ namespace TF2Items.Ui.ViewModel
 {
     public interface IWeaponDetailsAttributeViewModelFactory
     {
-        WeaponDetailsAttributeViewModel Get(Tf2WeaponAttribute tf2WeaponAttribute, Tf2Weapon model, AttributeClass attribute);
+        WeaponDetailsAttributeViewModel Get(Tf2WeaponAttribute tf2WeaponAttribute, Tf2Weapon model, AttributeClass attributeClass);
+        WeaponDetailsAttributeViewModel Get(ConfigWeaponAttribute configWeaponAttribute, Tf2Weapon model, AttributeClass attributeClass);
         void Revoke(Tf2Weapon model, WeaponDetailsAttributeViewModel vm);
     }
 
@@ -20,14 +21,28 @@ namespace TF2Items.Ui.ViewModel
             _getVm = getVm;
         }
 
-        public WeaponDetailsAttributeViewModel Get(Tf2WeaponAttribute tf2WeaponAttribute, Tf2Weapon model, AttributeClass attribute)
+        public WeaponDetailsAttributeViewModel Get(Tf2WeaponAttribute tf2WeaponAttribute, Tf2Weapon model, AttributeClass attributeClass)
+        {
+            string value = tf2WeaponAttribute.Value;
+
+            return Get(model, attributeClass, value);
+        }
+
+        public WeaponDetailsAttributeViewModel Get(ConfigWeaponAttribute configWeaponAttribute, Tf2Weapon model, AttributeClass attributeClass)
+        {
+            string value = configWeaponAttribute.Value;
+
+            return Get(model, attributeClass, value);
+        }
+
+        private WeaponDetailsAttributeViewModel Get(Tf2Weapon model, AttributeClass attribute, string value)
         {
             string key = model.Id.Id + "~" + attribute.Name;
             if (!_cache.ContainsKey(key))
             {
                 WeaponDetailsAttributeViewModel vm = _getVm();
                 vm.Model = attribute;
-                vm.Value = tf2WeaponAttribute.Value;
+                vm.Value = value;
 
                 _cache.Add(key, vm);
             }
