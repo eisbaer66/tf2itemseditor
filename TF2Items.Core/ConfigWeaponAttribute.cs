@@ -18,6 +18,7 @@ namespace TF2Items.Core
 
         public int? Id { get; set; }
         public string Value { get; set; }
+        public bool IsPredefined { get; set; }
 
         public override string ToString()
         {

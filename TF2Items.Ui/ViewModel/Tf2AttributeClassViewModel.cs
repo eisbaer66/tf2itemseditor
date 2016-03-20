@@ -5,7 +5,7 @@ using TF2Items.Core;
 
 namespace TF2Items.Ui.ViewModel
 {
-    public class Tf2AttributeViewModel : ViewModelBase
+    public class Tf2AttributeClassViewModel : ViewModelBase
     {
         private AttributeClass _class;
         private Tf2Attribute _model;
@@ -16,35 +16,34 @@ namespace TF2Items.Ui.ViewModel
             set
             {
                 _class = value;
-                _model = value.Get(1);
+                _model = value.Get(1, value.Name);
 
                 RaisePropertyChanged(() => Class);
-                RaisePropertyChanged(() => Model);
                 RaisePropertyChanged(() => Image);
                 RaisePropertyChanged(() => Format);
             }
-        }
-
-        public Tf2Attribute Model
-        {
-            get { return _model; }
-            set { _model = value; }
         }
 
         public string Image
         {
             get
             {
-                return Model.EffectType == "positive"
-                    ? "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_plus.png"
-                    : "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_minus.png";
+                switch (_model.EffectType)
+                {
+                    case "positive":
+                        return "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_plus.png";
+                    case "negative":
+                        return "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_minus.png";
+                    default:
+                        return "pack://application:,,,/TF2Items.Ui;component/assets/icons/Pictogram_neutral.png";
+                }
             }
         }
         public string Format
         {
             get
             {
-                switch (Model.Format)
+                switch (_model.Format)
                 {
                     case "value_is_percentage":
                         return "%";
@@ -57,11 +56,11 @@ namespace TF2Items.Ui.ViewModel
                     case "value_is_or":
                         return "OR";
                     case "value_is_particle_index":
-                        return "OR";
+                        return "PI";
                     default:
                     {
-                        Debug.WriteLine(Model.Format);
-                        return Model.Format.Replace("_", Environment.NewLine);
+                        Debug.WriteLine(_model.Format);
+                        return _model.Format.Replace("_", Environment.NewLine);
                     }
                 }
             }

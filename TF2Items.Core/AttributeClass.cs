@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -13,9 +14,37 @@ namespace TF2Items.Core
         }
 
         public string Name { get; set; }
-        public IList<Tf2Attribute> Attributes { get; set; }
 
-        public virtual Tf2Attribute Get(float value)
+        public virtual string PrettyName
+        {
+            get
+            {
+                Tf2Attribute attribute = Attributes.FirstOrDefault();
+                if (attribute == null)
+                    return Name;
+                return attribute.Name;
+            }
+        }
+
+        public IList<Tf2Attribute> Attributes { get; set; }
+        public virtual AttributeEditing EditMode { get{ return AttributeEditing.Numerical;} }
+
+
+        public Tf2Attribute Get(string value, string name)
+        {
+            float f;
+            if (float.TryParse(value, out f))
+                return Get(f, name);
+
+            throw new ArgumentException("value can not be recognized as float", "value");
+        }
+
+        public virtual Tf2Attribute Get(float value, int? id)
+        {
+            return Get(value, string.Empty);
+        }
+
+        public virtual Tf2Attribute Get(float value, string name)
         {
             return Attributes.FirstOrDefault();
         }
@@ -43,7 +72,7 @@ namespace TF2Items.Core
 
         public virtual ConfigWeaponAttribute GetDefaultWeaponAttribute()
         {
-            Tf2Attribute attribute = Get(1);
+            Tf2Attribute attribute = Get(1, string.Empty);
             return new ConfigWeaponAttribute(attribute.Id.Value, "1");
         }
 
@@ -65,9 +94,31 @@ namespace TF2Items.Core
         }
     }
 
+    public class AttributeClassSet : AttributeClass
+    {
+        public override string PrettyName
+        {
+            get { return Name.Replace('_', ' '); }
+        }
+
+        public override AttributeEditing EditMode
+        {
+            get { return AttributeEditing.Set; }
+        }
+
+        public override Tf2Attribute Get(float value, int? id)
+        {
+            return Attributes.FirstOrDefault(a => a.Id == id) ?? Attributes.FirstOrDefault();
+        }
+        public override Tf2Attribute Get(float value, string name)
+        {
+            return Attributes.FirstOrDefault(a => a.Name == name) ?? Attributes.FirstOrDefault();
+        }
+    }
+
     public class AttributeClassAdditive : AttributeClass
     {
-        public override Tf2Attribute Get(float value)
+        public override Tf2Attribute Get(float value, string name)
         {
             if (value < 0)
                 return GetNegativeAttribute();
@@ -78,57 +129,12 @@ namespace TF2Items.Core
         {
             Tf2Attribute attribute = GetPositiveAttribute();
             return new ConfigWeaponAttribute(attribute.Id.Value, "0");
-        }
-    }
-
-    public class AttributeClassAdditivePercentage : AttributeClass
-    {
-        public override Tf2Attribute Get(float value)
-        {
-            if (value < 0)
-                return GetNegativeAttribute();
-            return GetPositiveAttribute();
-        }
-
-        public override ConfigWeaponAttribute GetDefaultWeaponAttribute()
-        {
-            Tf2Attribute attribute = GetPositiveAttribute();
-            return new ConfigWeaponAttribute(attribute.Id.Value, "0");
-        }
-    }
-
-    public class AttributeClassInvertedPercentage : AttributeClass
-    {
-        public override Tf2Attribute Get(float value)
-        {
-            if (value < 1)
-                return GetPositiveAttribute();
-            return GetNegativeAttribute();
-        }
-
-        public override string Format(float value)
-        {
-            return (value * 100).ToString();
-        }
-
-        public override float Deformat(string value, float oldValue)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return base.Deformat(value, oldValue);
-            }
-
-            float f;
-            if (!float.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out f))
-                return oldValue;
-
-            return f / 100;
         }
     }
 
     public class AttributeClassPercentage : AttributeClass
     {
-        public override Tf2Attribute Get(float value)
+        public override Tf2Attribute Get(float value, string name)
         {
             if (value < 1)
                 return GetNegativeAttribute();

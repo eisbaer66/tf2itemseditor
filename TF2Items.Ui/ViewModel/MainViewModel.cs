@@ -1,6 +1,10 @@
 using System;
+using System.Threading.Tasks;
+using AsyncMvvmMessenger;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using log4net;
+using TF2Items.Core;
 using TF2Items.Ui.ViewModel.Messenges;
 
 namespace TF2Items.Ui.ViewModel
@@ -19,6 +23,7 @@ namespace TF2Items.Ui.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(MainViewModel));
         private readonly IConfigWeaponService _configWeaponService;
         private Tf2WeaponListViewModel _weaponList;
         private Tf2AttributeListViewModel _attributeList;
@@ -56,7 +61,7 @@ namespace TF2Items.Ui.ViewModel
 
         public bool ShowWeaponDetails
         {
-            get { return _weaponDetails != null && _weaponDetails.Model != null; }
+            get { return _weaponDetails != null && _weaponDetails.Tf2Weapon != null; }
         }
 
         public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails, IConfigWeaponService configWeaponService)
@@ -69,11 +74,19 @@ namespace TF2Items.Ui.ViewModel
             Messenger.Default.Register<SelectWeapon>(this, SelectWeapon);
         }
 
-        private void SelectWeapon(SelectWeapon msg)
+        private async void SelectWeapon(SelectWeapon msg)
         {
-            WeaponDetails.Model = msg.Weapon;
-            WeaponDetails.ConfigWeapon = _configWeaponService.GetConfigWeaponFor(msg.Weapon);
-            RaisePropertyChanged(() => ShowWeaponDetails);
+            try
+            {
+                ConfigWeapon configWeapon = await _configWeaponService.GetConfigWeaponFor(msg.Weapon);
+
+                WeaponDetails.UpdateModels(msg.Weapon, configWeapon);
+                RaisePropertyChanged(() => ShowWeaponDetails);
+            }
+            catch (Exception e)
+            {
+                Log.Error("Error while selecting weapon", e);
+            }
         }
     }
 }

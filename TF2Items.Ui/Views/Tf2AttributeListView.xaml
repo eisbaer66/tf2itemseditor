@@ -21,7 +21,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
-        <DataTemplate x:Key="AttributeTemplate" DataType="{x:Type viewModel:Tf2AttributeViewModel}">
+        <DataTemplate x:Key="AttributeTemplate" DataType="{x:Type viewModel:Tf2AttributeClassViewModel}">
             <Border Margin="10" Padding="5" BorderBrush="#FFE9E3C9" BorderThickness="3" CornerRadius="10"
                             Background="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=Background}" >
                 <Grid Height="50" >
@@ -35,10 +35,10 @@
                     <Image Grid.Column="0" Source="{Binding Image, Converter={StaticResource ImageConverter}}" VerticalAlignment="Center" Height="40" />
 
                     <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
-                        <TextBlock Text="{Binding Model.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                        <TextBlock Text="{Binding Class.PrettyName}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
                     </Viewbox>
                     <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5">
-                        <TextBlock Text="{Binding Model.Class}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
+                        <TextBlock Text="{Binding Class.Name}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />
                     </Viewbox>
                     <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center"  StretchDirection="DownOnly"  Stretch="Uniform" Grid.Column="3" Margin="5, 0, 5, 5">
                         <TextBlock Text="{Binding Format}" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32" Foreground="#FFFFD303" />

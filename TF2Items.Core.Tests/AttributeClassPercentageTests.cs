@@ -13,7 +13,7 @@ namespace TF2Items.Core.Tests
                                                           Name = "TestAttribute",
                                                       };
 
-            Assert.That(attributeClass.Get(0), Is.Null);
+            Assert.That(attributeClass.Get(0, string.Empty), Is.Null);
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace TF2Items.Core.Tests
             Tf2Attribute attribute = new Tf2Attribute(1, "TestAttribute", "Test-Attribute", "formatIstEgal", "effectTypeIstEgal");
             attributeClass.Attributes.Add(attribute);
 
-            Assert.That(attributeClass.Get(0), Is.SameAs(attribute), "did not return attribute");
+            Assert.That(attributeClass.Get(0, string.Empty), Is.SameAs(attribute), "did not return attribute");
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace TF2Items.Core.Tests
             attributeClass.Attributes.Add(attribute);
             attributeClass.Attributes.Add(attribute2);
 
-            Assert.That(attributeClass.Get(1), Is.SameAs(attribute2), "did not return attribute");
+            Assert.That(attributeClass.Get(1, string.Empty), Is.SameAs(attribute2), "did not return attribute");
         }
 
         [Test]
@@ -56,7 +56,7 @@ namespace TF2Items.Core.Tests
             attributeClass.Attributes.Add(attribute);
             attributeClass.Attributes.Add(attribute2);
 
-            Assert.That(attributeClass.Get(1.1f), Is.SameAs(attribute2), "did not return attribute");
+            Assert.That(attributeClass.Get(1.1f, string.Empty), Is.SameAs(attribute2), "did not return attribute");
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace TF2Items.Core.Tests
             attributeClass.Attributes.Add(attribute);
             attributeClass.Attributes.Add(attribute2);
 
-            Assert.That(attributeClass.Get(.9f), Is.SameAs(attribute2), "did not return attribute");
+            Assert.That(attributeClass.Get(.9f, string.Empty), Is.SameAs(attribute2), "did not return attribute");
         }
     }
 }

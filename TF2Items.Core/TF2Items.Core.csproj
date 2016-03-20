@@ -49,6 +49,7 @@
     <Compile Include="AttributeClass.cs" />
     <Compile Include="ConfigWeapon.cs" />
     <Compile Include="ConfigWeaponAttribute.cs" />
+    <Compile Include="AttributeEditing.cs" />
     <Compile Include="Enumerableutil.cs" />
     <Compile Include="IStatContainer.cs" />
     <Compile Include="ISteamConfig.cs" />

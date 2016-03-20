@@ -2,7 +2,7 @@ using System.Diagnostics;
 
 namespace TF2Items.Core
 {
-    [DebuggerDisplay("{Name}: {Value}")]
+    [DebuggerDisplay("{Name}: {Value} ({Class})")]
     public class Tf2WeaponAttribute
     {
         public Tf2WeaponAttribute(string attributeClass, string name, string value)

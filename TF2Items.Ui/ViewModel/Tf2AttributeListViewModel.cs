@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
+using TF2Items.Core;
 using TF2Items.Ui.Dispatch;
 using TF2Items.Ui.Services;
 
@@ -17,20 +18,20 @@ namespace TF2Items.Ui.ViewModel
     {
 
         private readonly ITf2WeaponService _itemsGameService;
-        private readonly Func<Tf2AttributeViewModel> _getAttributeViewModel;
+        private readonly Func<Tf2AttributeClassViewModel> _getAttributeViewModel;
 
-        private IList<Tf2AttributeViewModel> _allAttributes;
-        private SmartCollection<Tf2AttributeViewModel, int?> _attributes;
+        private IList<Tf2AttributeClassViewModel> _allAttributes;
+        private SmartCollection<Tf2AttributeClassViewModel, string> _attributes;
         private string _filter;
 
         public AsyncRelayCommand ReadAllAttributesCommand { get; set; }
 
-        public Tf2AttributeListViewModel(ITf2WeaponService itemsGameService, Func<Tf2AttributeViewModel> getAttributeViewModel)
+        public Tf2AttributeListViewModel(ITf2WeaponService itemsGameService, Func<Tf2AttributeClassViewModel> getAttributeViewModel)
         {
             _itemsGameService = itemsGameService;
             _getAttributeViewModel = getAttributeViewModel;
 
-            Attributes = new SmartCollection<Tf2AttributeViewModel, int?>(vm => vm.Model.Id);
+            Attributes = new SmartCollection<Tf2AttributeClassViewModel, string>(vm => vm.Class.Name);
             ReadAllAttributesCommand = new AsyncRelayCommand(GetAttributes);
 #if DEBUG
             if (IsInDesignMode)
@@ -43,7 +44,7 @@ namespace TF2Items.Ui.ViewModel
 #endif
         }
 
-        public SmartCollection<Tf2AttributeViewModel, int?> Attributes
+        public SmartCollection<Tf2AttributeClassViewModel, string> Attributes
         {
             get { return _attributes; }
             set
@@ -66,19 +67,19 @@ namespace TF2Items.Ui.ViewModel
 
         private async Task GetAttributes()
         {
-            IEnumerable<Tf2AttributeViewModel> viewModels = await GetAttributeViewModels();
+            IEnumerable<Tf2AttributeClassViewModel> viewModels = await GetAttributeViewModels();
 
-            Application.Current.Dispatcher.Invoke(() => Attributes.SmartReset(viewModels, (o, n) => o.Model = n.Model));
+            Application.Current.Dispatcher.Invoke(() => Attributes.SmartReset(viewModels, (o, n) => o.Class = n.Class));
         }
 
-        private async Task<IEnumerable<Tf2AttributeViewModel>> GetAttributeViewModels()
+        private async Task<IEnumerable<Tf2AttributeClassViewModel>> GetAttributeViewModels()
         {
             _allAttributes = (await _itemsGameService.GetAttributeClasses())
-                .Select(a =>
+                .Select(g =>
                         {
-                            Tf2AttributeViewModel attributeViewModel = _getAttributeViewModel();
-                            attributeViewModel.Class = a;
-                            return attributeViewModel;
+                            Tf2AttributeClassViewModel attributeClassViewModel = _getAttributeViewModel();
+                            attributeClassViewModel.Class = g;
+                            return attributeClassViewModel;
                         })
                 .ToList();
             return _allAttributes;
@@ -86,33 +87,44 @@ namespace TF2Items.Ui.ViewModel
 
         private void FilterAttributes()
         {
-            Func<Tf2AttributeViewModel, bool> matches = w =>
+            Func<Tf2AttributeClassViewModel, bool> matches = w =>
                                                         {
-                                                            bool nameContainsPhrase = CultureInfo.InvariantCulture.CompareInfo.IndexOf(w.Model.Name, _filter, CompareOptions.IgnoreCase) >= 0;
+                                                            bool nameContainsPhrase = CultureInfo.InvariantCulture.CompareInfo.IndexOf(w.Class.Name, _filter, CompareOptions.IgnoreCase) >= 0;
                                                             if (nameContainsPhrase)
                                                                 return true;
 
-                                                            bool classContainsPhrase = CultureInfo.InvariantCulture.CompareInfo.IndexOf(w.Model.Class, _filter, CompareOptions.IgnoreCase) >= 0;
-                                                            if (classContainsPhrase)
+                                                            bool attributeContainsPhrase = w.Class.Attributes.Any(a =>
+                                                                                                                  {
+                                                                                                                      bool attributeNameContainsPhrase = CultureInfo.InvariantCulture.CompareInfo.IndexOf(
+                                                                                                                          a.Name, _filter,
+                                                                                                                          CompareOptions.IgnoreCase) >= 0;
+                                                                                                                      if (attributeNameContainsPhrase)
+                                                                                                                          return true;
+
+                                                                                                                      if (a.Id.HasValue)
+                                                                                                                          return a.Id.ToString() == _filter;
+                                                                                                                      return false;
+                                                                                                                  });
+                                                            if (attributeContainsPhrase)
                                                                 return true;
 
                                                             return false;
                                                         };
-            List<Tf2AttributeViewModel> weaponsNotMatchingFilter = Attributes.Where(w => !matches(w)).ToList();
+            List<Tf2AttributeClassViewModel> weaponsNotMatchingFilter = Attributes.Where(w => !matches(w)).ToList();
             Attributes.Remove(weaponsNotMatchingFilter);
 
-            List<Tf2AttributeViewModel> weaponsMatchingFilter = _allAttributes.Where(w => matches(w) && !Attributes.Contains(w)).ToList();
+            List<Tf2AttributeClassViewModel> weaponsMatchingFilter = _allAttributes.Where(w => matches(w) && !Attributes.Contains(w)).ToList();
             Attributes.AddRange(weaponsMatchingFilter);
         }
 
         void IDragSource.StartDrag(IDragInfo dragInfo)
         {
-            Tf2AttributeViewModel viewModel = dragInfo.SourceItem as Tf2AttributeViewModel;
-            if (viewModel == null)
+            Tf2AttributeClassViewModel classViewModel = dragInfo.SourceItem as Tf2AttributeClassViewModel;
+            if (classViewModel == null)
                 return;
 
             dragInfo.Effects = DragDropEffects.Copy|DragDropEffects.Move;
-            dragInfo.Data = viewModel;
+            dragInfo.Data = classViewModel;
         }
 
         bool IDragSource.CanStartDrag(IDragInfo dragInfo)

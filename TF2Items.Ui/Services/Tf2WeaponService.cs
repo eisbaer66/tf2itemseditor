@@ -83,40 +83,41 @@ namespace TF2Items.Ui.Services
         public async Task<IEnumerable<AttributeClass>> GetAttributeClasses()
         {
             return (await GetAttributes())
-                .GroupBy(a => new {a.Class, a.Format})
+                .GroupBy(a => new {a.Class})
                 .Select(g =>
                         {
-                            AttributeClass attributeClass;
-                            switch (g.Key.Format)
-                            {
-                                case "value_is_percentage":
-                                    attributeClass = new AttributeClassPercentage();
-                                    break;
-                                case "value_is_inverted_percentage":
-                                    attributeClass = new AttributeClassInvertedPercentage();
-                                    break;
-                                case "value_is_additive_percentage":
-                                    attributeClass = new AttributeClassAdditivePercentage();
-                                    break;
-                                case "value_is_additive":
-                                    attributeClass = new AttributeClassAdditive();
-                                    break;
-                                case "value_is_or":
-                                    attributeClass = new AttributeClass();
-                                    break;
-                                case "value_is_particle_index":
-                                    attributeClass = new AttributeClass();
-                                    break;
-                                default:
-                                    Debug.WriteLine(g.Key.Format);
-                                    attributeClass = new AttributeClass();
-                                    break;
-                            }
+                            string @class = g.Key.Class;
 
-                            attributeClass.Name = g.Key.Class;
-                            attributeClass.Attributes = g.ToList();
+                            List<Tf2Attribute> attributes = g.ToList();
+                            Tf2Attribute attribute = attributes[0];
+
+                            AttributeClass attributeClass = CreateAttributeClass(attribute.Format, @class);
+                            attributeClass.Name = @class;
+                            attributeClass.Attributes = attributes;
                             return attributeClass;
                         });
+        }
+
+        private static AttributeClass CreateAttributeClass(string format, string @class)
+        {
+            if (@class.StartsWith("set_"))
+                return new AttributeClassSet();
+
+            switch (format)
+            {
+                case "value_is_percentage":
+                case "value_is_inverted_percentage":
+                    return new AttributeClassPercentage();
+                case "value_is_additive":
+                case "value_is_additive_percentage":
+                    return new AttributeClassAdditive();
+                case "value_is_or":
+                case "value_is_particle_index":
+                    return new AttributeClass();
+                default:
+                    Debug.WriteLine(format);
+                    return new AttributeClass();
+            }
         }
 
         private IDictionary<string, Tf2Prefab> Hydrate(IDictionary<string, Tf2Prefab> prefabs)
