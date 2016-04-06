@@ -11,4 +11,5 @@
     <SolidColorBrush x:Key="Foreground" Color="{DynamicResource ForegroundColor}"/>
     <SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource ButtonBackgroundColor}"/>
     <SolidColorBrush x:Key="ButtonPressedBackground" Color="{DynamicResource ButtonPressedBackgroundColor}"/>
+    <SolidColorBrush x:Key="ItemSelectedBackground" Color="{DynamicResource ButtonPressedBackgroundColor}"/>
 </ResourceDictionary>

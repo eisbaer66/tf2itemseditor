@@ -25,7 +25,7 @@ namespace TF2Items.Ui
 
         public SmartCollection(List<T> list, Func<T, TKey> key)
             : base(list)
-        {
+        { 
             _key = key;
         }
 
