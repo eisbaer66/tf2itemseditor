@@ -171,6 +171,7 @@
     <Compile Include="ViewModel\WeaponDetails\IWeaponDetailsAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsAttributeViewModelBase.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsNumericalAttributeViewModel.cs" />
+    <Compile Include="ViewModel\WeaponDetails\WeaponDetailsSetAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsViewModel.cs" />
     <Compile Include="Views\StartView.xaml.cs">
       <DependentUpon>StartView.xaml</DependentUpon>
