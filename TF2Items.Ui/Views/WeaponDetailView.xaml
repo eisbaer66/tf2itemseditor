@@ -92,6 +92,8 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="50" />
                             <ColumnDefinition Width="*" MinWidth="0" />
+                            <ColumnDefinition Width="Auto" MinWidth="0" />
+                            <ColumnDefinition Width="50" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50" />
@@ -101,9 +103,42 @@
                         <Image Grid.Column="0" Source="{Binding Image, Converter={StaticResource ImageConverter}}"
                                VerticalAlignment="Center" Height="40" />
 
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center" StretchDirection="DownOnly"
+                                 Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5"
+                                 Visibility="{Binding Editing, Converter={StaticResource BooleanToVisibilityConverterInverse}}">
+                            <TextBlock Text="{Binding ValuePretty}"
+                                       FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32"
+                                       Foreground="#FFFFD303" />
+                        </Viewbox>
                         <Viewbox HorizontalAlignment="Left" VerticalAlignment="Center" StretchDirection="DownOnly"
                                  Stretch="Uniform" Grid.Column="1" Margin="5, 0, 5, 5">
                             <TextBlock Text="{Binding Attribute.Name}"
+                                       FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32"
+                                       Foreground="#FFFFD303" />
+                        </Viewbox>
+                        
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center" StretchDirection="DownOnly"
+                                 Stretch="Uniform" Grid.Column="2" Margin="5, 0, 5, 5"
+                                 Visibility="{Binding Editing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBox Text="{Binding ValuePretty, UpdateSourceTrigger=PropertyChanged}"
+                                     FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32"
+                                     ui:FocusExtension.IsFocused="{Binding IsFocused}"
+                                     ui:MouseCaptureExtension.CaptureMouse="{Binding IsFocused}"
+                                     ui:SelectAllExtension.SelectAll="{Binding IsFocused}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostFocus">
+                                        <i:InvokeCommandAction Command="{Binding EndEditingCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding EndEditingCommand}" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </Viewbox>
+
+                        <Viewbox HorizontalAlignment="Stretch" VerticalAlignment="Center" StretchDirection="DownOnly"
+                                 Stretch="Uniform" Grid.Column="3" Margin="5, 0, 5, 5">
+                            <TextBlock Text="{Binding Format}"
                                        FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build" FontSize="32"
                                        Foreground="#FFFFD303" />
                         </Viewbox>
