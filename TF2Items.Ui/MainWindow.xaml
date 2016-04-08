@@ -5,18 +5,27 @@
         DataContext="{Binding Main, Source={StaticResource Locator}}"
         Title="MainWindow" Height="700" Width="1504">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
-            <ColumnDefinition Width="4"></ColumnDefinition>
-            <ColumnDefinition Width="2*" MinWidth="300"></ColumnDefinition>
-            <ColumnDefinition Width="4"></ColumnDefinition>
-            <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <views:Tf2WeaponListView></views:Tf2WeaponListView>
-        <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch" />
-        <views:StartView Grid.Column="2"></views:StartView>
-        <views:WeaponDetailView Grid.Column="2" Visibility="{Binding ShowWeaponDetails, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        <GridSplitter Grid.Column="3" Width="4" HorizontalAlignment="Stretch" />
-        <views:Tf2AttributeListView Grid.Column="4"></views:Tf2AttributeListView>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <views:HeaderView Grid.Row="0" />
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
+                <ColumnDefinition Width="4"></ColumnDefinition>
+                <ColumnDefinition Width="2*" MinWidth="300"></ColumnDefinition>
+                <ColumnDefinition Width="4"></ColumnDefinition>
+                <ColumnDefinition Width="*" MinWidth="300"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <views:Tf2WeaponListView></views:Tf2WeaponListView>
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"  />
+            <views:StartView Grid.Column="2" ></views:StartView>
+            <views:WeaponDetailView Grid.Column="2" Visibility="{Binding ShowWeaponDetails, Converter={StaticResource BooleanToVisibilityConverter}}"  />
+            <GridSplitter Grid.Column="3" Width="4" HorizontalAlignment="Stretch"  />
+            <views:Tf2AttributeListView Grid.Column="4" ></views:Tf2AttributeListView>
+        </Grid>
     </Grid>
 </Window>

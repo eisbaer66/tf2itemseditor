@@ -11,12 +11,13 @@ namespace TF2Items.Ui.ViewModel
     public interface IConfigWeaponService
     {
         Task<ConfigWeapon> GetConfigWeaponFor(Tf2Weapon weapon);
+        Result Set(ServerConfiguration configuration);
     }
 
     class ConfigWeaponService : IConfigWeaponService
     {
-        private readonly WeaponCollection _serverConfig = new WeaponCollection();
         private readonly ITf2WeaponService _tf2WeaponService;
+        private WeaponCollection _serverConfig = new WeaponCollection();
         private IDictionary<string, AttributeClass> _attributeClasses;
         private IDictionary<int, AttributeClass> _attributeClassesByAttributeId;
 
@@ -37,6 +38,19 @@ namespace TF2Items.Ui.ViewModel
                 _serverConfig.Weapons.Add(configWeapon);
             }
             return configWeapon;
+        }
+
+        public Result Set(ServerConfiguration configuration)
+        {
+            if (configuration == null)
+                return Result.Failed("no configuration present");
+            Func<WeaponCollection, bool> collectionForAllUsersPredicate = c => c.Users.IsAny();
+            WeaponCollection weaponCollection = configuration.WeaponCollections.FirstOrDefault(collectionForAllUsersPredicate);
+            if (weaponCollection == null)
+                return Result.Failed("configuration does not contain a weaponcollection for 'any user'");
+
+            _serverConfig = weaponCollection;
+            return Result.Successfull();
         }
 
         private async Task Init()

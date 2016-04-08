@@ -99,6 +99,7 @@
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Reactive.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -153,26 +154,33 @@
     <Compile Include="ScrollHelper.cs" />
     <Compile Include="Services\ISettingsService.cs" />
     <Compile Include="Services\IWeaponIconConfig.cs" />
+    <Compile Include="Services\SimpleNotificationService.cs" />
     <Compile Include="Services\Tf2WeaponService.cs" />
     <Compile Include="Services\IWeaponIconService.cs" />
     <Compile Include="SmartCollection.cs" />
     <Compile Include="Dispatch\AsyncRelayCommand.cs" />
+    <Compile Include="ViewModel\HeaderViewModel.cs" />
     <Compile Include="ViewModel\IConfigWeaponService.cs" />
     <Compile Include="ViewModel\Messenges\EditWeaponAttribute.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Messenges\RemoveWeaponAttribute.cs" />
+    <Compile Include="ViewModel\Result.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />
     <Compile Include="ViewModel\Messenges\SelectWeapon.cs" />
     <Compile Include="ViewModel\Tf2AttributeListViewModel.cs" />
     <Compile Include="ViewModel\Tf2AttributeClassViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponListViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponViewModel.cs" />
+    <Compile Include="ViewModel\ToastMessage.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\WeaponDetails\IWeaponDetailsAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsAttributeViewModelBase.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsNumericalAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsSetAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsViewModel.cs" />
+    <Compile Include="Views\HeaderView.xaml.cs">
+      <DependentUpon>HeaderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\StartView.xaml.cs">
       <DependentUpon>StartView.xaml</DependentUpon>
     </Compile>
@@ -215,6 +223,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\HeaderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\StartView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

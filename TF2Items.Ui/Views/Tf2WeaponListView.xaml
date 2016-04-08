@@ -9,7 +9,7 @@
              xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="TF2Items.Ui.Views.Tf2WeaponListView"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="800"
-			 Background="#FF282723"
+			 Background="{StaticResource Background}"
 			 Padding="15">
 	<UserControl.DataContext>
 		<Binding Path="Main.WeaponList" Source="{StaticResource Locator}"/>

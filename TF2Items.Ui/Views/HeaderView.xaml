@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="TF2Items.Ui.Views.HeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             DataContext="{Binding Main.Header, Source={StaticResource Locator}}"
+             d:DesignHeight="300" d:DesignWidth="800"
+			 Background="{StaticResource Background}">
+    <Border BorderThickness="0,0,0,4" BorderBrush="{DynamicResource Foreground}">
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Command="{Binding LoadCommand}" VerticalAlignment="Center" Margin="20">-> Load</Button>
+        
+            <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" StretchDirection="DownOnly" Stretch="Uniform" Margin="50,20">
+                <TextBlock Text="TF2 Items Editor" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build"
+                           FontSize="64" Foreground="#FFFFD303">
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="0" BlurRadius="10" Color="Black" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Viewbox>
+
+            <Button Grid.Column="2" Command="{Binding SaveCommand}" VerticalAlignment="Center" Margin="20">Save -></Button>
+        </Grid>
+    </Border>
+</UserControl>

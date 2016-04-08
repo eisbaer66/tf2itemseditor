@@ -1,8 +1,10 @@
+using GalaSoft.MvvmLight.Messaging;
 using Ninject.Modules;
 using TF2Items.Core;
 using TF2Items.Parsers;
 using TF2Items.ValvePak;
 using Ninject.Extensions.Conventions;
+using TF2Items.Ui.Services;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -27,6 +29,7 @@ namespace TF2Items.Ui.ViewModel
 
             Bind<ITf2AttributesParser>().To<Tf2AttributesParser>().WhenInjectedExactlyInto<Tf2AttributesParserCache>();
             Bind<MainViewModel>().To<MainViewModel>().InSingletonScope();
+            Bind<IMessenger>().ToConstant(Messenger.Default);
         }
     }
 }

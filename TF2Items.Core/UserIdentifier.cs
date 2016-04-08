@@ -2,6 +2,24 @@
 {
     public class UserIdentifier
     {
+        public static UserIdentifier Any()
+        {
+            return new UserIdentifier();
+        }
+
+        public static UserIdentifier FromStreamIds(params string[] streamIds)
+        {
+            bool listIsEmpty = streamIds.Length == 0;
+            bool onlyContainsStar = streamIds.Length == 1 && (string.IsNullOrEmpty(streamIds[0]) || streamIds[0] == "*");
+            if (listIsEmpty || onlyContainsStar)
+                return Any();
+
+            return new UserIdentifier
+            {
+                SteamIds = streamIds,
+            };
+        }
+
         public string[] SteamIds { get; set; }
 
         private UserIdentifier()
@@ -47,22 +65,9 @@
             return ToString().GetHashCode();
         }
 
-        public static UserIdentifier Any()
+        public bool IsAny()
         {
-            return new UserIdentifier();
-        }
-
-        public static UserIdentifier FromStreamIds(params string[] streamIds)
-        {
-            bool listIsEmpty = streamIds.Length == 0;
-            bool onlyContainsStar = streamIds.Length == 1 && (string.IsNullOrEmpty(streamIds[0]) || streamIds[0] == "*");
-            if (listIsEmpty || onlyContainsStar)
-                return Any();
-
-            return new UserIdentifier
-                   {
-                       SteamIds = streamIds,
-                   };
+            return Equals(Any());
         }
     }
 }

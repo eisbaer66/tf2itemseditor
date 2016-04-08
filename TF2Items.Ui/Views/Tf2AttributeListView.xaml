@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" 
              d:DesignWidth="1000"
-			 Background="#FF282723"
+			 Background="{StaticResource Background}"
 			 Padding="15">
     <UserControl.DataContext>
         <Binding Path="Main.AttributeList" Source="{StaticResource Locator}"/>

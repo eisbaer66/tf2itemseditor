@@ -17,6 +17,7 @@ using GalaSoft.MvvmLight;
 using Microsoft.Practices.ServiceLocation;
 using Ninject;
 using Ninject.Extensions.Factory;
+using TF2Items.Ui.Services;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -39,6 +40,8 @@ namespace TF2Items.Ui.ViewModel
             
             NinjectServiceLocator ninjectServiceLocator = new NinjectServiceLocator(kernel);
             ServiceLocator.SetLocatorProvider(() => ninjectServiceLocator);
+
+            kernel.Get<INotificationService>();
         }
 
         public MainViewModel Main

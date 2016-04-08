@@ -1,6 +1,4 @@
 using System;
-using System.Threading.Tasks;
-using AsyncMvvmMessenger;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
 using log4net;
@@ -28,6 +26,17 @@ namespace TF2Items.Ui.ViewModel
         private Tf2WeaponListViewModel _weaponList;
         private Tf2AttributeListViewModel _attributeList;
         private WeaponDetailsViewModel _weaponDetails;
+        private HeaderViewModel _header;
+
+        public HeaderViewModel Header
+        {
+            get { return _header; }
+            set
+            {
+                _header = value;
+                RaisePropertyChanged(() => Header);
+            }
+        }
 
         public Tf2WeaponListViewModel WeaponList
         {
@@ -64,12 +73,13 @@ namespace TF2Items.Ui.ViewModel
             get { return _weaponDetails != null && _weaponDetails.Tf2Weapon != null; }
         }
 
-        public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails, IConfigWeaponService configWeaponService)
+        public MainViewModel(Tf2WeaponListViewModel weaponList, Tf2AttributeListViewModel attributeList, WeaponDetailsViewModel weaponDetails, IConfigWeaponService configWeaponService, HeaderViewModel header)
         {
             _weaponList = weaponList;
             _attributeList = attributeList;
             _weaponDetails = weaponDetails;
             _configWeaponService = configWeaponService;
+            _header = header;
 
             Messenger.Default.Register<SelectWeapon>(this, SelectWeapon);
         }

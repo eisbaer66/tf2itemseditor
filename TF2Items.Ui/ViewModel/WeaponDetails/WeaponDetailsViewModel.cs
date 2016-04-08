@@ -31,7 +31,7 @@ namespace TF2Items.Ui.ViewModel
             _weaponIconService = weaponIconService;
             _attributeService = attributeService;
             _getVm = getVm;
-            this._getSetVm = getSetVm;
+            _getSetVm = getSetVm;
 
             Attributes = new SmartCollection<IWeaponDetailsAttributeViewModel, string>(vm => vm.Class.Name);
             ReadAttributesCommand = new AsyncRelayCommand(ReadAttributeClasses);

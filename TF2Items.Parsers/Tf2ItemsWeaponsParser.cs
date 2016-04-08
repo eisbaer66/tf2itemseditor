@@ -6,7 +6,12 @@ using ValveFormat;
 
 namespace TF2Items.Parsers
 {
-    public class Tf2ItemsWeaponsParser
+    public interface ITf2ItemsWeaponsParser
+    {
+        ServerConfiguration Parse(string filePath);
+    }
+
+    public class Tf2ItemsWeaponsParser : ITf2ItemsWeaponsParser
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(Tf2ItemsWeaponsParser));
         
