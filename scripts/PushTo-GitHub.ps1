@@ -1,10 +1,12 @@
-﻿$ErrorActionPreference = "Stop"
+﻿param(
+[string]$GitHubToken)
 
-$githubToken = $Env:GITHUB_TOKEN
+$ErrorActionPreference = "Stop"
+
 $releaseName = $Env:RELEASE_RELEASENAME
 $zipLocation = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/tf2itemseditor/zip/TF2ItemsEditor.zip"
 
-$authheader = "Basic " + ([Convert]::ToBase64String([System.Text.encoding]::ASCII.GetBytes($githubToken)))
+$authheader = "Basic " + ([Convert]::ToBase64String([System.Text.encoding]::ASCII.GetBytes($GitHubToken)))
 $header = @{Authorization=$authheader}
 
 
