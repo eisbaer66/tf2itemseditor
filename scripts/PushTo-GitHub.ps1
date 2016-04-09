@@ -2,7 +2,7 @@
 
 $githubToken = $Env:GITHUB_TOKEN
 $releaseName = $Env:RELEASE_RELEASENAME
-$zipLocation = "$(System.DefaultWorkingDirectory)/tf2itemseditor/zip/TF2ItemsEditor.zip"
+$zipLocation = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/tf2itemseditor/zip/TF2ItemsEditor.zip"
 
 $authheader = "Basic " + ([Convert]::ToBase64String([System.Text.encoding]::ASCII.GetBytes($githubToken)))
 $header = @{Authorization=$authheader}
