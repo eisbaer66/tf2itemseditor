@@ -101,8 +101,9 @@ namespace TF2Items.Ui.ViewModel
                                                                                                                       if (attributeNameContainsPhrase)
                                                                                                                           return true;
 
-                                                                                                                      if (a.Id.HasValue)
-                                                                                                                          return a.Id.ToString() == _filter;
+                                                                                                                      if (a.Id.ToString() == _filter)
+                                                                                                                          return true;
+
                                                                                                                       return false;
                                                                                                                   });
                                                             if (attributeContainsPhrase)

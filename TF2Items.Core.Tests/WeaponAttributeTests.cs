@@ -10,12 +10,12 @@ namespace TF2Items.Core.Tests
         {
             Tf2Attribute weapon = new Tf2Attribute(134, "set_attached_particle", "attach particle effect", "value_is_particle_index", "unusual");
 
-            Assert.That(weapon.Id, Is.Not.Null, "Id is not initialized");
-            Assert.That(weapon.Id.Value, Is.EqualTo(134), "Id is not initialized");
-            Assert.That(weapon.Name, Is.EqualTo("attach particle effect"), "Name is not initialized");
-            Assert.That(weapon.Class, Is.EqualTo("set_attached_particle"), "Class is not initialized");
-            Assert.That(weapon.Format, Is.EqualTo("value_is_particle_index"), "Format is not initialized");
-            Assert.That(weapon.EffectType, Is.EqualTo("unusual"), "EffectType is not initialized");
+            Assert.That(weapon.Id,         Is.Not.Null,                           "Id is not initialized");
+            Assert.That(weapon.Id,         Is.EqualTo(134),                       "Id is not initialized");
+            Assert.That(weapon.Name,       Is.EqualTo("attach particle effect"),  "Name is not initialized");
+            Assert.That(weapon.Class,      Is.EqualTo("set_attached_particle"),   "Class is not initialized");
+            Assert.That(weapon.Format,     Is.EqualTo("value_is_particle_index"), "Format is not initialized");
+            Assert.That(weapon.EffectType, Is.EqualTo("unusual"),                 "EffectType is not initialized");
         }
     }
     [TestFixture]
@@ -41,7 +41,7 @@ namespace TF2Items.Core.Tests
             ConfigWeaponAttribute weapon = new ConfigWeaponAttribute(134, 2);
 
             Assert.That(weapon.Id,          Is.Not.Null,        "Id is not initialized");
-            Assert.That(weapon.Id.Value,    Is.EqualTo(134),    "Id is not initialized");
+            Assert.That(weapon.Id,          Is.EqualTo(134),    "Id is not initialized");
             Assert.That(weapon.Value,       Is.EqualTo("2"),    "Value is not null");
         }
         [Test]

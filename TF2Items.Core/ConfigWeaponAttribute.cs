@@ -16,7 +16,7 @@ namespace TF2Items.Core
             Value = value;
         }
 
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Value { get; set; }
         public bool IsPredefined { get; set; }
 

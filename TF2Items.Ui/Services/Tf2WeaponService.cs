@@ -77,7 +77,7 @@ namespace TF2Items.Ui.Services
                                                                 });
                             })
                 .ToLookup(p => p.Attribute.Id, p => p.Class)
-                .ToDictionary(p => p.Key.Value, p => p.FirstOrDefault());
+                .ToDictionary(p => p.Key, p => p.FirstOrDefault());
         }
 
         public async Task<IEnumerable<AttributeClass>> GetAttributeClasses()

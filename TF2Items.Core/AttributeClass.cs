@@ -73,7 +73,7 @@ namespace TF2Items.Core
         public virtual ConfigWeaponAttribute GetDefaultWeaponAttribute()
         {
             Tf2Attribute attribute = Get(1, string.Empty);
-            return new ConfigWeaponAttribute(attribute.Id.Value, "1");
+            return new ConfigWeaponAttribute(attribute.Id, "1");
         }
 
         public virtual string Format(float value)
@@ -128,7 +128,7 @@ namespace TF2Items.Core
         public override ConfigWeaponAttribute GetDefaultWeaponAttribute()
         {
             Tf2Attribute attribute = GetPositiveAttribute();
-            return new ConfigWeaponAttribute(attribute.Id.Value, "0");
+            return new ConfigWeaponAttribute(attribute.Id, "0");
         }
     }
 

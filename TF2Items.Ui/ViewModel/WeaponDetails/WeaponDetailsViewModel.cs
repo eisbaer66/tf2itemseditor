@@ -123,14 +123,9 @@ namespace TF2Items.Ui.ViewModel
             _configAttributeViewModels = ConfigWeapon.Attributes
                                                      .Select(a =>
                                                              {
-                                                                 int? attributeId = a.Id;
-                                                                 if (!attributeId.HasValue)
-                                                                     return null;
-
-                                                                 IWeaponDetailsAttributeViewModel vm = Get(a, attributeId);
+                                                                 IWeaponDetailsAttributeViewModel vm = Get(a, a.Id);
                                                                  return vm;
                                                              })
-                                                     .Where(vm => vm != null)
                                                      .ToList();
 #if DEBUG
             if (IsInDesignMode)
@@ -154,7 +149,7 @@ namespace TF2Items.Ui.ViewModel
                                                AttributeClass attributeClass = _attributeClasses[a.Class];
 
                                                Tf2Attribute attribute = attributeClass.Get(a.Value, a.Name);
-                                               ConfigWeaponAttribute configattribute = new ConfigWeaponAttribute(attribute.Id.Value, a.Value);
+                                               ConfigWeaponAttribute configattribute = new ConfigWeaponAttribute(attribute.Id, a.Value);
                                                configattribute.IsPredefined = true;
                                                IWeaponDetailsAttributeViewModel vm = Get(configattribute, attribute.Id);
                                                return vm;
@@ -164,9 +159,9 @@ namespace TF2Items.Ui.ViewModel
         }
 
 
-        public IWeaponDetailsAttributeViewModel Get(ConfigWeaponAttribute configWeaponAttribute, int? attributeId)
+        public IWeaponDetailsAttributeViewModel Get(ConfigWeaponAttribute configWeaponAttribute, int attributeId)
         {
-            AttributeClass attributeClass = _attributeClassesByAttributeId[attributeId.Value];
+            AttributeClass attributeClass = _attributeClassesByAttributeId[attributeId];
 
             IWeaponDetailsAttributeViewModel vm;
             switch (attributeClass.EditMode)

@@ -14,7 +14,7 @@ namespace TF2Items.Core
             EffectType = effectType;
         }
 
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
         public string Format { get; set; }

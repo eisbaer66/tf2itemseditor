@@ -38,7 +38,7 @@ namespace TF2Items.Ui.ViewModel
             if (!_settings.ReloadOnStartup)
                 return;
 
-            Result result = _configDataAdapter.Load(_settings.ConfigPath);
+            Result result = _configDataAdapter.Load(_settings.LoadFrom);
 
             if (result.Success || result.UserAbort)
                 return;

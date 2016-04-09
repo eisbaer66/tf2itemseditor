@@ -11,7 +11,8 @@ namespace TF2Items.Ui.ViewModel
     public interface IConfigWeaponService
     {
         Task<ConfigWeapon> GetConfigWeaponFor(Tf2Weapon weapon);
-        Result Set(ServerConfiguration configuration);
+        Result Set(WeaponCollection weaponCollection);
+        WeaponCollection Get();
     }
 
     class ConfigWeaponService : IConfigWeaponService
@@ -40,17 +41,18 @@ namespace TF2Items.Ui.ViewModel
             return configWeapon;
         }
 
-        public Result Set(ServerConfiguration configuration)
+        public Result Set(WeaponCollection weaponCollection)
         {
-            if (configuration == null)
-                return Result.Failed("no configuration present");
-            Func<WeaponCollection, bool> collectionForAllUsersPredicate = c => c.Users.IsAny();
-            WeaponCollection weaponCollection = configuration.WeaponCollections.FirstOrDefault(collectionForAllUsersPredicate);
             if (weaponCollection == null)
                 return Result.Failed("configuration does not contain a weaponcollection for 'any user'");
 
             _serverConfig = weaponCollection;
             return Result.Successfull();
+        }
+
+        public WeaponCollection Get()
+        {
+            return _serverConfig;
         }
 
         private async Task Init()
@@ -75,7 +77,7 @@ namespace TF2Items.Ui.ViewModel
 
         private ConfigWeaponAttribute GetConfigAttributeFor(Tf2WeaponAttribute attribute, ConfigWeapon weapon)
         {
-            ConfigWeaponAttribute configAttribute = weapon.Attributes.FirstOrDefault(a => _attributeClassesByAttributeId[a.Id.Value].Name == attribute.Class);
+            ConfigWeaponAttribute configAttribute = weapon.Attributes.FirstOrDefault(a => _attributeClassesByAttributeId[a.Id].Name == attribute.Class);
             if (configAttribute != null)
                 return configAttribute;
 
@@ -86,7 +88,7 @@ namespace TF2Items.Ui.ViewModel
                 throw new UnexpectedAttributeValue(attribute);
 
             Tf2Attribute tf2Attribute = attributeClass.Get(value, attribute.Name);
-            configAttribute = new ConfigWeaponAttribute(tf2Attribute.Id.Value, value);
+            configAttribute = new ConfigWeaponAttribute(tf2Attribute.Id, value);
 
             weapon.Attributes.Add(configAttribute);
             return configAttribute;

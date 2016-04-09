@@ -38,12 +38,12 @@ namespace TF2Items.Ui.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ConfigPath {
+        public string LoadFrom {
             get {
-                return ((string)(this["ConfigPath"]));
+                return ((string)(this["LoadFrom"]));
             }
             set {
-                this["ConfigPath"] = value;
+                this["LoadFrom"] = value;
             }
         }
         
@@ -56,6 +56,18 @@ namespace TF2Items.Ui.Properties {
             }
             set {
                 this["ReuseLastSaveLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SaveTo {
+            get {
+                return ((string)(this["SaveTo"]));
+            }
+            set {
+                this["SaveTo"] = value;
             }
         }
     }

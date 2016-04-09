@@ -8,8 +8,9 @@ namespace TF2Items.Ui
     public interface IUserSettings :INotifyPropertyChanged
     {
         bool ReloadOnStartup { get; set; }
-        string ConfigPath { get; set; }
+        string LoadFrom { get; set; }
         bool ReuseLastSaveLocation { get; set; }
+        string SaveTo { get; set; }
     }
 
     public class UserSettings : ObservableObject, IUserSettings
@@ -34,13 +35,13 @@ namespace TF2Items.Ui
             }
         }
 
-        public string ConfigPath
+        public string LoadFrom
         {
-            get { return (string)_settings["ConfigPath"]; }
+            get { return (string)_settings["LoadFrom"]; }
             set
             {
-                _settings["ConfigPath"] = value;
-                RaisePropertyChanged(() => ConfigPath);
+                _settings["LoadFrom"] = value;
+                RaisePropertyChanged(() => LoadFrom);
             }
         }
 
@@ -51,6 +52,16 @@ namespace TF2Items.Ui
             {
                 _settings["ReuseLastSaveLocation"] = value;
                 RaisePropertyChanged(() => ReuseLastSaveLocation);
+            }
+        }
+
+        public string SaveTo
+        {
+            get { return (string)_settings["SaveTo"]; }
+            set
+            {
+                _settings["SaveTo"] = value;
+                RaisePropertyChanged(() => SaveTo);
             }
         }
     }

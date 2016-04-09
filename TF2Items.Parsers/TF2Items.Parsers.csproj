@@ -69,6 +69,7 @@
     <Compile Include="Primitives.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tf2ItemsWeaponsParser.cs" />
+    <Compile Include="Tf2ItemsWeaponsWriter.cs" />
     <Compile Include="Tf2Prefab.cs" />
   </ItemGroup>
   <ItemGroup>

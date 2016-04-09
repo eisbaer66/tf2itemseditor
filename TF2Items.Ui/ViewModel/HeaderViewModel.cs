@@ -21,7 +21,7 @@ namespace TF2Items.Ui.ViewModel
             _userSettings = userSettings;
             _dataAdapter = dataAdapter;
             LoadCommand = new RelayCommand(Load);
-            SaveCommand = new RelayCommand(Save, () => false);
+            SaveCommand = new RelayCommand(Save);
         }
 
         public ICommand LoadCommand { get; set; }
@@ -64,7 +64,32 @@ namespace TF2Items.Ui.ViewModel
 
         private void Save()
         {
-            throw new System.NotImplementedException();
+            Result result = _dataAdapter.Save();
+            if (result.UserAbort)
+                return;
+
+            ToastMessage toast = CreateSaveToast(result);
+            MessengerInstance.Send(toast);
+        }
+
+        private ToastMessage CreateSaveToast(Result result)
+        {
+            if (result.Success)
+            {
+                return new ToastMessage
+                {
+                    Caption = "configuration saved",
+                    Text = "The configuration was saved successfully."
+                };
+            }
+
+            string text = string.Format("The selected file could not be saved.\r\nReason: {0}", result.Reason);
+            string caption = "failed saving configuration";
+            return new ToastMessage
+                   {
+                       Caption = caption,
+                       Text = text,
+                   };
         }
     }
 }

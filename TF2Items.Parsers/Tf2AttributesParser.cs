@@ -206,8 +206,7 @@ namespace TF2Items.Parsers
         public async Task<IDictionary<int, Tf2Attribute>> ParseAsDictionary(string filePath)
         {
             return (await ParseSingle(filePath))
-                        .Where(f => f.Id.HasValue)
-                        .ToDictionary(f => f.Id.Value);
+                        .ToDictionary(f => f.Id);
         }
         public async Task<IList<Tf2Attribute>> Parse(string filePath)
         {
