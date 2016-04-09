@@ -42,6 +42,7 @@ namespace TF2Items.Ui.ViewModel
             ServiceLocator.SetLocatorProvider(() => ninjectServiceLocator);
 
             kernel.Get<INotificationService>();
+            kernel.Get<IAutomationService>().Startup();
         }
 
         public MainViewModel Main

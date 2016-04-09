@@ -153,13 +153,16 @@
     <Compile Include="Dispatch\NotifyTaskCompletion.cs" />
     <Compile Include="ScrollHelper.cs" />
     <Compile Include="Services\ISettingsService.cs" />
+    <Compile Include="Services\ITf2ConfigDataAdapter.cs" />
     <Compile Include="Services\IWeaponIconConfig.cs" />
     <Compile Include="Services\SimpleNotificationService.cs" />
     <Compile Include="Services\Tf2WeaponService.cs" />
     <Compile Include="Services\IWeaponIconService.cs" />
     <Compile Include="SmartCollection.cs" />
     <Compile Include="Dispatch\AsyncRelayCommand.cs" />
+    <Compile Include="UserSettings.cs" />
     <Compile Include="ViewModel\HeaderViewModel.cs" />
+    <Compile Include="ViewModel\IAutomationService.cs" />
     <Compile Include="ViewModel\IConfigWeaponService.cs" />
     <Compile Include="ViewModel\Messenges\EditWeaponAttribute.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

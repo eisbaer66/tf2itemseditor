@@ -2,26 +2,24 @@ using System;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
-using TF2Items.Core;
-using TF2Items.Parsers;
+using TF2Items.Ui.Services;
 
 namespace TF2Items.Ui.ViewModel
 {
     public class HeaderViewModel : ViewModelBase
     {
-        private readonly ITf2ItemsWeaponsParser _parser;
-        private readonly IConfigWeaponService _service;
+        private readonly IUserSettings _userSettings;
+        private readonly ITf2ConfigDataAdapter _dataAdapter;
 
-        public HeaderViewModel(ITf2ItemsWeaponsParser parser, IConfigWeaponService service)
+        public HeaderViewModel(IUserSettings userSettings, ITf2ConfigDataAdapter dataAdapter)
         {
-            if (parser == null)
-                throw new ArgumentNullException("parser");
-            if (service == null)
-                throw new ArgumentNullException("service");
+            if (userSettings == null)
+                throw new ArgumentNullException("userSettings");
+            if (dataAdapter == null)
+                throw new ArgumentNullException("dataAdapter");
 
-            _parser = parser;
-            _service = service;
+            _userSettings = userSettings;
+            _dataAdapter = dataAdapter;
             LoadCommand = new RelayCommand(Load);
             SaveCommand = new RelayCommand(Save, () => false);
         }
@@ -29,20 +27,16 @@ namespace TF2Items.Ui.ViewModel
         public ICommand LoadCommand { get; set; }
         public ICommand SaveCommand { get; set; }
 
+        public IUserSettings Settings
+        {
+            get { return _userSettings; }
+        }
+
         private void Load()
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            bool? fileChosen = dialog.ShowDialog();
-
-            if (!fileChosen.HasValue)
+            Result result = _dataAdapter.Load();
+            if (result.UserAbort)
                 return;
-            if (!fileChosen.Value)
-                return;
-
-            string fileName = dialog.FileName;
-
-            ServerConfiguration configuration = _parser.Parse(fileName);
-            Result result = _service.Set(configuration);
 
             ToastMessage message = CreateToastMessage(result);
             MessengerInstance.Send(message);

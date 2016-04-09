@@ -14,7 +14,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Command="{Binding LoadCommand}" VerticalAlignment="Center" Margin="20">-> Load</Button>
+            <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="20">
+                <Button Command="{Binding LoadCommand}">-> Load</Button>
+                <CheckBox IsChecked="{Binding Settings.ReloadOnStartup}">reload on startup</CheckBox>
+            </StackPanel>
         
             <Viewbox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" StretchDirection="DownOnly" Stretch="Uniform" Margin="50,20">
                 <TextBlock Text="TF2 Items Editor" FontFamily="/TF2Items.Ui;component/assets/fonts/#TF2 Build"
@@ -25,7 +28,10 @@
                 </TextBlock>
             </Viewbox>
 
-            <Button Grid.Column="2" Command="{Binding SaveCommand}" VerticalAlignment="Center" Margin="20">Save -></Button>
+            <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20">
+                <Button Command="{Binding SaveCommand}">Save -></Button>
+                <CheckBox IsChecked="{Binding Settings.ReuseLastSaveLocation}" IsEnabled="False">reuse last location</CheckBox>
+            </StackPanel>
         </Grid>
     </Border>
 </UserControl>

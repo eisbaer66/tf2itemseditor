@@ -3,15 +3,26 @@
 
     <Color x:Key="BackgroundColor" >#FF282723</Color>
     <Color x:Key="ItemBackgroundColor" >#FF312D2C</Color>
+    <Color x:Key="ItemBackgroundDisabledColor" >#FF2E2E2E</Color>
     <Color x:Key="ItemHighlightBackgroundColor" >#FF665D5B</Color>
     <Color x:Key="ForegroundColor" >#FFECE3CB</Color>
+    <Color x:Key="DisabledForegroundColor" >#FFE1E1E1</Color>
     <Color x:Key="ButtonBackgroundColor" >#FF766B5E</Color>
+    <Color x:Key="ButtonBackgroundDisabledColor" >#FF6C6C6C</Color>
     <Color x:Key="ButtonPressedBackgroundColor" >#FF924738</Color>
+    <Color x:Key="BorderColor"  >#FFE9E3C6</Color>
+    <Color x:Key="DisabledBorderColor"  >#FFE1E1E1</Color>
+    <Color x:Key="{x:Static SystemColors.GrayTextColor}">#FFE1E1E1</Color>
     <SolidColorBrush x:Key="Background" Color="{DynamicResource BackgroundColor}"/>
     <SolidColorBrush x:Key="ItemBackground" Color="{DynamicResource ItemBackgroundColor}"/>
+    <SolidColorBrush x:Key="ItemBackgroundDisabled" Color="{DynamicResource ItemBackgroundDisabledColor}"/>
     <SolidColorBrush x:Key="ItemHighlightBackground" Color="{DynamicResource ItemHighlightBackgroundColor}"/>
     <SolidColorBrush x:Key="Foreground" Color="{DynamicResource ForegroundColor}"/>
+    <SolidColorBrush x:Key="DisabledForeground" Color="{DynamicResource DisabledForegroundColor}"/>
     <SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource ButtonBackgroundColor}"/>
+    <SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource ButtonBackgroundDisabledColor}"/>
     <SolidColorBrush x:Key="ButtonPressedBackground" Color="{DynamicResource ButtonPressedBackgroundColor}"/>
     <SolidColorBrush x:Key="ItemSelectedBackground" Color="{DynamicResource ButtonPressedBackgroundColor}"/>
+    <SolidColorBrush x:Key="Border" Color="{DynamicResource BorderColor}"/>
+    <SolidColorBrush x:Key="DisabledBorder" Color="{DynamicResource DisabledBorderColor}"/>
 </ResourceDictionary>

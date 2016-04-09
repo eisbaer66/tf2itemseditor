@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TF2Items.Ui.Properties;
 
 namespace TF2Items.Ui
 {
@@ -13,5 +14,9 @@ namespace TF2Items.Ui
     /// </summary>
     public partial class App : Application
     {
+        private void OnExit(object sender, ExitEventArgs e)
+        {
+            Settings.Default.Save();
+        }
     }
 }

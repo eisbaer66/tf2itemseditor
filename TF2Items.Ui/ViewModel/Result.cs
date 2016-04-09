@@ -15,7 +15,16 @@ namespace TF2Items.Ui.ViewModel
                    };
         }
 
+        public static Result UserAborted()
+        {
+            return new Result
+                   {
+                       UserAbort = true,
+                   };
+        }
+
         public bool Success { get; set; }
+        public bool UserAbort { get; set; }
         public string Reason { get; set; }
     }
 }
