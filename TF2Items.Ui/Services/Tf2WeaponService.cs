@@ -135,7 +135,7 @@ namespace TF2Items.Ui.Services
                     continue;
                 }
 
-                string[] definedPrefabs = current.PrefabName.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] definedPrefabs = SplitPrefabNames(current.PrefabName);
                 if (!definedPrefabs.All(p => processedPrefabs.ContainsKey(p)))
                 {
                     queue.Enqueue(current);
@@ -153,20 +153,28 @@ namespace TF2Items.Ui.Services
             return processedPrefabs;
         }
 
+        private static string[] SplitPrefabNames(string prefabName)
+        {
+            return prefabName.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
         private Tf2Weapon Hydrate(Tf2Weapon weapon, IDictionary<string, Tf2Prefab> prefabs)
         {
             if (string.IsNullOrEmpty(weapon.PrefabName))
                 return weapon;
 
-            if (!prefabs.ContainsKey(weapon.PrefabName))
+            string[] definedPrefabs = SplitPrefabNames(weapon.PrefabName);
+            foreach (string definedPrefab in definedPrefabs)
             {
-                Log.ErrorFormat("could not find prefab '{0}' specified in weapon '{1} ({2})'", weapon.PrefabName, weapon.Id, weapon.Name);
-                return weapon;
+                if (!prefabs.ContainsKey(definedPrefab))
+                {
+                    Log.ErrorFormat("could not find prefab '{0}' specified in weapon '{1} ({2})'", definedPrefab, weapon.Id, weapon.Name);
+                    continue;
+                }
+
+                Tf2Prefab prefab = prefabs[definedPrefab];
+                Hydrate(weapon, prefab);
             }
-
-            Tf2Prefab prefab = prefabs[weapon.PrefabName];
-
-            Hydrate(weapon, prefab);
 
             return weapon;
         }
