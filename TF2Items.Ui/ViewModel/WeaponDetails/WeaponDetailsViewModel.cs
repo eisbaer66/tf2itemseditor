@@ -108,6 +108,9 @@ namespace TF2Items.Ui.ViewModel
 
         private async Task UpdateConfigWeapon(Tf2Weapon weapon)
         {
+            if (weapon == null)
+                return;
+
             _configWeapon = await _weaponService.GetConfigWeaponFor(weapon);
             RaisePropertyChanged(() => ConfigWeapon);
         }
