@@ -3,6 +3,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using TF2Items.Ui.Services;
+using TF2Items.Ui.ViewModel.Messenges;
 
 namespace TF2Items.Ui.ViewModel
 {
@@ -37,6 +38,9 @@ namespace TF2Items.Ui.ViewModel
             Result result = _dataAdapter.Load();
             if (result.UserAbort)
                 return;
+
+            ServerConfigurationChanged serverConfigurationChanged = new ServerConfigurationChanged();
+            MessengerInstance.Send(serverConfigurationChanged);
 
             ToastMessage message = CreateToastMessage(result);
             MessengerInstance.Send(message);

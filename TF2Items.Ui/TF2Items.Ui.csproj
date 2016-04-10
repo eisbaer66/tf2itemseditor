@@ -167,6 +167,7 @@
     <Compile Include="ViewModel\Messenges\EditWeaponAttribute.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Messenges\RemoveWeaponAttribute.cs" />
+    <Compile Include="ViewModel\Messenges\ServerConfigurationChanged.cs" />
     <Compile Include="ViewModel\Result.cs" />
     <Compile Include="ViewModel\RunTimeModule.cs" />
     <Compile Include="ViewModel\Messenges\SelectWeapon.cs" />
@@ -174,7 +175,7 @@
     <Compile Include="ViewModel\Tf2AttributeClassViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponListViewModel.cs" />
     <Compile Include="ViewModel\Tf2WeaponViewModel.cs" />
-    <Compile Include="ViewModel\ToastMessage.cs" />
+    <Compile Include="ViewModel\Messenges\ToastMessage.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\WeaponDetails\IWeaponDetailsAttributeViewModel.cs" />
     <Compile Include="ViewModel\WeaponDetails\WeaponDetailsAttributeViewModelBase.cs" />

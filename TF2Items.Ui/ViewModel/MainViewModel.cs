@@ -88,9 +88,7 @@ namespace TF2Items.Ui.ViewModel
         {
             try
             {
-                ConfigWeapon configWeapon = await _configWeaponService.GetConfigWeaponFor(msg.Weapon);
-
-                WeaponDetails.UpdateModels(msg.Weapon, configWeapon);
+                WeaponDetails.UpdateModels(msg.Weapon);
                 RaisePropertyChanged(() => ShowWeaponDetails);
             }
             catch (Exception e)

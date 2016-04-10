@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GongSolutions.Wpf.DragDrop;
+using log4net;
 using TF2Items.Core;
 using TF2Items.Ui.Dispatch;
 using TF2Items.Ui.Services;
@@ -14,6 +15,8 @@ namespace TF2Items.Ui.ViewModel
 {
     public class WeaponDetailsViewModel : ViewModelBase, IDropTarget
     {
+        private readonly static ILog Log = LogManager.GetLogger(typeof(WeaponDetailsViewModel));
+
         private readonly IWeaponIconService _weaponIconService;
         private readonly ITf2WeaponService _attributeService;
         private readonly Func<WeaponDetailsNumericalAttributeViewModel> _getVm;
@@ -52,6 +55,7 @@ namespace TF2Items.Ui.ViewModel
             ResetAllWeaponsCommand = new AsyncRelayCommand(ResetAllWeapons);
             MessengerInstance.Register<RemoveWeaponAttribute>(this, RemoveAttribute);
             MessengerInstance.Register<EditWeaponAttribute>(this, EditWeaponAttribute);
+            MessengerInstance.Register<ServerConfigurationChanged>(this, ServerConfigurationChanged);
 
 #if DEBUG
             if (IsInDesignMode)
@@ -83,32 +87,29 @@ namespace TF2Items.Ui.ViewModel
         public Tf2Weapon Tf2Weapon
         {
             get { return _tf2Weapon; }
-            set
-            {
-                _tf2Weapon = value;
-                Image = new RunNotifyTaskCompletion<string>(GetImage);
-
-                RaisePropertyChanged(() => Tf2Weapon);
-                RaisePropertyChanged(() => Image);
-            }
         }
 
         public ConfigWeapon ConfigWeapon
         {
             get { return _configWeapon; }
-            set
-            {
-                _configWeapon = value;
-
-                RaisePropertyChanged(() => ConfigWeapon);
-            }
         }
 
-        public void UpdateModels(Tf2Weapon weapon, ConfigWeapon configWeapon)
+        public async Task UpdateModels(Tf2Weapon weapon)
         {
-            Tf2Weapon = weapon;
-            ConfigWeapon = configWeapon;
+            _tf2Weapon = weapon;
+            Image = new RunNotifyTaskCompletion<string>(GetImage);
+
+            RaisePropertyChanged(() => Tf2Weapon);
+            RaisePropertyChanged(() => Image);
+            await UpdateConfigWeapon(weapon);
+
             UpdateAttributes();
+        }
+
+        private async Task UpdateConfigWeapon(Tf2Weapon weapon)
+        {
+            _configWeapon = await _weaponService.GetConfigWeaponFor(weapon);
+            RaisePropertyChanged(() => ConfigWeapon);
         }
 
         public void EditAttribute(IWeaponDetailsAttributeViewModel attribute)
@@ -258,6 +259,20 @@ namespace TF2Items.Ui.ViewModel
             ConfigWeaponAttribute existingAttribute = _configWeapon.Attributes.FirstOrDefault(a => a.Id == vm.Attribute.Id);
             _configWeapon.Attributes.Remove(existingAttribute);
             UpdateConfigAttributes();
+        }
+
+        private async void ServerConfigurationChanged(ServerConfigurationChanged msg)
+        {
+            try
+            {
+                await UpdateConfigWeapon(_tf2Weapon);
+                UpdateAttributes();
+            }
+            catch (Exception e)
+            {
+                Log.Error("failed to update WeaponDetails", e);
+                throw;
+            }
         }
 
         public void DragOver(IDropInfo dropInfo)
