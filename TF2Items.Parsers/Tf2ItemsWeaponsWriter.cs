@@ -35,6 +35,9 @@ namespace TF2Items.Parsers
 
         private void AddWeaponCollection(DataNode parent, WeaponCollection weaponCollection)
         {
+            if (weaponCollection.Weapons.Count == 0)
+                return;
+
             DataNode node = new DataNode
                             {
                                 Key = weaponCollection.Users.ToString(),
@@ -53,6 +56,12 @@ namespace TF2Items.Parsers
 
         private void AddWeapon(DataNode collectionNode, ConfigWeapon weapon)
         {
+            if (weapon.Attributes.Count == 0 &&
+                string.IsNullOrEmpty(weapon.AdminFlags) &&
+                weapon.Level == null &&
+                weapon.Quality == null)
+                return;
+
             DataNode node = new DataNode
                             {
                                 Key = weapon.Id.ToString(),
