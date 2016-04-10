@@ -64,7 +64,12 @@ namespace TF2Items.Ui.ViewModel
 
         private void Save()
         {
-            Result result = _dataAdapter.Save();
+            Result result;
+            if (Settings.ReuseLastSaveLocation && !string.IsNullOrEmpty(Settings.SaveTo))
+                result = _dataAdapter.Save(Settings.SaveTo);
+            else
+                result = _dataAdapter.Save();
+
             if (result.UserAbort)
                 return;
 
@@ -77,10 +82,10 @@ namespace TF2Items.Ui.ViewModel
             if (result.Success)
             {
                 return new ToastMessage
-                {
-                    Caption = "configuration saved",
-                    Text = "The configuration was saved successfully."
-                };
+                       {
+                           Caption = "configuration saved",
+                           Text = "The configuration was saved successfully."
+                       };
             }
 
             string text = string.Format("The selected file could not be saved.\r\nReason: {0}", result.Reason);

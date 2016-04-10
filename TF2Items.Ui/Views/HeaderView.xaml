@@ -30,7 +30,7 @@
 
             <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="20">
                 <Button Command="{Binding SaveCommand}">Save -></Button>
-                <CheckBox IsChecked="{Binding Settings.ReuseLastSaveLocation}" IsEnabled="False">reuse last location</CheckBox>
+                <CheckBox IsChecked="{Binding Settings.ReuseLastSaveLocation}">reuse last location</CheckBox>
             </StackPanel>
         </Grid>
     </Border>

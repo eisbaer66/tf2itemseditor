@@ -13,6 +13,7 @@ namespace TF2Items.Ui.Services
         Result Load();
         Result Load(string configPath);
         Result Save();
+        Result Save(string saveTo);
     }
 
     class Tf2ConfigDataAdapter : ITf2ConfigDataAdapter
@@ -87,7 +88,7 @@ namespace TF2Items.Ui.Services
             return Save(fileName);
         }
 
-        private Result Save(string fileName)
+        public Result Save(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
                 return Result.UserAborted();
