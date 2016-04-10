@@ -185,8 +185,10 @@
 			<RowDefinition Height="60" />
 			<RowDefinition Height="15" />
 			<RowDefinition Height="auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
         <Grid Margin="-15,-50,-15,0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="0" />
@@ -247,7 +249,18 @@
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>
-        <Grid Grid.Row="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAttributesCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
+
+        <Grid Grid.Row="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Reset all weapons" FontSize="30" FontWeight="Bold" Command="{Binding ResetAllWeaponsCommand}" />
+            <Button Grid.Column="2" Content="Reset weapon" FontSize="30" FontWeight="Bold" Command="{Binding ResetWeaponCommand}" />
+        </Grid>
+        
+        <Grid Grid.Row="3" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="{Binding ReadAttributesCommand.IsExecuting, Converter={StaticResource BooleanToVisibilityConverter}}"  >
             <Border Background="#FF282723" Opacity=".5"/>
             <Viewbox Margin="10" >
                 <ui:LoadingControl Height="300" Width="300"/>
