@@ -5,6 +5,7 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ui="clr-namespace:TF2Items.Ui"
              xmlns:properties="clr-namespace:TF2Items.Ui.Properties"
+             DispatcherUnhandledException="ApplicationOnDispatcherUnhandledException"
              Exit="OnExit">
     <Application.Resources>
         <ResourceDictionary>
